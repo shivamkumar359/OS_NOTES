@@ -81,6 +81,602 @@
 </head>
 <body>
 
+    <h1>Operating Systems — Fingertip Concise Notes (Week 1)</h1>
+
+    <div class="card">
+        <h2>1. What is an Operating System?</h2>
+        <p><strong>Operating System (OS):</strong> Software that acts as an intermediary between the user and computer hardware.</p>
+        
+        <h3>Two Views of OS</h3>
+        <table>
+            <tr>
+                <th>View</th>
+                <th>Meaning</th>
+            </tr>
+            <tr>
+                <td>User-centric</td>
+                <td>Provides an easy interface and services to users</td>
+            </tr>
+            <tr>
+                <td>System-centric</td>
+                <td>Allocates resources and controls system operations</td>
+            </tr>
+        </table>
+        
+        <div class="exam-point">
+            <strong>Exam Point:</strong> OS = Resource Allocator + Control Program + Interface
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>2. Computer System Structure</h2>
+        <p>A computer system has 4 main components:</p>
+        <ol>
+            <li><strong>Hardware:</strong> CPU, memory, I/O devices</li>
+            <li><strong>Operating System:</strong> Controls and coordinates hardware</li>
+            <li><strong>Application Programs:</strong> Word processors, browsers, compilers, DBMS, games</li>
+            <li><strong>Users:</strong> People, machines, other computers</li>
+        </ol>
+        <div class="highlight">
+            <strong>Fingertip:</strong> <span class="flow">Hardware &rarr; OS &rarr; Applications &rarr; Users</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. What Does an OS Do?</h2>
+        <p>Depends on the type of system.</p>
+        <ul>
+            <li>Provides convenience</li>
+            <li>Improves performance</li>
+            <li>Manages system resources</li>
+            <li>Supports multiple users/programs</li>
+            <li>Optimizes battery life in handheld systems</li>
+            <li>Embedded systems may have little/no user interface</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>4. Computer Startup</h2>
+        <p>At power-up/reboot:</p>
+        <p class="flow">Bootstrap Program &rarr; Initializes System &rarr; Loads OS Kernel &rarr; Starts Execution</p>
+        
+        <h3>Bootstrap Program</h3>
+        <ul>
+            <li>Stored in ROM/EPROM</li>
+            <li>Also called firmware</li>
+            <li>Loads the OS kernel into memory</li>
+        </ul>
+        <div class="exam-point">
+            <strong>Exam:</strong> Bootstrap program is the first program executed during startup.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>5. Computer-System Operation</h2>
+        <ul>
+            <li>CPU and I/O devices can work concurrently.</li>
+            <li>Each device has a device controller.</li>
+            <li>Controller has a local buffer.</li>
+            <li>Data moves between main memory &harr; local buffer.</li>
+            <li>After completing an operation, the controller sends an interrupt to the CPU.</li>
+        </ul>
+        <div class="highlight">
+            <strong>Fingertip:</strong> <span class="flow">Device &rarr; Controller &rarr; Buffer &rarr; Memory &rarr; Interrupt</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>6. Storage Hierarchy</h2>
+        <p>Storage systems are organized as a hierarchy based mainly on:</p>
+        <ul>
+            <li>Speed</li>
+            <li>Cost</li>
+            <li>Volatility</li>
+        </ul>
+        <p>Faster storage is generally more expensive and smaller.</p>
+    </div>
+
+    <div class="card">
+        <h2>7. Caching</h2>
+        <p><strong>Caching:</strong> Copying information from slower storage to faster storage temporarily.</p>
+        
+        <h3>How it works</h3>
+        <ol>
+            <li>Check faster storage (cache).</li>
+            <li>If data is present &rarr; use it directly.</li>
+            <li>If absent &rarr; copy data from slower storage to cache.</li>
+            <li>Use the cached copy.</li>
+        </ol>
+        <p>Cache is smaller than the storage it represents.</p>
+        
+        <h3>Important cache issues</h3>
+        <ul>
+            <li>Cache size</li>
+            <li>Replacement policy</li>
+            <li>Cache management</li>
+        </ul>
+        <div class="highlight">
+            <strong>Fingertip:</strong> Cache = Small + Fast + Temporary copy
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>8. Device Driver</h2>
+        <p><strong>Device Driver:</strong> Software that manages a particular device controller.</p>
+        <p>It:</p>
+        <ul>
+            <li>Manages I/O devices</li>
+            <li>Provides a uniform interface between the device controller and OS kernel</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>9. Multiprogramming</h2>
+        <p><strong>Multiprogramming:</strong> Keeping multiple jobs in memory so the CPU always has something to execute.</p>
+        <h3>Why?</h3>
+        <p>A single program may wait for I/O, leaving the CPU idle.</p>
+        <h3>Working</h3>
+        <p class="flow">Job A running &rarr; A waits for I/O &rarr; OS switches to Job B</p>
+        <p><strong>Goal:</strong> Improve CPU utilization and efficiency.</p>
+    </div>
+
+    <div class="card">
+        <h2>10. Timesharing / Multitasking</h2>
+        <p><strong>Timesharing:</strong> Extension of multiprogramming where the CPU switches between jobs very frequently.</p>
+        <p>This allows users to interact with programs while they are running.</p>
+        <ul>
+            <li>Provides interactive computing</li>
+            <li>Response time should generally be &lt; 1 second</li>
+            <li>Each user has at least one program in memory &rarr; Process</li>
+        </ul>
+        <p>If multiple jobs are ready &rarr; CPU Scheduling is required.</p>
+        
+        <h3>Difference</h3>
+        <table>
+            <tr>
+                <th>Multiprogramming</th>
+                <th>Timesharing</th>
+            </tr>
+            <tr>
+                <td>Focuses on CPU utilization</td>
+                <td>Focuses on interactive response</td>
+            </tr>
+            <tr>
+                <td>Switches when job waits</td>
+                <td>Switches frequently</td>
+            </tr>
+            <tr>
+                <td>Mainly efficiency</td>
+                <td>Mainly user interaction</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>11. Operating-System Operations</h2>
+        <p>OS operation is interrupt-driven.</p>
+        <h3>Types of Interrupts</h3>
+        <ol>
+            <li><strong>Hardware Interrupt:</strong> Generated by hardware/device.</li>
+            <li><strong>Software Interrupt:</strong> Also called exception/trap.
+                <ul>
+                    <li>Examples: Division by zero, Request for OS service, Other process-related problems</li>
+                </ul>
+            </li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>12. Dual-Mode Operation</h2>
+        <p>Used to protect the OS and other system components.</p>
+        <p>Two modes:</p>
+        <ol>
+            <li>User Mode</li>
+            <li>Kernel Mode</li>
+        </ol>
+        <p><strong>Mode Bit:</strong> Hardware mechanism that identifies the current mode.</p>
+        
+        <h3>Privileged Instructions</h3>
+        <p>Certain instructions can only execute in kernel mode.</p>
+        
+        <h3>Mode Transition</h3>
+        <p class="flow">User Program &rarr; System Call &rarr; Kernel Mode &rarr; Return &rarr; User Mode</p>
+        
+        <div class="exam-point">
+            <strong>Exam:</strong> Privileged instructions cannot be executed directly in user mode.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>13. Major Tasks of OS</h2>
+        <p>The OS mainly manages:</p>
+        <ol>
+            <li>Process Management</li>
+            <li>Memory Management</li>
+            <li>I/O Management</li>
+            <li>File Management</li>
+            <li>Storage Management</li>
+            <li>Protection & Security</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>14. Process Management</h2>
+        <p><strong>Process:</strong> A program in execution.</p>
+        <table>
+            <tr>
+                <th>Program</th>
+                <th>Process</th>
+            </tr>
+            <tr>
+                <td>Passive entity</td>
+                <td>Active entity</td>
+            </tr>
+            <tr>
+                <td>Stored code</td>
+                <td>Code currently executing</td>
+            </tr>
+            <tr>
+                <td>No execution state</td>
+                <td>Has execution state/resources</td>
+            </tr>
+        </table>
+        
+        <p>A process may require: CPU, Memory, I/O, Files, Initialization data.</p>
+        <p>When a process terminates, OS must reclaim its resources.</p>
+        
+        <h3>OS Process Activities</h3>
+        <ul>
+            <li>Create/delete processes</li>
+            <li>Suspend/resume processes</li>
+            <li>Process synchronization</li>
+            <li>Process communication</li>
+            <li>Deadlock handling</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>15. Memory Management</h2>
+        <p>To execute a program:</p>
+        <ul>
+            <li>Instructions must be in memory.</li>
+            <li>Required data must be in memory.</li>
+        </ul>
+        <p><strong>Memory Management:</strong> Determines what is in memory and when.</p>
+        
+        <h3>Main Activities</h3>
+        <ul>
+            <li>Track used/free memory</li>
+            <li>Decide what enters/leaves memory</li>
+            <li>Allocate memory</li>
+            <li>Deallocate memory</li>
+            <li>Improve CPU utilization and response time</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>16. Storage & File-System Management</h2>
+        <p>OS provides a logical view of storage: <span class="flow">Physical storage &rarr; File</span></p>
+        
+        <h3>File-System Activities</h3>
+        <ul>
+            <li>Create/delete files</li>
+            <li>Create/delete directories</li>
+            <li>Manipulate files/directories</li>
+            <li>Map files to secondary storage</li>
+            <li>Backup files</li>
+            <li>Access control</li>
+        </ul>
+        <p>Files are usually organized into directories.</p>
+    </div>
+
+    <div class="card">
+        <h2>17. I/O Management</h2>
+        <p>OS hides hardware-specific details from users.</p>
+        
+        <h3>I/O subsystem handles:</h3>
+        <ul>
+            <li><strong>Buffering:</strong> Temporary storage while data is transferred.</li>
+            <li><strong>Caching:</strong> Stores frequently/actively used data in faster storage.</li>
+            <li><strong>Spooling:</strong> Overlaps output of one job with input of another.</li>
+        </ul>
+        
+        <p>Also provides:</p>
+        <ul>
+            <li>General device-driver interface</li>
+            <li>Device-specific drivers</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Buffer = Temporary transfer storage<br>
+            Cache = Faster copy for performance<br>
+            Spool = Overlap I/O operations
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>18. Protection & Security</h2>
+        <ul>
+            <li><strong>Protection:</strong> Controls access of processes/users to system resources.</li>
+            <li><strong>Security:</strong> Protects the system from internal and external attacks. (Examples: Viruses, Worms, Denial-of-service, Identity theft, Theft of service)</li>
+        </ul>
+        
+        <h3>User Identification</h3>
+        <ul>
+            <li><strong>User ID:</strong> Identifies a user</li>
+            <li><strong>Group ID:</strong> Identifies a group of users</li>
+            <li>IDs are associated with files/processes to control access.</li>
+            <li><strong>Privilege escalation:</strong> Changing to an ID with greater permissions.</li>
+        </ul>
+        
+        <div class="exam-point">
+            <strong>Exam:</strong><br>
+            Protection = Access control<br>
+            Security = Defense against attacks
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>19. User Interfaces</h2>
+        
+        <h3>CLI — Command Line Interface</h3>
+        <p>Allows users to directly enter commands.</p>
+        <ul>
+            <li><strong>Shell:</strong> Fetches commands, Executes commands, Can have different implementations (e.g., Unix/Linux shells)</li>
+        </ul>
+        
+        <h3>GUI — Graphical User Interface</h3>
+        <p>Uses: Mouse, Keyboard, Monitor, Icons, Windows/folders.</p>
+        <p>Many operating systems support both CLI and GUI.</p>
+        
+        <h3>Touchscreen Interface</h3>
+        <p>Uses: Gestures, Virtual keyboard, Touch-based selection, Voice commands.</p>
+    </div>
+
+    <div class="card">
+        <h2>20. System Calls</h2>
+        <p><strong>System Call:</strong> Programming interface through which programs request services from the OS.</p>
+        <p>Programs usually access system calls through APIs (e.g., Windows API, POSIX API, Java API).</p>
+        
+        <div class="highlight">
+            <strong>Fingertip:</strong> <span class="flow">Application &rarr; API &rarr; System Call &rarr; OS</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>21. Types of System Calls</h2>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Examples</th>
+            </tr>
+            <tr>
+                <td>Process Control</td>
+                <td>Create, terminate, execute, wait</td>
+            </tr>
+            <tr>
+                <td>File Management</td>
+                <td>Create, delete, open, close, read, write</td>
+            </tr>
+            <tr>
+                <td>Device Management</td>
+                <td>Request/release, read/write device</td>
+            </tr>
+            <tr>
+                <td>Information Maintenance</td>
+                <td>Get/set time, system/process/file information</td>
+            </tr>
+            <tr>
+                <td>Communication</td>
+                <td>Send/receive messages, shared memory</td>
+            </tr>
+            <tr>
+                <td>Protection</td>
+                <td>Access control, permissions</td>
+            </tr>
+        </table>
+        
+        <h3>Communication Details</h3>
+        <p>Two major approaches:</p>
+        <ol>
+            <li><strong>Message Passing:</strong> Processes send/receive messages.</li>
+            <li><strong>Shared Memory:</strong> Processes share memory regions.</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>22. UNIX Structure</h2>
+        <p>Traditional UNIX structure is:</p>
+        <ul>
+            <li>More than a simple structure</li>
+            <li>Not completely layered</li>
+            <li>Contains a UNIX kernel</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>23. OS Impact on AI/Data Science</h2>
+        <p>Modern AI/DS workloads depend heavily on OS functionality.</p>
+        
+        <h3>Process & Thread Management</h3>
+        <p>Training uses multiple processes/threads. OS scheduler affects: Training time, Latency, CPU-GPU overlap, GPU utilization.</p>
+        
+        <h3>Memory Management</h3>
+        <p>AI models require large amounts of memory. OS manages Virtual memory, Page faults, Shared memory.</p>
+        <ul>
+            <li><strong>Problems:</strong> Excessive swapping &rarr; slower training; Memory fragmentation &rarr; allocation failures.</li>
+        </ul>
+        
+        <h3>File System & I/O</h3>
+        <p>Training data may be read repeatedly across epochs (ImageNet, CSV/Parquet, TFRecords, WebDataset).</p>
+        <p><strong>Therefore:</strong> Caching + Buffering &rarr; Important for training performance.</p>
+        <ul>
+            <li><strong>mmap():</strong> Maps a file into virtual memory.</li>
+            <li><strong>Prefetching:</strong> Loads the next batch while the current batch is being processed.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>24. GPU & Accelerator Interaction</h2>
+        <p>OS manages:</p>
+        <ul>
+            <li>GPU drivers</li>
+            <li>DMA transfers</li>
+            <li>Context switching</li>
+        </ul>
+        <p>OS/kernel scheduling affects GPU utilization. NUMA-aware memory placement can improve performance.</p>
+    </div>
+
+    <div class="card">
+        <h2>25. Networking for Distributed AI</h2>
+        <p>Distributed training uses: Sockets, RDMA, TCP/IP, RoCE.</p>
+        <p>OS networking affects: All-reduce latency, Parameter synchronization speed.</p>
+        <p><em>Note:</em> RDMA/kernel bypass &rarr; Lower latency than traditional sockets.</p>
+    </div>
+
+    <div class="card">
+        <h2>26. Containers & MLOps</h2>
+        <p>Tools such as Docker and Kubernetes depend on OS features.</p>
+        <ul>
+            <li><strong>Namespaces:</strong> Isolation</li>
+            <li><strong>cgroups:</strong> Resource control</li>
+            <li><strong>Virtual file systems</strong></li>
+        </ul>
+        <p>OS can enforce: CPU limits, GPU limits, Memory limits, Job isolation.</p>
+    </div>
+
+    <div class="card">
+        <h2>EXAM ONE-LINERS</h2>
+        <ul>
+            <li><strong>OS</strong> = Interface between user and hardware.</li>
+            <li><strong>OS as resource allocator</strong> = Manages and allocates system resources.</li>
+            <li><strong>OS as control program</strong> = Controls program execution and I/O devices.</li>
+            <li><strong>Process</strong> = Program in execution.</li>
+            <li><strong>Multiprogramming</strong> = Multiple jobs kept in memory to keep CPU busy.</li>
+            <li><strong>Timesharing</strong> = Frequent CPU switching for interactive computing.</li>
+            <li><strong>Interrupt</strong> = Signal indicating an event requiring CPU attention.</li>
+            <li><strong>Kernel mode</strong> = Mode where privileged instructions can execute.</li>
+            <li><strong>User mode</strong> = Restricted mode for user programs.</li>
+            <li><strong>System call</strong> = Interface for requesting OS services.</li>
+            <li><strong>Device driver</strong> = Software that manages a device/controller.</li>
+            <li><strong>Caching</strong> = Copying data from slower to faster storage.</li>
+            <li><strong>Protection</strong> = Controlling access to resources.</li>
+            <li><strong>Security</strong> = Defending the system against attacks.</li>
+            <li><strong>CLI</strong> = Command-based user interface.</li>
+            <li><strong>GUI</strong> = Graphical user interface.</li>
+        </ul>
+    </div>
+
+    <div class="card highlight">
+        <h2>Fingertip Memory Lines</h2>
+        <ul>
+            <li><strong>OS</strong> = Interface + Resource Manager + Control Program</li>
+            <li><strong>Computer System</strong> = Hardware + OS + Applications + Users</li>
+            <li><strong>Startup</strong> = Bootstrap &rarr; Kernel &rarr; OS Execution</li>
+            <li><strong>I/O</strong> = Device &rarr; Controller &rarr; Buffer &rarr; Memory &rarr; Interrupt</li>
+            <li><strong>Multiprogramming</strong> = Keep CPU Busy</li>
+            <li><strong>Timesharing</strong> = Fast Switching &rarr; Interactive Computing</li>
+            <li><strong>Process</strong> = Program + Execution</li>
+            <li><strong>System Call</strong> = Program &rarr; API &rarr; OS</li>
+            <li><strong>Protection</strong> = Who can access what?</li>
+            <li><strong>Security</strong> = How do we defend the system?</li>
+            <li><strong>Buffer</strong> = Temporary transfer storage</li>
+            <li><strong>Cache</strong> = Fast copy</li>
+            <li><strong>Spooling</strong> = Overlapping I/O</li>
+            <li><strong>AI + OS</strong> = CPU + Memory + I/O + GPU + Network + Containers</li>
+        </ul>
+    </div>
+
+    <div class="card exam-point">
+        <h2>15-Second Revision</h2>
+        <p>OS provides an interface between users and hardware and manages system resources. The major OS responsibilities are process, memory, I/O, file, storage, protection and security management. Multiprogramming keeps the CPU busy, while timesharing provides interactive computing. Interrupts handle hardware/software events, and dual-mode operation protects the OS. Programs request OS services through system calls. Modern AI workloads depend heavily on OS scheduling, memory, I/O, GPU, networking, and container-management features.</p>
+    </div>
+
+</body>
+</html><!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems — Week 1 Notes</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .highlight, .exam-point {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .exam-point {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .flow {
+            font-family: monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
     <h1>Operating Systems — Fingertip Concise Notes</h1>
 
     <div class="card">
