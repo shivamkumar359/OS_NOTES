@@ -1,0 +1,3056 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems — Complete Notes</title>
+    <style>
+        :root {
+            --accent: #3498db;
+            --text2: #7f8c8d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .highlight, .exam-point {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .exam-point {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .flow {
+            font-family: monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+
+        .nav-bar {
+            position: sticky;
+            top: 0;
+            z-index: 10;
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            padding: 12px 16px;
+            background: rgba(249, 249, 249, 0.96);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            backdrop-filter: blur(8px);
+        }
+
+        .nav-bar button {
+            padding: 8px 4px;
+            color: var(--text2);
+            background: none;
+            border: 0;
+            border-bottom: 2px solid transparent;
+            font: bold 0.82rem sans-serif;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .nav-bar button:hover {
+            color: var(--accent);
+        }
+
+        .nav-bar button.active {
+            color: var(--accent);
+            border-bottom-color: var(--accent);
+        }
+
+        .topic-section {
+            display: none;
+        }
+
+        .topic-section.active {
+            display: block;
+        }
+
+        @media (max-width: 600px) {
+            .nav-bar {
+                gap: 8px;
+                justify-content: space-between;
+                padding-left: 8px;
+                padding-right: 8px;
+            }
+
+            .nav-bar button {
+                font-size: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav-bar" aria-label="Weekly notes navigation">
+        <button type="button" class="active" onclick="showTopic('t1', this)">Week 1</button>
+        <button type="button" onclick="showTopic('t2', this)">Week 2</button>
+        <button type="button" onclick="showTopic('t3', this)">Week 3</button>
+        <button type="button" onclick="showTopic('t4', this)">Week 4</button>
+    </nav>
+    <main>
+        <section id="t1" class="source-document topic-section active">
+        
+            <h1>Operating Systems — Fingertip Concise Notes</h1>
+        
+            <div class="card">
+                <h2>1. What is an Operating System?</h2>
+                <p><strong>Operating System (OS):</strong> Software that acts as an intermediary between the user and computer hardware.</p>
+                
+                <h3>Two Views of OS</h3>
+                <table>
+                    <tr>
+                        <th>View</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td>User-centric</td>
+                        <td>Provides an easy interface and services to users</td>
+                    </tr>
+                    <tr>
+                        <td>System-centric</td>
+                        <td>Allocates resources and controls system operations</td>
+                    </tr>
+                </table>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> OS = Resource Allocator + Control Program + Interface
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>2. Computer System Structure</h2>
+                <p>A computer system has 4 main components:</p>
+                <ol>
+                    <li><strong>Hardware:</strong> CPU, memory, I/O devices</li>
+                    <li><strong>Operating System:</strong> Controls and coordinates hardware</li>
+                    <li><strong>Application Programs:</strong> Word processors, browsers, compilers, DBMS, games</li>
+                    <li><strong>Users:</strong> People, machines, other computers</li>
+                </ol>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong> <span class="flow">Hardware &rarr; OS &rarr; Applications &rarr; Users</span>
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>3. What Does an OS Do?</h2>
+                <p>Depends on the type of system.</p>
+                <ul>
+                    <li>Provides convenience</li>
+                    <li>Improves performance</li>
+                    <li>Manages system resources</li>
+                    <li>Supports multiple users/programs</li>
+                    <li>Optimizes battery life in handheld systems</li>
+                    <li>Embedded systems may have little/no user interface</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>4. Computer Startup</h2>
+                <p>At power-up/reboot:</p>
+                <p class="flow">Bootstrap Program &rarr; Initializes System &rarr; Loads OS Kernel &rarr; Starts Execution</p>
+                
+                <h3>Bootstrap Program</h3>
+                <ul>
+                    <li>Stored in ROM/EPROM</li>
+                    <li>Also called firmware</li>
+                    <li>Loads the OS kernel into memory</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Exam:</strong> Bootstrap program is the first program executed during startup.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>5. Computer-System Operation</h2>
+                <ul>
+                    <li>CPU and I/O devices can work concurrently.</li>
+                    <li>Each device has a device controller.</li>
+                    <li>Controller has a local buffer.</li>
+                    <li>Data moves between main memory &harr; local buffer.</li>
+                    <li>After completing an operation, the controller sends an interrupt to the CPU.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong> <span class="flow">Device &rarr; Controller &rarr; Buffer &rarr; Memory &rarr; Interrupt</span>
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>6. Storage Hierarchy</h2>
+                <p>Storage systems are organized as a hierarchy based mainly on:</p>
+                <ul>
+                    <li>Speed</li>
+                    <li>Cost</li>
+                    <li>Volatility</li>
+                </ul>
+                <p>Faster storage is generally more expensive and smaller.</p>
+            </div>
+        
+            <div class="card">
+                <h2>7. Caching</h2>
+                <p><strong>Caching:</strong> Copying information from slower storage to faster storage temporarily.</p>
+                
+                <h3>How it works</h3>
+                <ol>
+                    <li>Check faster storage (cache).</li>
+                    <li>If data is present &rarr; use it directly.</li>
+                    <li>If absent &rarr; copy data from slower storage to cache.</li>
+                    <li>Use the cached copy.</li>
+                </ol>
+                <p>Cache is smaller than the storage it represents.</p>
+                
+                <h3>Important cache issues</h3>
+                <ul>
+                    <li>Cache size</li>
+                    <li>Replacement policy</li>
+                    <li>Cache management</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong> Cache = Small + Fast + Temporary copy
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>8. Device Driver</h2>
+                <p><strong>Device Driver:</strong> Software that manages a particular device controller.</p>
+                <p>It:</p>
+                <ul>
+                    <li>Manages I/O devices</li>
+                    <li>Provides a uniform interface between the device controller and OS kernel</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>9. Multiprogramming</h2>
+                <p><strong>Multiprogramming:</strong> Keeping multiple jobs in memory so the CPU always has something to execute.</p>
+                
+                <h3>Why?</h3>
+                <p>A single program may wait for I/O, leaving the CPU idle.</p>
+                
+                <h3>Working</h3>
+                <p class="flow">Job A running &rarr; A waits for I/O &rarr; OS switches to Job B</p>
+                <p><strong>Goal:</strong> Improve CPU utilization and efficiency.</p>
+            </div>
+        
+            <div class="card">
+                <h2>10. Timesharing / Multitasking</h2>
+                <p><strong>Timesharing:</strong> Extension of multiprogramming where the CPU switches between jobs very frequently.</p>
+                <p>This allows users to interact with programs while they are running.</p>
+                <ul>
+                    <li>Provides interactive computing</li>
+                    <li>Response time should generally be &lt; 1 second</li>
+                    <li>Each user has at least one program in memory &rarr; <strong>Process</strong></li>
+                    <li>If multiple jobs are ready &rarr; <strong>CPU Scheduling</strong> is required.</li>
+                </ul>
+                
+                <h3>Difference</h3>
+                <table>
+                    <tr>
+                        <th>Multiprogramming</th>
+                        <th>Timesharing</th>
+                    </tr>
+                    <tr>
+                        <td>Focuses on CPU utilization</td>
+                        <td>Focuses on interactive response</td>
+                    </tr>
+                    <tr>
+                        <td>Switches when job waits</td>
+                        <td>Switches frequently</td>
+                    </tr>
+                    <tr>
+                        <td>Mainly efficiency</td>
+                        <td>Mainly user interaction</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>11. Operating-System Operations</h2>
+                <p>OS operation is interrupt-driven.</p>
+                
+                <h3>Types of Interrupts</h3>
+                <ol>
+                    <li><strong>Hardware Interrupt:</strong> Generated by hardware/device.</li>
+                    <li><strong>Software Interrupt:</strong> Also called exception/trap.
+                        <ul>
+                            <li>Examples: Division by zero, Request for OS service, Other process-related problems.</li>
+                        </ul>
+                    </li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>12. Dual-Mode Operation</h2>
+                <p>Used to protect the OS and other system components.</p>
+                
+                <h3>Two modes:</h3>
+                <ol>
+                    <li>User Mode</li>
+                    <li>Kernel Mode</li>
+                </ol>
+                
+                <p><strong>Mode Bit:</strong> Hardware mechanism that identifies the current mode.</p>
+                
+                <h3>Privileged Instructions</h3>
+                <p>Certain instructions can only execute in kernel mode.</p>
+                
+                <h3>Mode Transition</h3>
+                <p class="flow">User Program &rarr; System Call &rarr; Kernel Mode &rarr; Return &rarr; User Mode</p>
+                
+                <div class="exam-point">
+                    <strong>Exam:</strong> Privileged instructions cannot be executed directly in user mode.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>13. Major Tasks of OS</h2>
+                <p>The OS mainly manages:</p>
+                <ol>
+                    <li>Process Management</li>
+                    <li>Memory Management</li>
+                    <li>I/O Management</li>
+                    <li>File Management</li>
+                    <li>Storage Management</li>
+                    <li>Protection & Security</li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>14. Process Management</h2>
+                <p><strong>Process:</strong> A program in execution.</p>
+                
+                <table>
+                    <tr>
+                        <th>Program</th>
+                        <th>Process</th>
+                    </tr>
+                    <tr>
+                        <td>Passive entity</td>
+                        <td>Active entity</td>
+                    </tr>
+                    <tr>
+                        <td>Stored code</td>
+                        <td>Code currently executing</td>
+                    </tr>
+                    <tr>
+                        <td>No execution state</td>
+                        <td>Has execution state/resources</td>
+                    </tr>
+                </table>
+                
+                <p>A process may require: CPU, Memory, I/O, Files, Initialization data.</p>
+                <p>When a process terminates, OS must reclaim its resources.</p>
+                
+                <h3>OS Process Activities</h3>
+                <ul>
+                    <li>Create/delete processes</li>
+                    <li>Suspend/resume processes</li>
+                    <li>Process synchronization</li>
+                    <li>Process communication</li>
+                    <li>Deadlock handling</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>15. Memory Management</h2>
+                <p>To execute a program:</p>
+                <ul>
+                    <li>Instructions must be in memory.</li>
+                    <li>Required data must be in memory.</li>
+                </ul>
+                <p><strong>Memory Management:</strong> Determines what is in memory and when.</p>
+                
+                <h3>Main Activities</h3>
+                <ul>
+                    <li>Track used/free memory</li>
+                    <li>Decide what enters/leaves memory</li>
+                    <li>Allocate memory</li>
+                    <li>Deallocate memory</li>
+                    <li>Improve CPU utilization and response time</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>16. Storage & File-System Management</h2>
+                <p>OS provides a logical view of storage: <span class="flow">Physical storage &rarr; File</span></p>
+                
+                <h3>File-System Activities</h3>
+                <ul>
+                    <li>Create/delete files</li>
+                    <li>Create/delete directories</li>
+                    <li>Manipulate files/directories</li>
+                    <li>Map files to secondary storage</li>
+                    <li>Backup files</li>
+                    <li>Access control</li>
+                </ul>
+                <p>Files are usually organized into directories.</p>
+            </div>
+        
+            <div class="card">
+                <h2>17. I/O Management</h2>
+                <p>OS hides hardware-specific details from users.</p>
+                
+                <h3>I/O subsystem handles:</h3>
+                <ul>
+                    <li><strong>Buffering:</strong> Temporary storage while data is transferred.</li>
+                    <li><strong>Caching:</strong> Stores frequently/actively used data in faster storage.</li>
+                    <li><strong>Spooling:</strong> Overlaps output of one job with input of another.</li>
+                </ul>
+                
+                <p>Also provides:</p>
+                <ul>
+                    <li>General device-driver interface</li>
+                    <li>Device-specific drivers</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    Buffer = Temporary transfer storage<br>
+                    Cache = Faster copy for performance<br>
+                    Spool = Overlap I/O operations
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>18. Protection & Security</h2>
+                <ul>
+                    <li><strong>Protection:</strong> Controls access of processes/users to system resources.</li>
+                    <li><strong>Security:</strong> Protects the system from internal and external attacks. (Examples: Viruses, Worms, Denial-of-service, Identity theft, Theft of service)</li>
+                </ul>
+                
+                <h3>User Identification</h3>
+                <ul>
+                    <li><strong>User ID:</strong> Identifies a user</li>
+                    <li><strong>Group ID:</strong> Identifies a group of users</li>
+                    <li>IDs are associated with files/processes to control access.</li>
+                    <li><strong>Privilege escalation:</strong> Changing to an ID with greater permissions.</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Exam:</strong><br>
+                    Protection = Access control<br>
+                    Security = Defense against attacks
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>19. User Interfaces</h2>
+                
+                <h3>CLI — Command Line Interface</h3>
+                <p>Allows users to directly enter commands.</p>
+                <ul>
+                    <li><strong>Shell:</strong> Fetches commands, Executes commands, Can have different implementations (Examples include Unix/Linux shells).</li>
+                </ul>
+                
+                <h3>GUI — Graphical User Interface</h3>
+                <p>Uses: Mouse, Keyboard, Monitor, Icons, Windows/folders.</p>
+                <p>Many operating systems support both CLI and GUI.</p>
+                
+                <h3>Touchscreen Interface</h3>
+                <p>Uses: Gestures, Virtual keyboard, Touch-based selection, Voice commands.</p>
+            </div>
+        
+            <div class="card">
+                <h2>20. System Calls</h2>
+                <p><strong>System Call:</strong> Programming interface through which programs request services from the OS.</p>
+                <p>Programs usually access system calls through APIs.</p>
+                
+                <h3>Common APIs</h3>
+                <ul>
+                    <li>Windows API</li>
+                    <li>POSIX API</li>
+                    <li>Java API</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong> <span class="flow">Application &rarr; API &rarr; System Call &rarr; OS</span>
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>21. Types of System Calls</h2>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Examples</th>
+                    </tr>
+                    <tr>
+                        <td>Process Control</td>
+                        <td>Create, terminate, execute, wait, allocate/free memory, locks</td>
+                    </tr>
+                    <tr>
+                        <td>File Management</td>
+                        <td>Create, delete, open, close, read, write, reposition, get/set attributes</td>
+                    </tr>
+                    <tr>
+                        <td>Device Management</td>
+                        <td>Request/release device, read/write, attach/detach devices</td>
+                    </tr>
+                    <tr>
+                        <td>Information Maintenance</td>
+                        <td>Get/set time, system/process/file information</td>
+                    </tr>
+                    <tr>
+                        <td>Communication</td>
+                        <td>Send/receive messages, shared memory</td>
+                    </tr>
+                    <tr>
+                        <td>Protection</td>
+                        <td>Access control, permissions</td>
+                    </tr>
+                </table>
+                
+                <h3>Communication</h3>
+                <p>Two major approaches:</p>
+                <ol>
+                    <li><strong>Message Passing:</strong> Processes send/receive messages.</li>
+                    <li><strong>Shared Memory:</strong> Processes share memory regions.</li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>22. UNIX Structure</h2>
+                <p>Traditional UNIX structure is:</p>
+                <ul>
+                    <li>More than a simple structure</li>
+                    <li>Not completely layered</li>
+                    <li>Contains a UNIX kernel</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>23. OS Impact on AI/Data Science</h2>
+                <p>Modern AI/DS workloads depend heavily on OS functionality.</p>
+                
+                <h3>Process & Thread Management</h3>
+                <ul>
+                    <li>Training uses multiple processes/threads.</li>
+                    <li>OS scheduler affects: Training time, Latency, CPU-GPU overlap, GPU utilization.</li>
+                </ul>
+                
+                <h3>Memory Management</h3>
+                <ul>
+                    <li>AI models require large amounts of memory.</li>
+                    <li>OS manages: Virtual memory, Page faults, Shared memory.</li>
+                    <li><strong>Problems:</strong> Excessive swapping &rarr; slower training; Memory fragmentation &rarr; allocation failures.</li>
+                </ul>
+                
+                <h3>File System & I/O</h3>
+                <ul>
+                    <li>Training data may be read repeatedly across epochs (e.g., ImageNet, CSV/Parquet, TFRecords, WebDataset).</li>
+                    <li><strong>Therefore:</strong> Caching + Buffering &rarr; Important for training performance.</li>
+                    <li><strong>Important techniques:</strong> 
+                        <ul>
+                            <li><code>mmap()</code>: Maps a file into virtual memory.</li>
+                            <li><strong>Prefetching:</strong> Loads the next batch while the current batch is being processed.</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>24. GPU & Accelerator Interaction</h2>
+                <p>OS manages:</p>
+                <ul>
+                    <li>GPU drivers</li>
+                    <li>DMA transfers</li>
+                    <li>Context switching</li>
+                </ul>
+                <p>OS/kernel scheduling affects GPU utilization. NUMA-aware memory placement can improve performance.</p>
+            </div>
+        
+            <div class="card">
+                <h2>25. Networking for Distributed AI</h2>
+                <p>Distributed training uses:</p>
+                <ul>
+                    <li>Sockets</li>
+                    <li>RDMA</li>
+                    <li>TCP/IP</li>
+                    <li>RoCE</li>
+                </ul>
+                <p>OS networking affects: All-reduce latency, Parameter synchronization speed.</p>
+                <p><em>Note:</em> RDMA/kernel bypass &rarr; Lower latency than traditional sockets.</p>
+            </div>
+        
+            <div class="card">
+                <h2>26. Containers & MLOps</h2>
+                <p>Tools such as Docker and Kubernetes depend on OS features.</p>
+                
+                <h3>Important OS mechanisms:</h3>
+                <ul>
+                    <li><strong>Namespaces:</strong> Isolation</li>
+                    <li><strong>cgroups:</strong> Resource control</li>
+                    <li><strong>Virtual file systems</strong></li>
+                </ul>
+                <p>OS can enforce: CPU limits, GPU limits, Memory limits, Job isolation.</p>
+            </div>
+        
+            <div class="card">
+                <h2>EXAM ONE-LINERS</h2>
+                <ul>
+                    <li><strong>OS</strong> = Interface between user and hardware.</li>
+                    <li><strong>OS as resource allocator</strong> = Manages and allocates system resources.</li>
+                    <li><strong>OS as control program</strong> = Controls program execution and I/O devices.</li>
+                    <li><strong>Process</strong> = Program in execution.</li>
+                    <li><strong>Multiprogramming</strong> = Multiple jobs kept in memory to keep CPU busy.</li>
+                    <li><strong>Timesharing</strong> = Frequent CPU switching for interactive computing.</li>
+                    <li><strong>Interrupt</strong> = Signal indicating an event requiring CPU attention.</li>
+                    <li><strong>Kernel mode</strong> = Mode where privileged instructions can execute.</li>
+                    <li><strong>User mode</strong> = Restricted mode for user programs.</li>
+                    <li><strong>System call</strong> = Interface for requesting OS services.</li>
+                    <li><strong>Device driver</strong> = Software that manages a device/controller.</li>
+                    <li><strong>Caching</strong> = Copying data from slower to faster storage.</li>
+                    <li><strong>Protection</strong> = Controlling access to resources.</li>
+                    <li><strong>Security</strong> = Defending the system against attacks.</li>
+                    <li><strong>CLI</strong> = Command-based user interface.</li>
+                    <li><strong>GUI</strong> = Graphical user interface.</li>
+                </ul>
+            </div>
+        
+            <div class="card highlight">
+                <h2>Fingertip Memory Lines</h2>
+                <ul>
+                    <li><strong>OS</strong> = Interface + Resource Manager + Control Program</li>
+                    <li><strong>Computer System</strong> = Hardware + OS + Applications + Users</li>
+                    <li><strong>Startup</strong> = Bootstrap &rarr; Kernel &rarr; OS Execution</li>
+                    <li><strong>I/O</strong> = Device &rarr; Controller &rarr; Buffer &rarr; Memory &rarr; Interrupt</li>
+                    <li><strong>Multiprogramming</strong> = Keep CPU Busy</li>
+                    <li><strong>Timesharing</strong> = Fast Switching &rarr; Interactive Computing</li>
+                    <li><strong>Process</strong> = Program + Execution</li>
+                    <li><strong>System Call</strong> = Program &rarr; API &rarr; OS</li>
+                    <li><strong>Protection</strong> = Who can access what?</li>
+                    <li><strong>Security</strong> = How do we defend the system?</li>
+                    <li><strong>Buffer</strong> = Temporary transfer storage</li>
+                    <li><strong>Cache</strong> = Fast copy</li>
+                    <li><strong>Spooling</strong> = Overlapping I/O</li>
+                    <li><strong>AI + OS</strong> = CPU + Memory + I/O + GPU + Network + Containers</li>
+                </ul>
+            </div>
+        
+            <div class="card exam-point">
+                <h2>15-Second Revision</h2>
+                <p>OS provides an interface between users and hardware and manages system resources. The major OS responsibilities are process, memory, I/O, file, storage, protection and security management. Multiprogramming keeps the CPU busy, while timesharing provides interactive computing. Interrupts handle hardware/software events, and dual-mode operation protects the OS. Programs request OS services through system calls. Modern AI workloads depend heavily on OS scheduling, memory, I/O, GPU, networking, and container-management features.</p>
+            </div>
+        
+        </section>
+        <hr>
+        <section id="t2" class="source-document topic-section">
+        
+            <h1>Operating Systems — Processes & Threads (Week 2)</h1>
+        
+            <div class="card">
+                <h2>1. Process Concept</h2>
+                
+                <h3>Process Definition</h3>
+                <ul>
+                    <li><strong>Process</strong> = a program in execution.</li>
+                    <li>A <strong>program</strong> is a passive file stored on disk.</li>
+                    <li>A <strong>process</strong> is an active program executing in memory.</li>
+                    <li>A program becomes a process when it is loaded into memory.</li>
+                    <li>One program can create multiple processes when executed by different users.</li>
+                </ul>
+                
+                <h3>Process Components</h3>
+                <table>
+                    <tr>
+                        <th>Part</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Text/Code section</td>
+                        <td>Program instructions</td>
+                    </tr>
+                    <tr>
+                        <td>Program Counter + Registers</td>
+                        <td>Current execution activity</td>
+                    </tr>
+                    <tr>
+                        <td>Stack</td>
+                        <td>Function parameters, return addresses, local variables</td>
+                    </tr>
+                    <tr>
+                        <td>Data section</td>
+                        <td>Global variables</td>
+                    </tr>
+                    <tr>
+                        <td>Heap</td>
+                        <td>Dynamically allocated memory</td>
+                    </tr>
+                </table>
+                
+                <div class="exam-point">
+                    <strong>Key Distinction:</strong> A program is passive (stored on disk), whereas a process is active (executing in memory).
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>2. Process States</h2>
+                <p>As a process executes, it moves through different states:</p>
+                <table>
+                    <tr>
+                        <th>State</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td>New</td>
+                        <td>Process is being created</td>
+                    </tr>
+                    <tr>
+                        <td>Running</td>
+                        <td>Instructions are being executed</td>
+                    </tr>
+                    <tr>
+                        <td>Waiting</td>
+                        <td>Waiting for some event</td>
+                    </tr>
+                    <tr>
+                        <td>Ready</td>
+                        <td>Waiting for CPU assignment</td>
+                    </tr>
+                    <tr>
+                        <td>Terminated</td>
+                        <td>Execution is finished</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>State Transitions:</strong> <span class="flow">New &rarr; Ready &rarr; Running &rarr; Waiting &rarr; Ready &rarr; Terminated</span>
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>3. Process Control Block (PCB)</h2>
+                <h3>Definition</h3>
+                <p><strong>PCB</strong> = data structure containing information about a process. Also called Task Control Block (TCB).</p>
+                
+                <p>PCB contains:</p>
+                <ul>
+                    <li><strong>Process State</strong> &rarr; running, waiting, etc.</li>
+                    <li><strong>Program Counter</strong> &rarr; next instruction to execute</li>
+                    <li><strong>CPU Registers</strong> &rarr; register contents</li>
+                    <li><strong>CPU Scheduling Information</strong> &rarr; priority, queue pointers</li>
+                    <li><strong>Memory Management Information</strong> &rarr; memory allocated</li>
+                    <li><strong>Accounting Information</strong> &rarr; CPU time, elapsed time, limits</li>
+                    <li><strong>I/O Status Information</strong> &rarr; allocated devices, open files</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Note:</strong> PCB stores all execution-related data required to manage a process.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>4. Context Switch</h2>
+                <h3>Definition</h3>
+                <p>When CPU changes from one process to another:</p>
+                <p class="flow">Save old process state &rarr; Load new process state</p>
+                <ul>
+                    <li>Process context is stored in the PCB.</li>
+                    <li>Context-switching consumes CPU time.</li>
+                    <li>During switching, no useful process work is performed.</li>
+                    <li>More complex OS/PCB &rarr; potentially longer switch time.</li>
+                    <li>Time depends on hardware support.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Summary:</strong> Context Switch = Save Old + Load New
+                </div>
+                <div class="exam-point">
+                    <strong>Note:</strong> Context switching represents overhead because the CPU performs no productive work during the switch.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>5. Process Creation</h2>
+                <ul>
+                    <li>A parent process can create child processes.</li>
+                    <li>Children can create more processes &rarr; forms a process tree.</li>
+                    <li>Every process is identified by a <strong>PID</strong> (Process ID).</li>
+                </ul>
+                
+                <h3>Resource Sharing</h3>
+                <p>Parent and child may:</p>
+                <ul>
+                    <li>Share all resources</li>
+                    <li>Share a subset</li>
+                    <li>Share no resources</li>
+                </ul>
+                
+                <h3>Execution</h3>
+                <ul>
+                    <li>Parent and child execute concurrently OR</li>
+                    <li>Parent waits until child terminates.</li>
+                </ul>
+                
+                <h3>UNIX</h3>
+                <ul>
+                    <li><code>fork()</code> &rarr; creates a new process</li>
+                    <li><code>exec()</code> &rarr; replaces process memory with a new program</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Summary:</strong> <code>fork()</code> creates a new process; <code>exec()</code> replaces the process memory with a new program.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>6. Process Termination</h2>
+                <h3>Normal termination</h3>
+                <ul>
+                    <li>Process finishes its last statement.</li>
+                    <li>Calls <code>exit()</code>.</li>
+                    <li>OS deallocates its resources.</li>
+                    <li>Parent can obtain child status using <code>wait()</code>.</li>
+                </ul>
+                
+                <h3>Parent can terminate a child using <code>abort()</code> when:</h3>
+                <ul>
+                    <li>Child exceeds allocated resources.</li>
+                    <li>Child's task is no longer required.</li>
+                    <li>Parent terminates and OS does not allow child to continue.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>7. Zombie and Orphan Processes</h2>
+                
+                <h3>Zombie Process</h3>
+                <ul>
+                    <li>A terminated child whose parent has not yet called <code>wait()</code>.</li>
+                    <li>Child's process-table entry remains.</li>
+                    <li>Exit status has not yet been collected.</li>
+                </ul>
+                
+                <h3>Orphan Process</h3>
+                <ul>
+                    <li>A child whose parent terminates without calling <code>wait()</code>.</li>
+                    <li>OS assigns the <code>init</code> process as its parent.</li>
+                    <li><code>init</code> periodically calls <code>wait()</code>.</li>
+                </ul>
+                
+                <h3>Zombie vs Orphan</h3>
+                <table>
+                    <tr>
+                        <th>Zombie</th>
+                        <th>Orphan</th>
+                    </tr>
+                    <tr>
+                        <td>Child already terminated</td>
+                        <td>Child is still running</td>
+                    </tr>
+                    <tr>
+                        <td>Parent has not collected status</td>
+                        <td>Parent has terminated</td>
+                    </tr>
+                    <tr>
+                        <td>Entry remains in process table</td>
+                        <td>Adopted by init</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>Summary:</strong> A zombie is a terminated process whose exit status has not been collected by its parent. An orphan is an active process whose parent has terminated.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>8. Cascading Termination</h2>
+                <ul>
+                    <li>Some OSs do not allow children to continue after the parent terminates.</li>
+                </ul>
+                <h3>Definition</h3>
+                <p>Termination of a parent causes termination of:</p>
+                <p class="flow">Child &rarr; Grandchild &rarr; Further descendants</p>
+                <p>The OS initiates this termination.</p>
+            </div>
+        
+            <div class="card">
+                <h2>9. Interprocess Communication (IPC)</h2>
+                <h3>Definition</h3>
+                <p><strong>IPC</strong> = communication between processes.</p>
+                <p>Processes may be:</p>
+                <ul>
+                    <li><strong>Independent</strong> &rarr; cannot affect each other.</li>
+                    <li><strong>Cooperating</strong> &rarr; can affect/be affected by other processes.</li>
+                </ul>
+                
+                <h3>Why processes cooperate?</h3>
+                <ul>
+                    <li>Information sharing</li>
+                    <li>Computation speed-up</li>
+                    <li>Modularity</li>
+                    <li>Convenience</li>
+                </ul>
+                
+                <h3>Two main IPC models</h3>
+                <ol>
+                    <li>Shared Memory</li>
+                    <li>Message Passing</li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>10. Shared Memory</h2>
+                <ul>
+                    <li>A memory area is shared by multiple processes.</li>
+                    <li>Processes communicate through shared memory.</li>
+                    <li>Communication is mainly controlled by user processes, not the OS.</li>
+                    <li>Processes must synchronize access to shared data.</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Key Consideration:</strong> Explicit synchronization is required when multiple processes write to shared memory.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>11. Message Passing</h2>
+                <ul>
+                    <li>Processes communicate without shared variables.</li>
+                </ul>
+                
+                <h3>Basic operations</h3>
+                <ul>
+                    <li><code>send(message)</code></li>
+                    <li><code>receive(message)</code></li>
+                </ul>
+                <p>Used for communication and synchronization. Message size can be fixed or variable.</p>
+                
+                <div class="highlight">
+                    <strong>Summary:</strong><br>
+                    <strong>Shared Memory:</strong> Direct access to shared data structures.<br>
+                    <strong>Message Passing:</strong> Communication via explicit send and receive operations.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>12. Remote Procedure Call (RPC)</h2>
+                <ul>
+                    <li><strong>RPC</strong> = mechanism that makes procedure calls between processes on networked systems appear simpler.</li>
+                    <li>Uses ports for service differentiation.</li>
+                    <li><strong>Client stub</strong> acts as a proxy. Locates server and marshals parameters.</li>
+                    <li><strong>Server stub</strong> receives, unpacks parameters, and performs the procedure.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Client Stub:</strong> Locates server and marshals parameters.<br>
+                    <strong>Server Stub:</strong> Unpacks parameters and invokes the execution.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>13. Pipes</h2>
+                <p><strong>Definition:</strong> A pipe is a communication channel between processes.</p>
+                <p>Important questions:</p>
+                <ul>
+                    <li>Unidirectional or bidirectional?</li>
+                    <li>Half-duplex or full-duplex?</li>
+                    <li>Parent-child relationship required?</li>
+                    <li>Can it work over a network?</li>
+                </ul>
+                
+                <h3>13.1 Ordinary Pipes</h3>
+                <ul>
+                    <li>Usually used between parent and child.</li>
+                    <li>Unidirectional.</li>
+                    <li>Producer writes &rarr; Consumer reads.</li>
+                    <li>Producer = write end; Consumer = read end.</li>
+                    <li>In Windows, called anonymous pipes.</li>
+                </ul>
+                <div class="exam-point">
+                    <strong>Note:</strong> Unused pipe ends must be closed to prevent processes from blocking indefinitely.
+                </div>
+                
+                <h3>13.2 Named Pipes</h3>
+                <ul>
+                    <li>Bidirectional</li>
+                    <li>No parent-child relationship required</li>
+                    <li>Multiple processes can use them</li>
+                    <li>Available in UNIX and Windows</li>
+                </ul>
+                
+                <h3>Ordinary vs Named Pipe</h3>
+                <table>
+                    <tr>
+                        <th>Ordinary Pipe</th>
+                        <th>Named Pipe</th>
+                    </tr>
+                    <tr>
+                        <td>Usually parent-child</td>
+                        <td>No parent-child requirement</td>
+                    </tr>
+                    <tr>
+                        <td>Unidirectional</td>
+                        <td>Bidirectional</td>
+                    </tr>
+                    <tr>
+                        <td>Less powerful</td>
+                        <td>More powerful</td>
+                    </tr>
+                    <tr>
+                        <td>Anonymous</td>
+                        <td>Has a name</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>14. Threads</h2>
+                <p><strong>Definition:</strong> A thread is a unit of execution within a process.</p>
+                <p>Modern applications are generally multithreaded.</p>
+                <p>Example: Thread 1 &rarr; UI | Thread 2 &rarr; Network requests | Thread 3 &rarr; JavaScript | Thread 4 &rarr; File download</p>
+                
+                <h3>Process vs Thread</h3>
+                <ul>
+                    <li><strong>Processes:</strong> Heavyweight units with distinct memory spaces.</li>
+                    <li><strong>Threads:</strong> Lightweight execution units sharing process memory space.</li>
+                </ul>
+                <p>Threads can simplify programs and improve efficiency.</p>
+            </div>
+        
+            <div class="card">
+                <h2>15. Benefits of Multithreading</h2>
+                <ol>
+                    <li><strong>Responsiveness:</strong> One blocked part does not necessarily stop the whole application.</li>
+                    <li><strong>Resource Sharing:</strong> Threads of the same process naturally share process resources.</li>
+                    <li><strong>Economy:</strong> Thread creation and switching cost less than process creation and context switching.</li>
+                    <li><strong>Scalability:</strong> Threads can use multiprocessor/multicore systems.</li>
+                </ol>
+                
+                <div class="highlight">
+                    <strong>Key Benefits:</strong> Responsiveness, Resource Sharing, Economy, and Scalability.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>16. Concurrency vs Parallelism</h2>
+                
+                <h3>Concurrency</h3>
+                <ul>
+                    <li>Multiple tasks make progress during overlapping periods.</li>
+                    <li>Possible even on a single-core CPU through scheduling.</li>
+                </ul>
+                
+                <h3>Parallelism</h3>
+                <ul>
+                    <li>Multiple tasks are executed simultaneously.</li>
+                    <li>Requires multiple cores/processors for true simultaneous execution.</li>
+                </ul>
+                
+                <table>
+                    <tr>
+                        <th>Concurrency</th>
+                        <th>Parallelism</th>
+                    </tr>
+                    <tr>
+                        <td>Tasks make progress</td>
+                        <td>Tasks execute simultaneously</td>
+                    </tr>
+                    <tr>
+                        <td>Possible on single core</td>
+                        <td>Uses multiple cores</td>
+                    </tr>
+                    <tr>
+                        <td>Scheduler can switch tasks</td>
+                        <td>Tasks can run at same time</td>
+                    </tr>
+                </table>
+                
+                <div class="exam-point">
+                    <strong>Key Distinction:</strong> Concurrency allows multiple tasks to make progress over overlapping time frames; parallelism executes multiple tasks simultaneously.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>17. Types of Parallelism</h2>
+                
+                <h3>Data Parallelism</h3>
+                <ul>
+                    <li>Same operation on different data chunks using multiple cores/threads.</li>
+                    <li><em>Example:</em> Split an array into parts and process all parts simultaneously.</li>
+                </ul>
+                
+                <h3>Task Parallelism</h3>
+                <ul>
+                    <li>Different threads perform different operations.</li>
+                    <li><em>Example:</em> One thread downloads data while another processes it.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Summary:</strong><br>
+                    <strong>Data Parallelism:</strong> Same operation applied across different data chunks.<br>
+                    <strong>Task Parallelism:</strong> Different operations executed concurrently on separate threads.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>18. Multicore Programming Challenges</h2>
+                <p>Main challenges:</p>
+                <ul>
+                    <li>Dividing activities</li>
+                    <li>Load balancing</li>
+                    <li>Data splitting</li>
+                    <li>Data dependency</li>
+                    <li>Testing and debugging</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>19. User Threads vs Kernel Threads</h2>
+                
+                <h3>User Threads</h3>
+                <ul>
+                    <li>Managed by a user-level thread library.</li>
+                    <li>Examples of thread libraries: POSIX Pthreads, Windows threads, Java threads</li>
+                </ul>
+                
+                <h3>Kernel Threads</h3>
+                <ul>
+                    <li>Supported and managed by the OS kernel.</li>
+                    <li>Examples: Windows, Linux, Solaris, Mac OS X, Tru64 UNIX</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>20. Blocking: User vs Kernel Threads</h2>
+                
+                <h3>User Thread</h3>
+                <p>If one user thread makes a blocking system call:</p>
+                <p class="flow">One thread blocks &rarr; Entire process may block &rarr; All user threads stop</p>
+                
+                <h3>Kernel Thread</h3>
+                <p>If one kernel thread blocks:</p>
+                <p class="flow">Only that thread blocks &rarr; Other threads can continue</p>
+                
+                <div class="exam-point">
+                    <strong>Key Distinction:</strong> A blocking system call in a user thread blocks the entire process, whereas in a kernel thread, only that thread is blocked.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>21. Multithreading Models</h2>
+                <p>Three main models: Many-to-One, One-to-One, Many-to-Many</p>
+                
+                <h3>21.1 Many-to-One Model</h3>
+                <p class="flow">Many user threads &rarr; One kernel thread</p>
+                <ul>
+                    <li>One blocking thread can block all.</li>
+                    <li>No true parallelism on multicore systems.</li>
+                    <li>Rarely used today.</li>
+                    <li>Examples: Solaris Green Threads, GNU Portable Threads</li>
+                </ul>
+                <div class="highlight">
+                    <strong>Summary:</strong> Multiple user threads mapped to a single kernel thread can cause potential bottlenecks during blocking operations.
+                </div>
+                
+                <h3>21.2 One-to-One Model</h3>
+                <p class="flow">One user thread &rarr; One kernel thread</p>
+                <ul>
+                    <li>More concurrency than many-to-one.</li>
+                    <li>Creating a user thread also creates a kernel thread.</li>
+                    <li>Number of threads may be restricted because of overhead.</li>
+                    <li>Examples: Windows, Linux, Solaris 9+</li>
+                </ul>
+                <div class="highlight">
+                    <strong>Summary:</strong> Each user thread maps to a distinct kernel thread, maximizing concurrency but incurring kernel overhead.
+                </div>
+                
+                <h3>21.3 Many-to-Many Model</h3>
+                <p class="flow">Many user threads &rarr; Many kernel threads</p>
+                <ul>
+                    <li>OS creates an appropriate number of kernel threads.</li>
+                    <li>Provides greater flexibility.</li>
+                    <li>Examples: Solaris versions before 9, Windows with ThreadFiber package</li>
+                </ul>
+                <div class="highlight">
+                    <strong>Summary:</strong> Maps many user threads to an equal or lesser number of kernel threads, balancing concurrency and resource usage.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>22. Multithreading in Python</h2>
+                <h3>Basic Thread</h3>
+        <pre><code>import threading
+        
+        def task():
+            print("Hello from thread")
+        
+        t = threading.Thread(target=task)
+        t.start()
+        t.join()
+        
+        print("Main thread finished")</code></pre>
+                
+                <p><strong>Important methods:</strong></p>
+                <ul>
+                    <li><code>Thread(...)</code> &rarr; creates thread</li>
+                    <li><code>start()</code> &rarr; starts execution</li>
+                    <li><code>join()</code> &rarr; waits for thread completion</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>23. Creating Multiple Threads</h2>
+        <pre><code>import threading
+        
+        def worker(n):
+            print(f"Thread {n} is running")
+        
+        threads = []
+        
+        for i in range(5):
+            t = threading.Thread(target=worker, args=(i,))
+            threads.append(t)
+            t.start()
+        
+        for t in threads:
+            t.join()
+        
+        print("All threads completed")</code></pre>
+                <p><strong>Execution Flow:</strong> <span class="flow">Create &rarr; Start &rarr; Join</span></p>
+            </div>
+        
+            <div class="card">
+                <h2>24. Shared Data and Race Conditions</h2>
+                <p>When multiple threads access the same variable, incorrect results may occur due to unsynchronized access.</p>
+                <p>Example shared variable:</p>
+        <pre><code>counter = 0</code></pre>
+                <p>Two threads may simultaneously execute:</p>
+        <pre><code>counter += 1</code></pre>
+                <p>This can create a race condition.</p>
+                
+                <div class="exam-point">
+                    <strong>Race Condition:</strong> When the final result depends on the timing/order of thread execution.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>25. Synchronizing Shared Data with Locks</h2>
+        <pre><code>import threading
+        
+        counter = 0
+        lock = threading.Lock()
+        
+        def increment():
+            global counter
+            for _ in range(100000):
+                with lock:
+                    counter += 1</code></pre>
+                    
+                <h3>Lock Mechanism</h3>
+                <ul>
+                    <li>Allows controlled access to shared data so that critical operations are protected.</li>
+                    <li><strong>Without Lock</strong> &rarr; possible race condition</li>
+                    <li><strong>With Lock</strong> &rarr; synchronized access</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>Key Concepts Comparison</h2>
+                
+                <h3>Program vs Process</h3>
+                <table>
+                    <tr>
+                        <th>Program</th>
+                        <th>Process</th>
+                    </tr>
+                    <tr>
+                        <td>Passive</td>
+                        <td>Active</td>
+                    </tr>
+                    <tr>
+                        <td>Stored on disk</td>
+                        <td>Executing in memory</td>
+                    </tr>
+                    <tr>
+                        <td>No execution state</td>
+                        <td>Has execution state</td>
+                    </tr>
+                </table>
+                
+                <h3>Process vs Thread</h3>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Thread</th>
+                    </tr>
+                    <tr>
+                        <td>Heavyweight</td>
+                        <td>Lightweight</td>
+                    </tr>
+                    <tr>
+                        <td>Separate process context</td>
+                        <td>Runs within process</td>
+                    </tr>
+                    <tr>
+                        <td>More expensive creation</td>
+                        <td>Cheaper creation</td>
+                    </tr>
+                    <tr>
+                        <td>Context switching has more overhead</td>
+                        <td>Thread switching generally has lower overhead</td>
+                    </tr>
+                    <tr>
+                        <td>IPC needed for process communication</td>
+                        <td>Threads share process resources</td>
+                    </tr>
+                </table>
+                
+                <h3>Shared Memory vs Message Passing</h3>
+                <table>
+                    <tr>
+                        <th>Shared Memory</th>
+                        <th>Message Passing</th>
+                    </tr>
+                    <tr>
+                        <td>Common memory area</td>
+                        <td>Messages exchanged</td>
+                    </tr>
+                    <tr>
+                        <td>Shared data/variables</td>
+                        <td>send() / receive()</td>
+                    </tr>
+                    <tr>
+                        <td>Synchronization is important</td>
+                        <td>Communication through messages</td>
+                    </tr>
+                </table>
+        
+                <h3>Many-to-One vs One-to-One vs Many-to-Many</h3>
+                <table>
+                    <tr>
+                        <th>Model</th>
+                        <th>Mapping</th>
+                    </tr>
+                    <tr>
+                        <td>Many-to-One</td>
+                        <td>Many User &rarr; 1 Kernel</td>
+                    </tr>
+                    <tr>
+                        <td>One-to-One</td>
+                        <td>1 User &rarr; 1 Kernel</td>
+                    </tr>
+                    <tr>
+                        <td>Many-to-Many</td>
+                        <td>Many User &harr; Many Kernel</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card exam-point">
+                <h2>Key Takeaways</h2>
+                <ul>
+                    <li>A process is a program in execution.</li>
+                    <li>PCB contains the state and execution information of a process.</li>
+                    <li>Context switching is an overhead because CPU performs no useful process work during the switch.</li>
+                    <li><code>fork()</code> creates a new process in UNIX.</li>
+                    <li><code>exec()</code> loads a new program into a process.</li>
+                    <li>A zombie process has terminated but its parent has not collected its exit status.</li>
+                    <li>An orphan process has a terminated parent.</li>
+                    <li>IPC models are shared memory and message passing.</li>
+                    <li>Ordinary pipes are generally unidirectional.</li>
+                    <li>Named pipes do not require a parent-child relationship.</li>
+                    <li>Threads are lighter than processes.</li>
+                    <li>Concurrency can exist on a single-core system.</li>
+                    <li>Parallelism requires simultaneous execution, typically using multiple cores.</li>
+                    <li>Data parallelism uses the same operation on different data.</li>
+                    <li>Task parallelism distributes different operations among threads.</li>
+                    <li>Kernel threads allow other threads to continue when one thread blocks.</li>
+                    <li>Many-to-one maps many user threads to one kernel thread.</li>
+                    <li>One-to-one maps each user thread to a kernel thread.</li>
+                    <li>A race condition occurs when unsynchronized shared access causes results to depend on execution timing.</li>
+                    <li>A lock protects critical sections involving shared data.</li>
+                </ul>
+            </div>
+        
+            <div class="card highlight">
+                <h2>Summary Overview</h2>
+                <ul>
+                    <li><strong>Process</strong> &rarr; Program in execution</li>
+                    <li><strong>States</strong> &rarr; New, Ready, Running, Waiting, Terminated</li>
+                    <li><strong>PCB</strong> &rarr; Process information</li>
+                    <li><strong>Context Switch</strong> &rarr; Save old + load new</li>
+                    <li><strong>Creation</strong> &rarr; Parent &rarr; Child &rarr; PID</li>
+                    <li><strong>UNIX</strong> &rarr; <code>fork()</code> + <code>exec()</code></li>
+                    <li><strong>Termination</strong> &rarr; <code>exit()</code> + <code>wait()</code></li>
+                    <li><strong>Zombie</strong> &rarr; Dead child, status not collected</li>
+                    <li><strong>Orphan</strong> &rarr; Parent gone, child remains</li>
+                    <li><strong>IPC</strong> &rarr; Shared Memory + Message Passing</li>
+                    <li><strong>Pipes</strong> &rarr; Ordinary / Named</li>
+                    <li><strong>Thread</strong> &rarr; Lightweight execution unit</li>
+                    <li><strong>Benefits</strong> &rarr; Responsiveness + Sharing + Economy + Scalability</li>
+                    <li><strong>Concurrency</strong> &rarr; Tasks progress together</li>
+                    <li><strong>Parallelism</strong> &rarr; Tasks execute simultaneously</li>
+                    <li><strong>Parallelism types</strong> &rarr; Data + Task</li>
+                    <li><strong>Threads</strong> &rarr; User + Kernel</li>
+                    <li><strong>Models</strong> &rarr; Many-to-One, One-to-One, Many-to-Many</li>
+                    <li><strong>Shared data problem</strong> &rarr; Race Condition</li>
+                    <li><strong>Solution</strong> &rarr; Lock</li>
+                </ul>
+            </div>
+        
+        </section>
+        <hr>
+        <section id="t3" class="source-document topic-section">
+        
+            <h1>Operating Systems — CPU Scheduling (Week 3) </h1>
+        
+            <div class="card">
+                <h2>1. CPU Scheduling — Introduction</h2>
+                <p><strong>CPU Scheduling:</strong> Selecting a process from the ready queue and allocating the CPU to it.</p>
+                
+                <h3>Main Goals</h3>
+                <ul>
+                    <li>Maximize CPU utilization</li>
+                    <li>Maximize throughput</li>
+                    <li>Minimize waiting time</li>
+                    <li>Minimize turnaround time</li>
+                    <li>Minimize response time</li>
+                </ul>
+                
+                <h3>Why Scheduling is Needed</h3>
+                <p>With multiprogramming, when one process waits for I/O, another process can use the CPU.</p>
+        <pre>
+        Process P1:  CPU  ──>  I/O  ──>  CPU  ──>  I/O  ──>  CPU
+                                     │
+                                     ▼
+        Process P2:            CPU  ──>  I/O  ──>  CPU
+        </pre>
+            </div>
+        
+            <div class="card">
+                <h2>2. Basic Concepts</h2>
+                <h3>CPU–I/O Burst Cycle</h3>
+                <p>A process normally alternates between:</p>
+                <p class="flow">CPU Burst &rarr; I/O Burst &rarr; CPU Burst &rarr; I/O Burst &rarr; ...</p>
+                <ul>
+                    <li><strong>CPU Burst:</strong> Process executes instructions on CPU.</li>
+                    <li><strong>I/O Burst:</strong> Process waits for I/O operation.</li>
+                </ul>
+                <p>The distribution of CPU-burst times is important for scheduling.</p>
+                
+                <div class="highlight">
+                    <strong>Fingertip Summary:</strong> Process execution = CPU execution + I/O waiting
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>3. Context Switching</h2>
+                <p><strong>Context Switch:</strong> Switching the CPU from one process to another.</p>
+        <pre>
+        Process P1                             Process P2
+            │                                      │     
+            │            CPU execution             │     
+            ├─────────────────────────────────────►│     
+            │                                      │     
+            │           Context Switch             │     
+            ├─────────────────────────────────────►│     
+            │                                      │     
+            │                              CPU execution     
+        </pre>
+                <p>During a context switch:</p>
+                <ol>
+                    <li>Save the state of the current process.</li>
+                    <li>Load the state of the next process.</li>
+                    <li>Start/resume the next process.</li>
+                </ol>
+                
+                <div class="exam-point">
+                    <strong>Important:</strong> Context switching is overhead because the CPU does not perform useful process work during the switch.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>4. Scheduling Criteria</h2>
+                <table>
+                    <tr>
+                        <th>Criterion</th>
+                        <th>Meaning</th>
+                        <th>Goal</th>
+                    </tr>
+                    <tr>
+                        <td>CPU Utilization</td>
+                        <td>Percentage of time CPU is busy</td>
+                        <td>Maximize</td>
+                    </tr>
+                    <tr>
+                        <td>Throughput</td>
+                        <td>Processes completed per unit time</td>
+                        <td>Maximize</td>
+                    </tr>
+                    <tr>
+                        <td>Turnaround Time</td>
+                        <td>Total time from arrival to completion</td>
+                        <td>Minimize</td>
+                    </tr>
+                    <tr>
+                        <td>Waiting Time</td>
+                        <td>Time spent waiting in ready queue</td>
+                        <td>Minimize</td>
+                    </tr>
+                    <tr>
+                        <td>Response Time</td>
+                        <td>Time from request submission until first response</td>
+                        <td>Minimize</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>Important Formula:</strong> Turnaround Time = Completion Time - Arrival Time
+                </div>
+                
+                <h3>Response Time</h3>
+                <ul>
+                    <li>Response time measures the time until the first response, not the complete output.</li>
+                    <li>Especially important in time-sharing/interactive systems.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>5. Scheduling Algorithm Optimization</h2>
+                <p>A good scheduling algorithm tries to achieve:</p>
+                <ul>
+                    <li>CPU Utilization &rarr; <strong>MAX</strong></li>
+                    <li>Throughput &rarr; <strong>MAX</strong></li>
+                    <li>Turnaround Time &rarr; <strong>MIN</strong></li>
+                    <li>Waiting Time &rarr; <strong>MIN</strong></li>
+                    <li>Response Time &rarr; <strong>MIN</strong></li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>6. First-Come, First-Served (FCFS) Scheduling</h2>
+                <p><strong>FCFS:</strong> The process that arrives first gets the CPU first.</p>
+                <ul>
+                    <li>Non-preemptive</li>
+                    <li>Simple to implement</li>
+                    <li>Uses FIFO ordering</li>
+                </ul>
+                
+                <h3>Example</h3>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Burst Time</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+                
+                <h4>Case 1: Arrival order: P1 &rarr; P2 &rarr; P3</h4>
+        <pre>
+        Gantt Chart
+        0                24       27       30
+        ┌────────────────┬────────┬────────┐
+        │       P1       │   P2   │   P3   │
+        └────────────────┴────────┴────────┘
+        </pre>
+                <ul>
+                    <li><strong>Waiting Time:</strong> P1 = 0, P2 = 24, P3 = 27</li>
+                    <li><strong>Average Waiting Time:</strong> (0 + 24 + 27) / 3 = 17</li>
+                </ul>
+                
+                <h4>Case 2: Arrival order: P2 &rarr; P3 &rarr; P1</h4>
+        <pre>
+        Gantt Chart
+        0        3        6                30
+        ┌────────┬────────┬────────────────┐
+        │   P2   │   P3   │       P1       │
+        └────────┴────────┴────────────────┘
+        </pre>
+                <ul>
+                    <li><strong>Waiting Time:</strong> P1 = 6, P2 = 0, P3 = 3</li>
+                    <li><strong>Average Waiting Time:</strong> (6 + 0 + 3) / 3 = 3</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> FCFS performance can change significantly depending on arrival order (Convoy Effect).
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>7. Shortest-Job-First (SJF) Scheduling</h2>
+                <p><strong>SJF:</strong> Select the process having the shortest next CPU burst.</p>
+                
+                <h3>Features</h3>
+                <ul>
+                    <li>Usually non-preemptive</li>
+                    <li>Gives minimum average waiting time for a given set of processes.</li>
+                    <li>Main difficulty: predicting the length of the next CPU burst.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Important:</strong> SJF is optimal for minimum average waiting time under the standard assumptions.
+                </div>
+                
+                <h3>SJF Example</h3>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Arrival Time</th>
+                        <th>Burst Time</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>0</td>
+                        <td>6</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>2</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>4</td>
+                        <td>7</td>
+                    </tr>
+                    <tr>
+                        <td>P4</td>
+                        <td>5</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+                
+        <pre>
+        Gantt Chart
+        0        6        9               16              24
+        ┌────────┬────────┬───────────────┬───────────────┐
+        │   P1   │   P4   │       P3      │       P2      │
+        └────────┴────────┴───────────────┴───────────────┘
+        </pre>
+                <ul>
+                    <li><strong>Waiting Time:</strong> P1 = 0, P2 = 16 - 2 = 14, P3 = 9 - 4 = 5, P4 = 6 - 5 = 1</li>
+                    <li><strong>Average Waiting Time:</strong> (0 + 14 + 5 + 1) / 4 = 5</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>8. Determining the Next CPU Burst</h2>
+                <p>The exact length of the next CPU burst is generally not known. Therefore, it is estimated from previous CPU bursts.</p>
+                
+                <h3>Exponential Averaging</h3>
+                <p>A common prediction formula is:</p>
+                <p><code>τ(n+1) = α &middot; t(n) + (1 - α) &middot; τ(n)</code></p>
+                <ul>
+                    <li><strong>τ(n+1)</strong> = predicted next CPU burst</li>
+                    <li><strong>t(n)</strong> = actual previous CPU burst</li>
+                    <li><strong>τ(n)</strong> = previous predicted burst</li>
+                    <li><strong>α</strong> = weighting factor (Commonly, α = 1/2)</li>
+                </ul>
+                
+                <p class="flow">Previous CPU bursts &rarr; Estimate next burst &rarr; Choose shortest predicted burst</p>
+            </div>
+        
+            <div class="card">
+                <h2>9. Shortest-Remaining-Time-First (SRTF)</h2>
+                <p><strong>SRTF = Preemptive version of SJF</strong></p>
+                <p>The CPU is given to the process with the shortest remaining CPU burst.</p>
+                <p>If a new process arrives with a shorter remaining time: <span class="flow">Current Process &rarr; Preempt &rarr; New shorter process</span></p>
+                
+                <h3>Key Difference</h3>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>SJF</th>
+                        <th>SRTF</th>
+                    </tr>
+                    <tr>
+                        <td>Type</td>
+                        <td>Usually non-preemptive</td>
+                        <td>Preemptive</td>
+                    </tr>
+                    <tr>
+                        <td>Execution</td>
+                        <td>Runs selected process until completion/block</td>
+                        <td>Can interrupt current process</td>
+                    </tr>
+                    <tr>
+                        <td>Decision Criterion</td>
+                        <td>Based on shortest burst</td>
+                        <td>Based on shortest remaining burst</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>10. SRTF Example</h2>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Arrival Time</th>
+                        <th>Burst Time</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>0</td>
+                        <td>8</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>1</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>2</td>
+                        <td>9</td>
+                    </tr>
+                    <tr>
+                        <td>P4</td>
+                        <td>3</td>
+                        <td>5</td>
+                    </tr>
+                </table>
+                
+        <pre>
+        Scheduling Idea / Gantt Chart
+        Time:
+        0    1        5        10       17       26
+        ┌────┬────────┬────────┬────────┬────────┐
+        │ P1 │   P2   │   P1   │   P4   │   P3   │
+        └────┴────────┴────────┴────────┴────────┘
+        </pre>
+                <ul>
+                    <li><strong>Average Waiting Time:</strong> P1 = 2, P2 = 0, P3 = 15, P4 = 7</li>
+                    <li><strong>Average</strong> = (2 + 0 + 15 + 7) / 4 = 6</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> SRTF can improve waiting time but causes more context switches because of preemption.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>11. Priority Scheduling</h2>
+                <p>Each process is assigned a priority number.</p>
+                <p class="flow">Smaller priority number &rarr; Higher priority</p>
+                <p><em>Example:</em> Priority 1 &gt; Priority 2 &gt; Priority 3</p>
+                <p>The highest-priority process gets the CPU.</p>
+                
+                <h3>Types</h3>
+                <ul>
+                    <li>Preemptive Priority Scheduling</li>
+                    <li>Non-preemptive Priority Scheduling</li>
+                </ul>
+                
+                <h3>Relation with SJF</h3>
+                <p>SJF can be considered a priority scheduling algorithm where: <span class="flow">Shorter predicted CPU burst &rarr; Higher priority</span></p>
+                
+                <h3>Problem: Starvation</h3>
+                <p><strong>Starvation:</strong> A low-priority process may wait indefinitely because higher-priority processes keep arriving.</p>
+                <p class="flow">High Priority &rarr; CPU | High Priority &rarr; CPU | Low Priority &rarr; Waiting...</p>
+                
+                <h3>Solution: Aging</h3>
+                <p><strong>Aging:</strong> Gradually increase the priority of a waiting process.</p>
+                <p class="flow">Long waiting time &rarr; Priority increases &rarr; Eventually gets CPU</p>
+            </div>
+        
+            <div class="card">
+                <h2>12. Priority Scheduling Example</h2>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Burst Time</th>
+                        <th>Priority</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>10</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>1</td>
+                        <td>1</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>2</td>
+                        <td>4</td>
+                    </tr>
+                    <tr>
+                        <td>P4</td>
+                        <td>1</td>
+                        <td>5</td>
+                    </tr>
+                    <tr>
+                        <td>P5</td>
+                        <td>5</td>
+                        <td>2</td>
+                    </tr>
+                </table>
+                
+                <p><strong>Priority order:</strong> <span class="flow">P2 &rarr; P5 &rarr; P1 &rarr; P3 &rarr; P4</span></p>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> Priority 1 is higher than Priority 5 when smaller numbers represent higher priority.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>13. Round Robin (RR) Scheduling</h2>
+                <p><strong>Round Robin:</strong> Each process receives a fixed amount of CPU time called the <strong>time quantum (q)</strong>.</p>
+                <p>Typical quantum: <code>q = 10–100 ms</code></p>
+                
+                <p>When the quantum expires:</p>
+                <p class="flow">Running Process &rarr; Preempt &rarr; End of Ready Queue</p>
+                
+                <p><strong>Example Queue:</strong> <span class="flow">P1 &rarr; P2 &rarr; P3 &rarr; P1 &rarr; P2 &rarr; P3 &rarr; ...</span></p>
+                
+                <p>If there are <em>n</em> processes:</p>
+                <ul>
+                    <li>Each process gets approximately 1/n of CPU time.</li>
+                    <li>A process waits for at most approximately <strong>(n - 1)q</strong> before getting another turn (assuming standard RR queue).</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>14. Round Robin Performance</h2>
+                <ul>
+                    <li><strong>Large Time Quantum (q large):</strong> RR approaches FCFS/FIFO.</li>
+                    <li><strong>Small Time Quantum (q small):</strong> More context switches &rarr; Higher overhead.</li>
+                </ul>
+                
+                <p>Therefore, Time Quantum should be <strong>large compared with context-switch time</strong>.</p>
+                <ul>
+                    <li>Typical values: <code>q = 10–100 ms</code></li>
+                    <li>Context switch: <code>&lt; 10 μs</code></li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Key Point:</strong> RR generally provides better response time than FCFS and is suitable for interactive systems.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>15. RR Example — q = 4</h2>
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Burst Time</th>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>24</td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>3</td>
+                    </tr>
+                </table>
+                
+                <p>With <code>q = 4</code>:</p>
+        <pre>
+        0    4    7    10   14   18   22   26   30
+        ┌────┬────┬────┬────┬────┬────┬────┬────┐
+        │ P1 │ P2 │ P3 │ P1 │ P1 │ P1 │ P1 │ P1 │
+        └────┴────┴────┴────┴────┴────┴────┴────┘
+        </pre>
+                
+                <div class="highlight">
+                    <strong>Important:</strong><br>
+                    Smaller q &rarr; better responsiveness but more context-switch overhead.<br>
+                    Larger q &rarr; fewer context switches but RR approaches FCFS.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>16. Time Quantum vs Context Switch</h2>
+                <table>
+                    <tr>
+                        <th>Large q</th>
+                        <th>Small q</th>
+                    </tr>
+                    <tr>
+                        <td>Less switching</td>
+                        <td>More switching</td>
+                    </tr>
+                    <tr>
+                        <td>Less overhead</td>
+                        <td>More overhead</td>
+                    </tr>
+                    <tr>
+                        <td>RR &rarr; FCFS</td>
+                        <td>Better response time</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>Rule of Thumb:</strong> About 80% of CPU bursts should ideally be shorter than q. This allows most CPU bursts to finish within one quantum.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>17. Multilevel Queue Scheduling</h2>
+                <p>The ready queue is divided into separate queues. Example:</p>
+                <ul>
+                    <li><strong>Foreground Queue (Interactive):</strong> Uses RR</li>
+                    <li><strong>Background Queue (Batch):</strong> Uses FCFS</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Important:</strong> A process is permanently assigned to one queue. Each queue can have its own scheduling algorithm.
+                </div>
+                
+                <h3>Scheduling Between Queues</h3>
+                <ol>
+                    <li><strong>Fixed Priority:</strong> Serve foreground completely &rarr; Background. <em>(Problem: Background processes may suffer from starvation.)</em></li>
+                    <li><strong>Time Slicing:</strong> CPU time is divided between queues. <em>(Example: 80% CPU to Foreground RR, 20% CPU to Background FCFS. Allows both queues to receive CPU time.)</em></li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>18. Multilevel Feedback Queue (MLFQ)</h2>
+                <p><strong>MLFQ:</strong> Processes can move between different queues based on their behavior.</p>
+                
+                <h3>Basic Rules</h3>
+                <ul>
+                    <li><span class="flow">New process &rarr; Top-priority queue</span></li>
+                    <li>If it uses entire quantum: <span class="flow">Move to Lower-priority queue</span></li>
+                    <li>If it waits for I/O before quantum expires: <span class="flow">Stays in same queue</span></li>
+                </ul>
+                
+                <h3>Aging</h3>
+                <p>A process waiting too long in a lower queue can be promoted.</p>
+                <p class="flow">Long waiting &rarr; Priority increases &rarr; Move upward</p>
+            </div>
+        
+            <div class="card">
+                <h2>19. MLFQ Example</h2>
+                <p>Three queues:</p>
+                <ul>
+                    <li>Q0 &rarr; RR, <code>q = 8 ms</code></li>
+                    <li>Q1 &rarr; RR, <code>q = 16 ms</code></li>
+                    <li>Q2 &rarr; FCFS</li>
+                </ul>
+                
+                <h3>Scheduling Flow</h3>
+                <p class="flow">New Job &rarr; Q0 (8 ms) &rarr; [If not finished] &rarr; Q1 (16 ms) &rarr; [If not finished] &rarr; Q2 (FCFS)</p>
+            </div>
+        
+            <div class="card">
+                <h2>20. MLFQ Philosophy</h2>
+                <p>MLFQ does not initially know whether a process is short or long. Therefore:</p>
+                <p class="flow">New process &rarr; Assume short &rarr; Give high priority</p>
+                <ul>
+                    <li><strong>Short job:</strong> Finishes quickly at the top.</li>
+                    <li><strong>Long job:</strong> Moves down queues and runs as a batch-like job.</li>
+                </ul>
+                
+                <div class="highlight">
+                    <strong>Key Idea:</strong> Short/interactive jobs stay high. Long CPU-bound jobs gradually move lower.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>21. MLFQ — Interactive vs CPU-Bound Jobs</h2>
+                <ul>
+                    <li><strong>Interactive Job (short CPU bursts):</strong><br>
+                        <span class="flow">High-priority queue &rarr; Finishes quickly</span>
+                    </li>
+                    <li><strong>CPU-bound Job (long CPU bursts):</strong><br>
+                        <span class="flow">Uses entire quantum &rarr; Moves downward &rarr; Lower-priority queue</span>
+                    </li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>22. MLFQ Major Problems and Solutions</h2>
+                
+                <h3>Problem 1: Too Many Interactive Jobs</h3>
+                <p>If too many interactive jobs remain in high-priority queues, they consume most CPU time, leading to starvation for long-running jobs.</p>
+                <ul>
+                    <li><strong>Solution: Periodic Priority Boost.</strong> After some time period S, move all jobs to the topmost queue. This prevents long-running processes from being permanently ignored.</li>
+                </ul>
+                
+                <h3>Problem 2: Gaming the Scheduler</h3>
+                <p>A process might deliberately give up the CPU before its quantum expires to remain in a high-priority queue.</p>
+                <ul>
+                    <li><strong>Solution: Track Total Time.</strong> Track the total time allotment used at a level. If it uses full time allotment (even across multiple short bursts) &rarr; Priority reduced. The process cannot stay at a high priority simply by giving up the CPU early.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>23. Impact of CPU Scheduling on AI/ML Workloads</h2>
+                <p>CPU scheduling is particularly important in modern AI/ML systems because CPU, GPU, memory, storage, and network operations are interconnected.</p>
+                
+                <h3>A. Mixed Compute and I/O Phases</h3>
+                <p>AI workloads can alternate between different types of work:</p>
+                <p class="flow">Data decoding (CPU) &rarr; Forward/Backward Passes (GPU) &rarr; Checkpointing (I/O)</p>
+                
+                <ul>
+                    <li><strong>CPU-heavy:</strong> Data decoding, Data augmentation, Tokenization</li>
+                    <li><strong>GPU-heavy:</strong> Forward pass, Backward pass</li>
+                    <li><strong>I/O-heavy:</strong> Disk operations, Network operations, Checkpointing</li>
+                </ul>
+                
+                <h3>Scheduling Impact</h3>
+                <p>Poor CPU scheduling can create a phase mismatch:</p>
+                <p class="flow">CPU delayed &rarr; Data not prepared &rarr; GPU waits &rarr; GPU pipeline stalls</p>
+                
+                <div class="highlight">
+                    <strong>Key Point:</strong> Efficient CPU scheduling helps keep GPU workloads continuously supplied with data.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>24. Bursty and Synchronized AI/ML Execution</h2>
+                <p>Distributed DNN training commonly uses synchronization operations such as All-reduce or All-gather. Workers may need to reach a synchronization barrier together.</p>
+        <pre>
+        Worker 1 ──┐                  
+        Worker 2 ──┼──► Barrier ──> Continue
+        Worker 3 ──┤                  
+        Worker 4 ──┘                  
+        </pre>
+                <p>If one process is delayed (straggler problem):</p>
+        <pre>
+        Worker 1 ──┐          
+        Worker 2 ──┼──► Waiting
+        Worker 3 ──┤          
+        Worker 4 ──┘          
+        </pre>
+                <p class="flow">Delayed Worker &rarr; Barrier delayed &rarr; Other GPUs wait</p>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> In synchronized distributed training, scheduling delays affecting one worker can cause other workers/GPUs to remain idle.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>25. Latency-Sensitive AI Inference</h2>
+                <p>Some AI workloads require very low response latency.</p>
+                <ul>
+                    <li><em>Examples:</em> First-token latency, Autoregressive decoding loops, RPC handling threads</li>
+                </ul>
+                
+                <h3>Scheduling Impact</h3>
+                <p>If an inference thread is preempted or its time slice expires:</p>
+                <p class="flow">Preemption &rarr; Inference thread waits &rarr; Response delayed &rarr; Higher tail latency</p>
+            </div>
+        
+            <div class="card">
+                <h2>26. Scheduling Algorithms — Quick Comparison</h2>
+                <table>
+                    <tr>
+                        <th>Algorithm</th>
+                        <th>Preemptive?</th>
+                        <th>Main Idea</th>
+                        <th>Main Issue</th>
+                    </tr>
+                    <tr>
+                        <td>FCFS</td>
+                        <td>No</td>
+                        <td>First arrival runs first</td>
+                        <td>Convoy effect / poor waiting time</td>
+                    </tr>
+                    <tr>
+                        <td>SJF</td>
+                        <td>No</td>
+                        <td>Shortest CPU burst first</td>
+                        <td>Burst prediction</td>
+                    </tr>
+                    <tr>
+                        <td>SRTF</td>
+                        <td>Yes</td>
+                        <td>Shortest remaining burst</td>
+                        <td>More context switches</td>
+                    </tr>
+                    <tr>
+                        <td>Priority</td>
+                        <td>Yes/No</td>
+                        <td>Highest priority first</td>
+                        <td>Starvation</td>
+                    </tr>
+                    <tr>
+                        <td>RR</td>
+                        <td>Yes</td>
+                        <td>Fixed time quantum</td>
+                        <td>Quantum selection</td>
+                    </tr>
+                    <tr>
+                        <td>Multilevel Queue</td>
+                        <td>Depends</td>
+                        <td>Separate fixed queues</td>
+                        <td>Starvation possible</td>
+                    </tr>
+                    <tr>
+                        <td>MLFQ</td>
+                        <td>Yes</td>
+                        <td>Processes move between queues</td>
+                        <td>More complex</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>27. Important Problems to Remember</h2>
+                <ul>
+                    <li><strong>FCFS:</strong> Arrival order can produce very different waiting times.</li>
+                    <li><strong>SJF:</strong> Exact next CPU burst is difficult to know.</li>
+                    <li><strong>SRTF:</strong> Frequent preemption/context switching.</li>
+                    <li><strong>Priority:</strong> Problem: Starvation. Solution: Aging.</li>
+                    <li><strong>RR:</strong> Problem: Choosing the correct time quantum. <em>(q too large &rarr; behaves like FCFS, q too small &rarr; excessive context-switch overhead)</em></li>
+                    <li><strong>Multilevel Queue:</strong> Problem: Lower-priority queues can starve.</li>
+                    <li><strong>MLFQ:</strong> Problems: Too many interactive jobs, Scheduler gaming. Solutions: Periodic priority boost, Track total time allotment.</li>
+                </ul>
+            </div>
+        
+            <div class="card highlight">
+                <h2>28. Fingertip Memory Lines</h2>
+                <ul>
+                    <li><strong>FCFS</strong> = First come, first served</li>
+                    <li><strong>SJF</strong> = Shortest burst first</li>
+                    <li><strong>SRTF</strong> = Shortest remaining burst first</li>
+                    <li><strong>Priority</strong> = Highest priority first</li>
+                    <li><strong>RR</strong> = Fixed time quantum + circular scheduling</li>
+                    <li><strong>MLQ</strong> = Fixed queues</li>
+                    <li><strong>MLFQ</strong> = Processes can move between queues</li>
+                    <li><strong>SJF</strong> &rarr; Minimum average waiting time</li>
+                    <li><strong>SRTF</strong> &rarr; Preemptive SJF</li>
+                    <li><strong>Priority</strong> &rarr; Starvation possible</li>
+                    <li><strong>Aging</strong> &rarr; Prevents starvation</li>
+                    <li><strong>RR</strong> &rarr; Good response time</li>
+                    <li><strong>q large</strong> &rarr; RR approaches FCFS</li>
+                    <li><strong>q small</strong> &rarr; More context-switch overhead</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>29. Exam One-Liners</h2>
+                <ul>
+                    <li><strong>CPU Scheduling:</strong> Selecting a ready process and allocating the CPU to it.</li>
+                    <li><strong>Context Switch:</strong> Saving one process's state and loading another process's state.</li>
+                    <li><strong>CPU Utilization:</strong> Fraction of time the CPU is busy.</li>
+                    <li><strong>Throughput:</strong> Number of processes completed per unit time.</li>
+                    <li><strong>Turnaround Time:</strong> Completion Time &minus; Arrival Time.</li>
+                    <li><strong>Waiting Time:</strong> Time spent waiting in the ready queue.</li>
+                    <li><strong>Response Time:</strong> Time from request submission until the first response.</li>
+                    <li><strong>FCFS:</strong> Schedules processes according to arrival order.</li>
+                    <li><strong>SJF:</strong> Selects the process with the shortest next CPU burst.</li>
+                    <li><strong>SRTF:</strong> Preemptive version of SJF.</li>
+                    <li><strong>Priority Scheduling:</strong> CPU is assigned to the highest-priority process.</li>
+                    <li><strong>Starvation:</strong> Indefinite waiting of a process for CPU allocation.</li>
+                    <li><strong>Aging:</strong> Gradually increasing the priority of waiting processes.</li>
+                    <li><strong>Round Robin:</strong> Each process receives a fixed time quantum.</li>
+                    <li><strong>Multilevel Queue:</strong> Ready queue divided into fixed separate queues.</li>
+                    <li><strong>MLFQ:</strong> Processes can move between scheduling queues.</li>
+                    <li><strong>AI/ML scheduling issue:</strong> CPU delays can stall GPU pipelines.</li>
+                    <li><strong>Straggler problem:</strong> A delayed worker can make other synchronized workers wait.</li>
+                    <li><strong>Inference scheduling:</strong> Preemption can increase response and tail latency.</li>
+                </ul>
+            </div>
+        
+            <div class="card exam-point">
+                <h2>30. 15-Second Revision</h2>
+                
+                <h3>CPU Scheduling</h3>
+                <ul>
+                    <li><strong>FCFS</strong> &rarr; Arrival order</li>
+                    <li><strong>SJF</strong> &rarr; Shortest burst</li>
+                    <li><strong>SRTF</strong> &rarr; Shortest remaining burst</li>
+                    <li><strong>Priority</strong> &rarr; Highest priority (Aging prevents starvation)</li>
+                    <li><strong>RR</strong> &rarr; Time quantum</li>
+                    <li><strong>MLQ</strong> &rarr; Fixed separate queues</li>
+                    <li><strong>MLFQ</strong> &rarr; Processes move between queues</li>
+                </ul>
+                
+                <h3>Core Optimization</h3>
+                <ul>
+                    <li>CPU Utilization &rarr; <strong>MAX</strong></li>
+                    <li>Throughput &rarr; <strong>MAX</strong></li>
+                    <li>Waiting Time &rarr; <strong>MIN</strong></li>
+                    <li>Turnaround Time &rarr; <strong>MIN</strong></li>
+                    <li>Response Time &rarr; <strong>MIN</strong></li>
+                </ul>
+                
+                <h3>AI/ML Impact</h3>
+                <ul>
+                    <li>Data processing delay &rarr; <strong>GPU stalls</strong></li>
+                    <li>Worker descheduling &rarr; <strong>Straggler problem</strong></li>
+                    <li>Inference preemption &rarr; <strong>Higher latency</strong></li>
+                </ul>
+            </div>
+        
+        </section>
+        <hr>
+        <section id="t4" class="source-document topic-section">
+        
+            <h1>Operating Systems — Concurrency, Synchronization & Deadlocks</h1>
+        
+            <div class="card">
+                <h2>1. Concurrency and Synchronization</h2>
+                <h3>1.1 Concurrency</h3>
+                <ul>
+                    <li><strong>Concurrency</strong> = Multiple processes/threads execute during overlapping time periods.</li>
+                    <li>When processes share data/resources, incorrect results can occur unless their access is properly synchronized.</li>
+                    <li><strong>Synchronization</strong> = Coordinating processes so that shared data remains consistent.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>2. Producer-Consumer Problem</h2>
+                <p>The Producer-Consumer Problem is a classic synchronization problem involving a shared buffer.</p>
+        <pre>
+        Shared Buffer
+        +-------------------------------+--------+
+        Producer | [ ][ ][ ][ ][ ] Buffer | Consumer
+         --->    | Adds data     Removes data |  --->   
+        +-------------------------------+--------+
+        </pre>
+                <ul>
+                    <li><strong>Producer:</strong> Generates data and puts it into the shared buffer.</li>
+                    <li><strong>Consumer:</strong> Takes data from the shared buffer and processes it.</li>
+                </ul>
+                
+                <h3>Main Challenges</h3>
+                <ul>
+                    <li>Producer must not add data when the buffer is full.</li>
+                    <li>Consumer must not remove data when the buffer is empty.</li>
+                    <li>Producer and consumer must not access the buffer in a conflicting way at the same time.</li>
+                </ul>
+        
+                <h3>2.1 Producer Code</h3>
+        <pre><code>while (true) {
+            /* produce an item in next_produced */
+            while (counter == BUFFER_SIZE)
+                ; /* do nothing */
+        
+            buffer[in] = next_produced;
+            in = (in + 1) % BUFFER_SIZE;
+            counter++;
+        }</code></pre>
+        
+                <h3>2.2 Consumer Code</h3>
+        <pre><code>while (true) {
+            while (counter == 0)
+                ; /* do nothing */
+        
+            next_consumed = buffer[out];
+            out = (out + 1) % BUFFER_SIZE;
+            counter--;
+        
+            /* consume the item in next_consumed */
+        }</code></pre>
+        
+                <div class="highlight">
+                    <strong>Important:</strong> <code>counter</code> = Number of items currently present in the buffer.<br>
+                    <code>counter = 0</code> &rarr; Buffer Empty<br>
+                    <code>0 &lt; counter &lt; N</code> &rarr; Buffer Partially Full<br>
+                    <code>counter = N</code> &rarr; Buffer Full
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>3. Race Condition</h2>
+                <h3>Definition</h3>
+                <p>A <strong>Race Condition</strong> occurs when multiple processes access and modify shared data concurrently, and the final result depends on the order in which their instructions execute.</p>
+                
+                <h3>Example</h3>
+                <p>Suppose <code>counter = 5</code></p>
+                <p><code>counter++</code> may internally execute as:</p>
+        <pre><code>register1 = counter
+        register1 = register1 + 1
+        counter = register1</code></pre>
+        
+                <p><code>counter--</code> may internally execute as:</p>
+        <pre><code>register2 = counter
+        register2 = register2 - 1
+        counter = register2</code></pre>
+        
+                <h3>Problematic Interleaving</h3>
+        <pre>
+        Initial: counter = 5
+        
+        S0: Producer -> register1 = counter          (register1 = 5)
+        S1: Producer -> register1 = register1 + 1    (register1 = 6)
+        S2: Consumer -> register2 = counter          (register2 = 5)
+        S3: Consumer -> register2 = register2 - 1    (register2 = 4)
+        S4: Producer -> counter = register1          (counter = 6)
+        S5: Consumer -> counter = register2          (counter = 4)
+        </pre>
+                <ul>
+                    <li><strong>Expected Result:</strong> One increment and one decrement should cancel each other (5 + 1 - 1 = 5).</li>
+                    <li><strong>Actual Result:</strong> <code>counter = 4</code> (The shared variable has become inconsistent).</li>
+                </ul>
+                
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> Race conditions occur because operations on shared data can be interleaved unpredictably.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>4. Critical Section Problem</h2>
+                <h3>4.1 Critical Section</h3>
+                <p>A <strong>Critical Section (CS)</strong> is the part of a process where shared resources/data are accessed or modified.</p>
+                <p>Examples: Updating common variables, Updating a shared table, Writing to a shared file, Accessing a shared buffer.</p>
+                <p>If one process is executing its critical section, another process should not execute its conflicting critical section simultaneously.</p>
+        
+                <h3>4.2 General Process Structure</h3>
+        <pre>
+        +---------------------+
+        |    Entry Section    |
+        |   (Request access)  |
+        +----------+----------+
+                   |
+                   v
+        +---------------------+
+        |   Critical Section  |
+        |   (Shared resource) |
+        +----------+----------+
+                   |
+                   v
+        +---------------------+
+        |    Exit Section     |
+        |   (Release access)  |
+        +----------+----------+
+                   |
+                   v
+        +---------------------+
+        |  Remainder Section  |
+        |     (Other work)    |
+        +---------------------+
+        </pre>
+        
+                <table>
+                    <tr>
+                        <th>Section</th>
+                        <th>Purpose</th>
+                    </tr>
+                    <tr>
+                        <td>Entry</td>
+                        <td>Request permission to enter CS</td>
+                    </tr>
+                    <tr>
+                        <td>Critical</td>
+                        <td>Access shared resource</td>
+                    </tr>
+                    <tr>
+                        <td>Exit</td>
+                        <td>Release/leave CS</td>
+                    </tr>
+                    <tr>
+                        <td>Remainder</td>
+                        <td>Execute other code</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>5. Requirements for Critical-Section Solution</h2>
+                <p>A correct solution must satisfy three requirements.</p>
+        
+                <h3>5.1 Mutual Exclusion</h3>
+                <p>If process Pi is executing in its critical section, no other process can execute its critical section at the same time.</p>
+                <p class="flow">P0 &rarr; [ CRITICAL SECTION ] | P1 &rarr; Cannot enter CS</p>
+        
+                <h3>5.2 Progress</h3>
+                <p>If no process is currently in the critical section and some processes want to enter, the selection of the next process cannot be postponed indefinitely.</p>
+        
+                <h3>5.3 Bounded Waiting</h3>
+                <p>There must be a limit on how many times other processes can enter their critical sections after a process has requested entry and before its request is granted.</p>
+        
+                <p><strong>Assumptions:</strong> Each process executes at a nonzero speed. No assumption is made about the relative speed of processes.</p>
+        
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    Mutual Exclusion &rarr; Only one inside CS<br>
+                    Progress &rarr; Don't postpone entry forever<br>
+                    Bounded Waiting &rarr; Don't make a process wait forever
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>6. Peterson's Solution</h2>
+                <p>Peterson's Solution is an algorithmic solution to the critical-section problem for two processes.</p>
+                <ul>
+                    <li><strong>Assumes:</strong> Two processes (P0 and P1). Load/store instructions are atomic.</li>
+                </ul>
+                <p>Two shared variables are used:</p>
+        <pre><code>int turn;
+        Boolean flag[2];</code></pre>
+                <ul>
+                    <li><code>turn</code>: Indicates whose turn it is to enter the critical section.</li>
+                    <li><code>flag[i]</code>: Indicates whether process Pi wants to enter the critical section (<code>flag[i] = true</code>).</li>
+                </ul>
+        
+                <h3>6.1 Peterson's Algorithm for P0</h3>
+        <pre><code>do {
+            flag[0] = true;
+            turn = 1;
+        
+            while (flag[1] && turn == 1)
+                ;
+        
+            // critical section
+        
+            flag[0] = false;
+        
+            // remainder section
+        } while (true);</code></pre>
+        
+                <h3>6.2 Peterson's Algorithm for P1</h3>
+        <pre><code>do {
+            flag[1] = true;
+            turn = 0;
+        
+            while (flag[0] && turn == 0)
+                ;
+        
+            // critical section
+        
+            flag[1] = false;
+        
+            // remainder section
+        } while (true);</code></pre>
+        
+                <h3>6.3 Why Peterson's Solution Works</h3>
+                <ol>
+                    <li><strong>Mutual Exclusion:</strong> P0 enters CS only when <code>flag[1] == false</code> OR <code>turn == 0</code>. The while condition ensures that both cannot enter simultaneously.</li>
+                    <li><strong>Progress:</strong> P0 waits only when <code>flag[1] == true</code> AND <code>turn == 1</code>. If the other process does not want to enter, P0 can proceed.</li>
+                    <li><strong>Bounded Waiting:</strong> Once a process sets its flag to true, the other process can enter the critical section at most one more time before the waiting process gets its turn.</li>
+                </ol>
+        
+                <div class="highlight">
+                    <strong>Fingertip: Peterson's Solution</strong><br>
+                    &bull; <code>flag[]</code> &rarr; Who wants to enter?<br>
+                    &bull; <code>turn</code> &rarr; Whose turn?<br>
+                    &bull; Two-process solution<br>
+                    &bull; Satisfies: Mutual Exclusion, Progress, Bounded Waiting
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>7. Mutex Locks</h2>
+                <h3>Definition</h3>
+                <p>A <strong>Mutex Lock</strong> is a synchronization mechanism used to protect a critical section.</p>
+                <p>A process must acquire and release a mutex lock around its critical section:</p>
+                <p class="flow">acquire() &rarr; Critical Section &rarr; release()</p>
+                <p>The lock is represented by a Boolean-like variable indicating whether it is available.</p>
+        
+                <h3>7.1 acquire() and release()</h3>
+        <pre><code>acquire() {
+            while (!available)
+                ; /* busy wait */
+            available = false;
+        }
+        
+        release() {
+            available = true;
+        }</code></pre>
+                <p><strong>Important:</strong> <code>acquire()</code> and <code>release()</code> must be atomic (generally implemented using hardware atomic instructions).</p>
+        
+                <h3>7.2 Spinlock</h3>
+                <p>Mutex locks using busy waiting are called <strong>spinlocks</strong>. CPU time is wasted while waiting.</p>
+                
+                <div class="exam-point">
+                    <strong>Important Rule:</strong> The same thread/process that performs <code>acquire()</code> should perform <code>release()</code>.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>8. Semaphore</h2>
+                <h3>Definition</h3>
+                <p>A <strong>Semaphore</strong> is a synchronization tool that provides more sophisticated process synchronization than simple mutex locks. A semaphore <code>S</code> is an integer variable accessed only through atomic operations:</p>
+                <ul>
+                    <li><code>wait(S)</code> (Originally <code>P()</code>)</li>
+                    <li><code>signal(S)</code> (Originally <code>V()</code>)</li>
+                </ul>
+        
+                <h3>8.1 wait()</h3>
+        <pre><code>wait(S) {
+            while (S <= 0)
+                ; /* busy wait */
+            S--;
+        }</code></pre>
+        
+                <h3>8.2 signal()</h3>
+        <pre><code>signal(S) {
+            S++;
+        }</code></pre>
+        
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    <code>wait()</code> &rarr; Decrease semaphore / wait if unavailable<br>
+                    <code>signal()</code> &rarr; Increase semaphore / release resource
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>9. Types of Semaphores</h2>
+                <table>
+                    <tr>
+                        <th>Type</th>
+                        <th>Values</th>
+                        <th>Typical Use</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Counting Semaphore</strong></td>
+                        <td>0, 1, 2, 3, ...</td>
+                        <td>Multiple instances of a resource</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Binary Semaphore</strong></td>
+                        <td>0 or 1</td>
+                        <td>Mutual exclusion (like a mutex lock)</td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>10. Semaphore for Process Ordering</h2>
+                <p>Suppose <code>S1</code> must happen before <code>S2</code>. Create: <code>semaphore synch = 0;</code></p>
+        <pre>
+        P1:                 P2:
+            S1;                 wait(synch);
+            signal(synch);      S2;
+        </pre>
+                <p class="flow">S1 &rarr; signal(synch) &rarr; wait(synch) &rarr; S2</p>
+                <p>Therefore: <code>S1</code> always happens before <code>S2</code>.</p>
+            </div>
+        
+            <div class="card">
+                <h2>11. Deadlock & 12. Example Using Semaphores</h2>
+                <h3>Definition</h3>
+                <p><strong>Deadlock</strong> occurs when two or more processes wait indefinitely for events/resources that can only be caused/released by the waiting processes.</p>
+        
+                <h3>Simple Example</h3>
+                <p>Initially: <code>S = 1</code>, <code>Q = 1</code></p>
+        <pre>
+        P0                  P1
+        wait(S)             wait(Q)
+           |                   |
+           v                   v
+        holds S             holds Q
+           |                   |
+        wait(Q)             wait(S)
+           |                   |
+           v                   v
+         WAIT                WAIT
+        </pre>
+                <ul>
+                    <li>P0 holds S and waits for Q.</li>
+                    <li>P1 holds Q and waits for S.</li>
+                    <li>Neither process can continue.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>13. Starvation</h2>
+                <h3>Definition</h3>
+                <p><strong>Starvation</strong> = Indefinite blocking of a process. A process may wait indefinitely because it is never selected or removed from the semaphore/resource waiting queue.</p>
+        
+                <h3>Deadlock vs Starvation</h3>
+                <table>
+                    <tr>
+                        <th>Deadlock</th>
+                        <th>Starvation</th>
+                    </tr>
+                    <tr>
+                        <td>Processes wait for each other</td>
+                        <td>A process waits indefinitely</td>
+                    </tr>
+                    <tr>
+                        <td>Usually involves circular waiting</td>
+                        <td>Can occur due to unfair scheduling</td>
+                    </tr>
+                    <tr>
+                        <td>Multiple processes permanently blocked</td>
+                        <td>One process may continuously be denied access</td>
+                    </tr>
+                </table>
+        
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    Deadlock &rarr; Everyone involved is stuck<br>
+                    Starvation &rarr; A process may never get its turn
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>14. Necessary Conditions for Deadlock</h2>
+                <p>Deadlock can occur only when all four conditions hold simultaneously:</p>
+        <pre>
+                   +----------------------+----------------------+
+                   |                      |                      |
+                   v                      v                      v
+            Mutual Exclusion        Hold & Wait            No Preemption
+                                      |
+                                      v
+                                Circular Wait
+        </pre>
+        
+                <h3>14.1 Mutual Exclusion</h3>
+                <p>At least one resource must be non-sharable. Only one process can use that resource at a time.</p>
+        
+                <h3>14.2 Hold and Wait</h3>
+                <p>A process is holding at least one resource while waiting to acquire another resource held by another process.</p>
+        
+                <h3>14.3 No Preemption</h3>
+                <p>A resource cannot be forcibly taken away from a process. It must be released voluntarily by the process holding it.</p>
+        
+                <h3>14.4 Circular Wait</h3>
+                <p>A circular chain of waiting processes exists:</p>
+                <p class="flow">P0 waits for R1 (held by P1) &rarr; P1 waits for R2 (held by P2) &rarr; P2 waits for R3 (held by P0)</p>
+        
+                <div class="exam-point">
+                    <strong>Exam Point:</strong> Deadlock requires ALL FOUR conditions to hold simultaneously.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>15. Traffic Example of Deadlock</h2>
+                <p>A traffic intersection jam demonstrates all four deadlock conditions:</p>
+        <pre>
+               Vehicle A
+                   |
+                   v
+             +-----------+
+             |   Road    |
+             +-----------+
+                   |
+                   v
+                Vehicle B
+                   |
+                   v
+                Vehicle C ---> (Waiting in circular chain)
+        </pre>
+                <ol>
+                    <li><strong>Mutual Exclusion:</strong> Only one vehicle can occupy a particular road section at a time.</li>
+                    <li><strong>Hold and Wait:</strong> Each vehicle occupies one section while waiting for another section.</li>
+                    <li><strong>No Preemption:</strong> A road section occupied by a vehicle cannot simply be taken away.</li>
+                    <li><strong>Circular Wait:</strong> Each vehicle waits for a section occupied by another vehicle in the circular chain.</li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>16. Methods for Handling Deadlocks</h2>
+                <p>There are four major approaches to handling deadlocks:</p>
+                <ol>
+                    <li><strong>Deadlock Prevention:</strong> Prevent at least one of the four necessary conditions from occurring.</li>
+                    <li><strong>Deadlock Avoidance:</strong> Use additional information about future resource requirements and allocate resources only if the resulting state remains safe.</li>
+                    <li><strong>Deadlock Detection and Recovery:</strong> Allow deadlocks to occur, detect them, and then recover.</li>
+                    <li><strong>Do Nothing:</strong> If a system does not use prevention, avoidance, or detection/recovery, deadlocks may occur and remain.</li>
+                </ol>
+            </div>
+        
+            <div class="card">
+                <h2>17. Deadlock Prevention</h2>
+                <p>Deadlock prevention works by restricting how resources can be requested. The goal is to ensure that at least one necessary condition cannot hold.</p>
+        
+                <h3>17.1 Prevent Mutual Exclusion</h3>
+                <ul>
+                    <li>Cannot always be eliminated (non-sharable resources require mutual exclusion).</li>
+                    <li>For sharable resources (e.g., read-only files), sharing is possible.</li>
+                </ul>
+        
+                <h3>17.2 Prevent Hold and Wait</h3>
+                <ul>
+                    <li>Require a process to request all required resources before execution begins, OR</li>
+                    <li>Allow a process to request resources only when it currently holds no resources.</li>
+                    <li><em>Disadvantages:</em> Low resource utilization, starvation may occur.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>18. Deadlock Prevention — No Preemption</h2>
+                <p>If a process holding some resources requests another resource that cannot be immediately allocated, then all resources currently held by that process may be released.</p>
+                <p class="flow">P0 (Holds R1+R2) &rarr; Requests R3 (Unavailable) &rarr; Release R1+R2 &rarr; Wait for R1+R2+R3 &rarr; Restart when all obtained</p>
+                
+                <ul>
+                    <li>Currently held resources are released.</li>
+                    <li>Preempted resources are added to the list of resources for which the process is waiting.</li>
+                    <li>The process restarts only when it can regain its old resources and the newly requested resources.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>19. Deadlock Prevention — Circular Wait</h2>
+                <p>Circular wait can be prevented by imposing a total ordering on all resource types. Each resource type is assigned a number (e.g., Tape=1, Disk=5, Printer=12).</p>
+                
+                <p><strong>Rule:</strong> A process must request resources in increasing order. If it has requested <code>Ri</code>, it can request <code>Rj</code> only if <code>F(Rj) &gt; F(Ri)</code>.</p>
+                
+                <ul>
+                    <li><strong>Valid:</strong> Tape drive (1) &rarr; Disk drive (5) &rarr; Printer (12)</li>
+                    <li><strong>Invalid:</strong> Printer (12) &rarr; Disk drive (5) <em>(because 5 &lt; 12)</em></li>
+                </ul>
+        
+                <div class="exam-point">
+                    <strong>Exam One-Liner:</strong> Circular wait is prevented by imposing a total ordering on resource types and requiring every process to request resources in increasing order.
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>20. Deadlock Avoidance</h2>
+                <p>Deadlock Avoidance requires additional information about the maximum resources each process may need. The OS dynamically checks every resource request.</p>
+        <pre>
+        Process Requests Resource
+                   |
+                   v
+         Check Resulting State
+                   |
+        +-----------------+-----------------+
+        |                                   |
+        v                                   v
+        Safe State                     Unsafe State
+        (Allocate Resource)               (Wait)
+        </pre>
+                <ul>
+                    <li>Each process must declare its maximum resource requirement in advance.</li>
+                    <li>The system decides whether granting a request keeps the system in a safe state.</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>21. Resource-Allocation State & 22. Safe State & 23. Safe vs Unsafe</h2>
+                <p><strong>Resource-Allocation State:</strong> Defined by available resources, allocated resources, and maximum resource demands.</p>
+                
+                <h3>Safe State</h3>
+                <p>A system is in a safe state if there exists an ordering of all processes <code>&lt;P1, P2, ..., Pn&gt;</code> (a <strong>safe sequence</strong>) such that every process can obtain its remaining required resources, finish, and release its resources.</p>
+                
+                <p class="flow">Available Resources &rarr; Can P1 finish? (Yes) &rarr; P1 finishes &amp; releases &rarr; Can P2 finish?...</p>
+        
+                <h3>Safe vs Unsafe State</h3>
+                <table>
+                    <tr>
+                        <th>State</th>
+                        <th>Meaning</th>
+                    </tr>
+                    <tr>
+                        <td><strong>Safe State</strong></td>
+                        <td>System has at least one safe sequence (No deadlock)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Unsafe State</strong></td>
+                        <td>No guaranteed safe sequence (Deadlock is possible)</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Deadlock State</strong></td>
+                        <td>Processes are actually permanently blocked</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    Safe &rarr; Deadlock guaranteed to be avoidable<br>
+                    Unsafe &rarr; Deadlock may occur<br>
+                    Deadlock &rarr; Deadlock has occurred
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>24. Banker's Algorithm & 25. System Model</h2>
+                <p><strong>Banker's Algorithm</strong> is a deadlock-avoidance algorithm.</p>
+                <ul>
+                    <li>Used when multiple instances of each resource type exist.</li>
+                    <li>Each process declares its maximum resource requirement.</li>
+                    <li>A process may need to wait for resources, and must eventually return all allocated resources.</li>
+                </ul>
+                <p><strong>System Model:</strong> A process uses resources in this order: <span class="flow">Request &rarr; Use &rarr; Release</span></p>
+            </div>
+        
+            <div class="card">
+                <h2>26. Banker's Algorithm Example & 27. Need Matrix</h2>
+                <p>5 processes (P0-P4), 3 resource types (A=10, B=5, C=7).</p>
+                
+                <p><strong>Snapshot at T0:</strong> <code>Available = (3, 3, 2)</code></p>
+                
+                <h3>Need Matrix</h3>
+                <p><code>Need = Max - Allocation</code></p>
+                
+                <table>
+                    <tr>
+                        <th>Process</th>
+                        <th>Allocation (A B C)</th>
+                        <th>Max (A B C)</th>
+                        <th>Need (A B C)</th>
+                    </tr>
+                    <tr>
+                        <td>P0</td>
+                        <td>0 1 0</td>
+                        <td>7 5 3</td>
+                        <td><strong>7 4 3</strong></td>
+                    </tr>
+                    <tr>
+                        <td>P1</td>
+                        <td>2 0 0</td>
+                        <td>3 2 2</td>
+                        <td><strong>1 2 2</strong></td>
+                    </tr>
+                    <tr>
+                        <td>P2</td>
+                        <td>3 0 2</td>
+                        <td>9 0 2</td>
+                        <td><strong>6 0 0</strong></td>
+                    </tr>
+                    <tr>
+                        <td>P3</td>
+                        <td>2 1 1</td>
+                        <td>2 2 2</td>
+                        <td><strong>0 1 1</strong></td>
+                    </tr>
+                    <tr>
+                        <td>P4</td>
+                        <td>0 0 2</td>
+                        <td>4 3 3</td>
+                        <td><strong>4 3 1</strong></td>
+                    </tr>
+                </table>
+            </div>
+        
+            <div class="card">
+                <h2>28. Safe Sequence in Banker's Algorithm</h2>
+                <p>Initial: <code>Available = (3, 3, 2)</code></p>
+                <ol>
+                    <li><strong>P1:</strong> Need (1,2,2) &le; Available (3,3,2) &rarr; Finishes. New Available = (3,3,2) + (2,0,0) = <strong>(5,3,2)</strong></li>
+                    <li><strong>P3:</strong> Need (0,1,1) &le; Available (5,3,2) &rarr; Finishes. New Available = (5,3,2) + (2,1,1) = <strong>(7,4,3)</strong></li>
+                    <li><strong>P4:</strong> Need (4,3,1) &le; Available (7,4,3) &rarr; Finishes. New Available = (7,4,3) + (0,0,2) = <strong>(7,4,5)</strong></li>
+                    <li><strong>P2:</strong> Need (6,0,0) &le; Available (7,4,5) &rarr; Finishes. New Available = (7,4,5) + (3,0,2) = <strong>(10,4,7)</strong></li>
+                    <li><strong>P0:</strong> Need (7,4,3) &le; Available (10,4,7) &rarr; Finishes.</li>
+                </ol>
+                
+                <div class="highlight">
+                    Safe sequence: <strong>&lt;P1, P3, P4, P2, P0&gt;</strong><br>
+                    Hence: <strong>System is in a SAFE STATE</strong>
+                </div>
+            </div>
+        
+            <div class="card">
+                <h2>29. Banker's Algorithm — Fingertip Method</h2>
+                <ol>
+                    <li>Calculate Need: <code>Need = Max - Allocation</code></li>
+                    <li>Start with Available</li>
+                    <li>Find a process where <code>Need &lt;= Available</code></li>
+                    <li>Assume it finishes</li>
+                    <li>Add its Allocation to Available</li>
+                    <li>Repeat</li>
+                </ol>
+                <p>If ALL processes finish &rarr; <strong>SAFE STATE</strong>. If no process can finish &rarr; <strong>UNSAFE STATE</strong>.</p>
+            </div>
+        
+            <div class="card">
+                <h2>30. Deadlock Prevention vs Avoidance</h2>
+                <table>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Prevention</th>
+                        <th>Avoidance</th>
+                    </tr>
+                    <tr>
+                        <td>Basic idea</td>
+                        <td>Break at least one necessary condition</td>
+                        <td>Avoid unsafe states</td>
+                    </tr>
+                    <tr>
+                        <td>Information needed</td>
+                        <td>Usually less</td>
+                        <td>Maximum future resource needs</td>
+                    </tr>
+                    <tr>
+                        <td>Approach</td>
+                        <td>Restrict resource requests</td>
+                        <td>Dynamically check requests</td>
+                    </tr>
+                    <tr>
+                        <td>Goal</td>
+                        <td>Make deadlock impossible</td>
+                        <td>Ensure safe state</td>
+                    </tr>
+                    <tr>
+                        <td>Example</td>
+                        <td>Resource ordering</td>
+                        <td>Banker's Algorithm</td>
+                    </tr>
+                </table>
+                
+                <div class="highlight">
+                    <strong>Fingertip:</strong><br>
+                    Prevention &rarr; Stop one deadlock condition from occurring<br>
+                    Avoidance &rarr; Check whether allocation keeps system SAFE
+                </div>
+            </div>
+        
+            <div class="card exam-point">
+                <h2>32. Most Important Exam Concepts</h2>
+                <ul>
+                    <li><strong>Critical Section:</strong> Entry &rarr; Critical &rarr; Exit &rarr; Remainder</li>
+                    <li><strong>Three CS Requirements:</strong> Mutual Exclusion, Progress, Bounded Waiting</li>
+                    <li><strong>Peterson's Solution:</strong> Two processes, <code>flag[]</code>, <code>turn</code></li>
+                    <li><strong>Mutex:</strong> <code>acquire()</code> &rarr; Critical Section &rarr; <code>release()</code></li>
+                    <li><strong>Semaphore:</strong> <code>wait(S)</code>, <code>signal(S)</code></li>
+                    <li><strong>Deadlock Conditions:</strong> Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait</li>
+                    <li><strong>Deadlock Prevention:</strong> Break at least ONE necessary condition</li>
+                    <li><strong>Deadlock Avoidance:</strong> Never enter an unsafe state</li>
+                    <li><strong>Banker's Algorithm:</strong> Need = Max - Allocation</li>
+                    <li><strong>Safe State:</strong> At least one safe sequence exists</li>
+                </ul>
+            </div>
+        
+            <div class="card">
+                <h2>33. Exam One-Liners</h2>
+                <ul>
+                    <li><strong>Race Condition:</strong> A situation where the final result depends on the order of concurrent execution of processes.</li>
+                    <li><strong>Critical Section:</strong> The part of a process that accesses shared data/resources.</li>
+                    <li><strong>Mutual Exclusion:</strong> Only one process can execute a critical section at a time.</li>
+                    <li><strong>Progress:</strong> If the critical section is free, selection of the next process cannot be postponed indefinitely.</li>
+                    <li><strong>Bounded Waiting:</strong> A process must have a finite bound on how many times others can enter before it gets its turn.</li>
+                    <li><strong>Peterson's Solution:</strong> A software solution for the critical-section problem involving two processes using flag[] and turn.</li>
+                    <li><strong>Mutex Lock:</strong> A synchronization mechanism that protects a critical section using acquire() and release().</li>
+                    <li><strong>Spinlock:</strong> A lock where a process continuously waits by busy waiting.</li>
+                    <li><strong>Semaphore:</strong> An integer synchronization variable accessed through atomic wait() and signal() operations.</li>
+                    <li><strong>Deadlock:</strong> A state where processes wait indefinitely for resources/events held or controlled by other waiting processes.</li>
+                    <li><strong>Starvation:</strong> Indefinite waiting of a process because it is repeatedly denied access to a resource.</li>
+                    <li><strong>Deadlock Prevention:</strong> Preventing at least one of the four necessary deadlock conditions.</li>
+                    <li><strong>Deadlock Avoidance:</strong> Dynamically allocating resources while ensuring the system remains in a safe state.</li>
+                    <li><strong>Safe State:</strong> A state in which there exists a safe sequence allowing all processes to finish.</li>
+                    <li><strong>Banker's Algorithm:</strong> A deadlock-avoidance algorithm that checks whether granting resources keeps the system safe.</li>
+                    <li><strong>Need Matrix:</strong> Need = Max - Allocation.</li>
+                    <li><strong>Circular Wait Prevention:</strong> Assign a numerical order to resource types and require processes to request resources in increasing order.</li>
+                    <li><strong>No Preemption Prevention:</strong> If a requested resource cannot be immediately allocated, a process may be forced to release resources it currently holds.</li>
+                </ul>
+            </div>
+        
+            <div class="card highlight">
+                <h2>34. 15-Second Revision Flow</h2>
+                <p class="flow">
+                    CONCURRENCY<br>&darr;<br>
+                    Shared resources create synchronization problems<br>&darr;<br>
+                    Producer-Consumer &rarr; Race Condition &rarr; Critical Section<br>&darr;<br>
+                    3 Requirements: Mutual Exclusion + Progress + Bounded Waiting<br>&darr;<br>
+                    Solutions: Peterson's Solution | Mutex Locks | Semaphores<br>&darr;<br>
+                    Synchronization Problems: Deadlock & Starvation<br>&darr;<br>
+                    Deadlock requires 4 conditions: ME + Hold & Wait + No Preemption + Circular Wait<br>&darr;<br>
+                    Handling Strategies: Prevention | Avoidance | Detection & Recovery<br>&darr;<br>
+                    Avoidance via Banker's Algorithm (Need = Max - Allocation)<br>&darr;<br>
+                    Safe Sequence = All processes can finish
+                </p>
+            </div>
+        
+            <div class="card">
+                <h2>35. Ultimate Fingertip Memory Lines</h2>
+                <ul>
+                    <li><strong>Producer-Consumer</strong> = Shared buffer synchronization problem</li>
+                    <li><strong>Race Condition</strong> = Result depends on execution order</li>
+                    <li><strong>Critical Section</strong> = Shared-resource access code</li>
+                    <li><strong>Mutex</strong> = Lock before CS, unlock after CS</li>
+                    <li><strong>Semaphore</strong> = <code>wait()</code> + <code>signal()</code></li>
+                    <li><strong>Peterson</strong> = <code>flag[]</code> + <code>turn</code></li>
+                    <li><strong>Deadlock</strong> = Processes permanently wait for each other</li>
+                    <li><strong>Deadlock Conditions</strong> = Mutual Exclusion + Hold and Wait + No Preemption + Circular Wait</li>
+                    <li><strong>Prevention</strong> = Break at least one condition</li>
+                    <li><strong>No Preemption</strong> = Release held resources if new resource cannot be obtained</li>
+                    <li><strong>Circular Wait Prevention</strong> = Request resources only in increasing order</li>
+                    <li><strong>Avoidance</strong> = Never enter unsafe state</li>
+                    <li><strong>Safe State</strong> = Safe sequence exists</li>
+                    <li><strong>Banker's Algorithm</strong> = <code>Need = Max - Allocation</code></li>
+                </ul>
+            </div>
+        
+        </section>
+    </main>
+    <script>
+        function showTopic(id, btn) {
+            document.querySelectorAll('.topic-section').forEach((section) => {
+                section.classList.remove('active');
+            });
+
+            document.querySelectorAll('.nav-bar button').forEach((button) => {
+                button.classList.remove('active');
+            });
+
+            const selectedSection = document.getElementById(id);
+            selectedSection.classList.add('active');
+            btn.classList.add('active');
+
+            const targetTop = selectedSection.getBoundingClientRect().top + window.scrollY - 100;
+            window.scrollTo({ top: targetTop, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
