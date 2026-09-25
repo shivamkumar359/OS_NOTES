@@ -1,1 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems — Concurrency, Synchronization & Deadlocks (Week 3)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .highlight, .exam-point {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .exam-point {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .flow {
+            font-family: monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
 
+    <h1>Operating Systems — Concurrency, Synchronization & Deadlocks</h1>
+
+    <div class="card">
+        <h2>1. Concurrency and Synchronization</h2>
+        <h3>1.1 Concurrency</h3>
+        <ul>
+            <li><strong>Concurrency</strong> = Multiple processes/threads execute during overlapping time periods.</li>
+            <li>When processes share data/resources, incorrect results can occur unless their access is properly synchronized.</li>
+            <li><strong>Synchronization</strong> = Coordinating processes so that shared data remains consistent.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>2. Producer-Consumer Problem</h2>
+        <p>The Producer-Consumer Problem is a classic synchronization problem involving a shared buffer.</p>
+<pre>
+Shared Buffer
++-------------------------------+--------+
+Producer | [ ][ ][ ][ ][ ] Buffer | Consumer
+ --->    | Adds data     Removes data |  --->   
++-------------------------------+--------+
+</pre>
+        <ul>
+            <li><strong>Producer:</strong> Generates data and puts it into the shared buffer.</li>
+            <li><strong>Consumer:</strong> Takes data from the shared buffer and processes it.</li>
+        </ul>
+        
+        <h3>Main Challenges</h3>
+        <ul>
+            <li>Producer must not add data when the buffer is full.</li>
+            <li>Consumer must not remove data when the buffer is empty.</li>
+            <li>Producer and consumer must not access the buffer in a conflicting way at the same time.</li>
+        </ul>
+
+        <h3>2.1 Producer Code</h3>
+<pre><code>while (true) {
+    /* produce an item in next_produced */
+    while (counter == BUFFER_SIZE)
+        ; /* do nothing */
+
+    buffer[in] = next_produced;
+    in = (in + 1) % BUFFER_SIZE;
+    counter++;
+}</code></pre>
+
+        <h3>2.2 Consumer Code</h3>
+<pre><code>while (true) {
+    while (counter == 0)
+        ; /* do nothing */
+
+    next_consumed = buffer[out];
+    out = (out + 1) % BUFFER_SIZE;
+    counter--;
+
+    /* consume the item in next_consumed */
+}</code></pre>
+
+        <div class="highlight">
+            <strong>Important:</strong> <code>counter</code> = Number of items currently present in the buffer.<br>
+            <code>counter = 0</code> &rarr; Buffer Empty<br>
+            <code>0 &lt; counter &lt; N</code> &rarr; Buffer Partially Full<br>
+            <code>counter = N</code> &rarr; Buffer Full
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Race Condition</h2>
+        <h3>Definition</h3>
+        <p>A <strong>Race Condition</strong> occurs when multiple processes access and modify shared data concurrently, and the final result depends on the order in which their instructions execute.</p>
+        
+        <h3>Example</h3>
+        <p>Suppose <code>counter = 5</code></p>
+        <p><code>counter++</code> may internally execute as:</p>
+<pre><code>register1 = counter
+register1 = register1 + 1
+counter = register1</code></pre>
+
+        <p><code>counter--</code> may internally execute as:</p>
+<pre><code>register2 = counter
+register2 = register2 - 1
+counter = register2</code></pre>
+
+        <h3>Problematic Interleaving</h3>
+<pre>
+Initial: counter = 5
+
+S0: Producer -> register1 = counter          (register1 = 5)
+S1: Producer -> register1 = register1 + 1    (register1 = 6)
+S2: Consumer -> register2 = counter          (register2 = 5)
+S3: Consumer -> register2 = register2 - 1    (register2 = 4)
+S4: Producer -> counter = register1          (counter = 6)
+S5: Consumer -> counter = register2          (counter = 4)
+</pre>
+        <ul>
+            <li><strong>Expected Result:</strong> One increment and one decrement should cancel each other (5 + 1 - 1 = 5).</li>
+            <li><strong>Actual Result:</strong> <code>counter = 4</code> (The shared variable has become inconsistent).</li>
+        </ul>
+        
+        <div class="exam-point">
+            <strong>Exam Point:</strong> Race conditions occur because operations on shared data can be interleaved unpredictably.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>4. Critical Section Problem</h2>
+        <h3>4.1 Critical Section</h3>
+        <p>A <strong>Critical Section (CS)</strong> is the part of a process where shared resources/data are accessed or modified.</p>
+        <p>Examples: Updating common variables, Updating a shared table, Writing to a shared file, Accessing a shared buffer.</p>
+        <p>If one process is executing its critical section, another process should not execute its conflicting critical section simultaneously.</p>
+
+        <h3>4.2 General Process Structure</h3>
+<pre>
++---------------------+
+|    Entry Section    |
+|   (Request access)  |
++----------+----------+
+           |
+           v
++---------------------+
+|   Critical Section  |
+|   (Shared resource) |
++----------+----------+
+           |
+           v
++---------------------+
+|    Exit Section     |
+|   (Release access)  |
++----------+----------+
+           |
+           v
++---------------------+
+|  Remainder Section  |
+|     (Other work)    |
++---------------------+
+</pre>
+
+        <table>
+            <tr>
+                <th>Section</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Entry</td>
+                <td>Request permission to enter CS</td>
+            </tr>
+            <tr>
+                <td>Critical</td>
+                <td>Access shared resource</td>
+            </tr>
+            <tr>
+                <td>Exit</td>
+                <td>Release/leave CS</td>
+            </tr>
+            <tr>
+                <td>Remainder</td>
+                <td>Execute other code</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>5. Requirements for Critical-Section Solution</h2>
+        <p>A correct solution must satisfy three requirements.</p>
+
+        <h3>5.1 Mutual Exclusion</h3>
+        <p>If process Pi is executing in its critical section, no other process can execute its critical section at the same time.</p>
+        <p class="flow">P0 &rarr; [ CRITICAL SECTION ] | P1 &rarr; Cannot enter CS</p>
+
+        <h3>5.2 Progress</h3>
+        <p>If no process is currently in the critical section and some processes want to enter, the selection of the next process cannot be postponed indefinitely.</p>
+
+        <h3>5.3 Bounded Waiting</h3>
+        <p>There must be a limit on how many times other processes can enter their critical sections after a process has requested entry and before its request is granted.</p>
+
+        <p><strong>Assumptions:</strong> Each process executes at a nonzero speed. No assumption is made about the relative speed of processes.</p>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Mutual Exclusion &rarr; Only one inside CS<br>
+            Progress &rarr; Don't postpone entry forever<br>
+            Bounded Waiting &rarr; Don't make a process wait forever
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>6. Peterson's Solution</h2>
+        <p>Peterson's Solution is an algorithmic solution to the critical-section problem for two processes.</p>
+        <ul>
+            <li><strong>Assumes:</strong> Two processes (P0 and P1). Load/store instructions are atomic.</li>
+        </ul>
+        <p>Two shared variables are used:</p>
+<pre><code>int turn;
+Boolean flag[2];</code></pre>
+        <ul>
+            <li><code>turn</code>: Indicates whose turn it is to enter the critical section.</li>
+            <li><code>flag[i]</code>: Indicates whether process Pi wants to enter the critical section (<code>flag[i] = true</code>).</li>
+        </ul>
+
+        <h3>6.1 Peterson's Algorithm for P0</h3>
+<pre><code>do {
+    flag[0] = true;
+    turn = 1;
+
+    while (flag[1] && turn == 1)
+        ;
+
+    // critical section
+
+    flag[0] = false;
+
+    // remainder section
+} while (true);</code></pre>
+
+        <h3>6.2 Peterson's Algorithm for P1</h3>
+<pre><code>do {
+    flag[1] = true;
+    turn = 0;
+
+    while (flag[0] && turn == 0)
+        ;
+
+    // critical section
+
+    flag[1] = false;
+
+    // remainder section
+} while (true);</code></pre>
+
+        <h3>6.3 Why Peterson's Solution Works</h3>
+        <ol>
+            <li><strong>Mutual Exclusion:</strong> P0 enters CS only when <code>flag[1] == false</code> OR <code>turn == 0</code>. The while condition ensures that both cannot enter simultaneously.</li>
+            <li><strong>Progress:</strong> P0 waits only when <code>flag[1] == true</code> AND <code>turn == 1</code>. If the other process does not want to enter, P0 can proceed.</li>
+            <li><strong>Bounded Waiting:</strong> Once a process sets its flag to true, the other process can enter the critical section at most one more time before the waiting process gets its turn.</li>
+        </ol>
+
+        <div class="highlight">
+            <strong>Fingertip: Peterson's Solution</strong><br>
+            &bull; <code>flag[]</code> &rarr; Who wants to enter?<br>
+            &bull; <code>turn</code> &rarr; Whose turn?<br>
+            &bull; Two-process solution<br>
+            &bull; Satisfies: Mutual Exclusion, Progress, Bounded Waiting
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>7. Mutex Locks</h2>
+        <h3>Definition</h3>
+        <p>A <strong>Mutex Lock</strong> is a synchronization mechanism used to protect a critical section.</p>
+        <p>A process must acquire and release a mutex lock around its critical section:</p>
+        <p class="flow">acquire() &rarr; Critical Section &rarr; release()</p>
+        <p>The lock is represented by a Boolean-like variable indicating whether it is available.</p>
+
+        <h3>7.1 acquire() and release()</h3>
+<pre><code>acquire() {
+    while (!available)
+        ; /* busy wait */
+    available = false;
+}
+
+release() {
+    available = true;
+}</code></pre>
+        <p><strong>Important:</strong> <code>acquire()</code> and <code>release()</code> must be atomic (generally implemented using hardware atomic instructions).</p>
+
+        <h3>7.2 Spinlock</h3>
+        <p>Mutex locks using busy waiting are called <strong>spinlocks</strong>. CPU time is wasted while waiting.</p>
+        
+        <div class="exam-point">
+            <strong>Important Rule:</strong> The same thread/process that performs <code>acquire()</code> should perform <code>release()</code>.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>8. Semaphore</h2>
+        <h3>Definition</h3>
+        <p>A <strong>Semaphore</strong> is a synchronization tool that provides more sophisticated process synchronization than simple mutex locks. A semaphore <code>S</code> is an integer variable accessed only through atomic operations:</p>
+        <ul>
+            <li><code>wait(S)</code> (Originally <code>P()</code>)</li>
+            <li><code>signal(S)</code> (Originally <code>V()</code>)</li>
+        </ul>
+
+        <h3>8.1 wait()</h3>
+<pre><code>wait(S) {
+    while (S <= 0)
+        ; /* busy wait */
+    S--;
+}</code></pre>
+
+        <h3>8.2 signal()</h3>
+<pre><code>signal(S) {
+    S++;
+}</code></pre>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            <code>wait()</code> &rarr; Decrease semaphore / wait if unavailable<br>
+            <code>signal()</code> &rarr; Increase semaphore / release resource
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>9. Types of Semaphores</h2>
+        <table>
+            <tr>
+                <th>Type</th>
+                <th>Values</th>
+                <th>Typical Use</th>
+            </tr>
+            <tr>
+                <td><strong>Counting Semaphore</strong></td>
+                <td>0, 1, 2, 3, ...</td>
+                <td>Multiple instances of a resource</td>
+            </tr>
+            <tr>
+                <td><strong>Binary Semaphore</strong></td>
+                <td>0 or 1</td>
+                <td>Mutual exclusion (like a mutex lock)</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>10. Semaphore for Process Ordering</h2>
+        <p>Suppose <code>S1</code> must happen before <code>S2</code>. Create: <code>semaphore synch = 0;</code></p>
+<pre>
+P1:                 P2:
+    S1;                 wait(synch);
+    signal(synch);      S2;
+</pre>
+        <p class="flow">S1 &rarr; signal(synch) &rarr; wait(synch) &rarr; S2</p>
+        <p>Therefore: <code>S1</code> always happens before <code>S2</code>.</p>
+    </div>
+
+    <div class="card">
+        <h2>11. Deadlock & 12. Example Using Semaphores</h2>
+        <h3>Definition</h3>
+        <p><strong>Deadlock</strong> occurs when two or more processes wait indefinitely for events/resources that can only be caused/released by the waiting processes.</p>
+
+        <h3>Simple Example</h3>
+        <p>Initially: <code>S = 1</code>, <code>Q = 1</code></p>
+<pre>
+P0                  P1
+wait(S)             wait(Q)
+   |                   |
+   v                   v
+holds S             holds Q
+   |                   |
+wait(Q)             wait(S)
+   |                   |
+   v                   v
+ WAIT                WAIT
+</pre>
+        <ul>
+            <li>P0 holds S and waits for Q.</li>
+            <li>P1 holds Q and waits for S.</li>
+            <li>Neither process can continue.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>13. Starvation</h2>
+        <h3>Definition</h3>
+        <p><strong>Starvation</strong> = Indefinite blocking of a process. A process may wait indefinitely because it is never selected or removed from the semaphore/resource waiting queue.</p>
+
+        <h3>Deadlock vs Starvation</h3>
+        <table>
+            <tr>
+                <th>Deadlock</th>
+                <th>Starvation</th>
+            </tr>
+            <tr>
+                <td>Processes wait for each other</td>
+                <td>A process waits indefinitely</td>
+            </tr>
+            <tr>
+                <td>Usually involves circular waiting</td>
+                <td>Can occur due to unfair scheduling</td>
+            </tr>
+            <tr>
+                <td>Multiple processes permanently blocked</td>
+                <td>One process may continuously be denied access</td>
+            </tr>
+        </table>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Deadlock &rarr; Everyone involved is stuck<br>
+            Starvation &rarr; A process may never get its turn
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>14. Necessary Conditions for Deadlock</h2>
+        <p>Deadlock can occur only when all four conditions hold simultaneously:</p>
+<pre>
+           +----------------------+----------------------+
+           |                      |                      |
+           v                      v                      v
+    Mutual Exclusion        Hold & Wait            No Preemption
+                              |
+                              v
+                        Circular Wait
+</pre>
+
+        <h3>14.1 Mutual Exclusion</h3>
+        <p>At least one resource must be non-sharable. Only one process can use that resource at a time.</p>
+
+        <h3>14.2 Hold and Wait</h3>
+        <p>A process is holding at least one resource while waiting to acquire another resource held by another process.</p>
+
+        <h3>14.3 No Preemption</h3>
+        <p>A resource cannot be forcibly taken away from a process. It must be released voluntarily by the process holding it.</p>
+
+        <h3>14.4 Circular Wait</h3>
+        <p>A circular chain of waiting processes exists:</p>
+        <p class="flow">P0 waits for R1 (held by P1) &rarr; P1 waits for R2 (held by P2) &rarr; P2 waits for R3 (held by P0)</p>
+
+        <div class="exam-point">
+            <strong>Exam Point:</strong> Deadlock requires ALL FOUR conditions to hold simultaneously.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>15. Traffic Example of Deadlock</h2>
+        <p>A traffic intersection jam demonstrates all four deadlock conditions:</p>
+<pre>
+       Vehicle A
+           |
+           v
+     +-----------+
+     |   Road    |
+     +-----------+
+           |
+           v
+        Vehicle B
+           |
+           v
+        Vehicle C ---> (Waiting in circular chain)
+</pre>
+        <ol>
+            <li><strong>Mutual Exclusion:</strong> Only one vehicle can occupy a particular road section at a time.</li>
+            <li><strong>Hold and Wait:</strong> Each vehicle occupies one section while waiting for another section.</li>
+            <li><strong>No Preemption:</strong> A road section occupied by a vehicle cannot simply be taken away.</li>
+            <li><strong>Circular Wait:</strong> Each vehicle waits for a section occupied by another vehicle in the circular chain.</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>16. Methods for Handling Deadlocks</h2>
+        <p>There are four major approaches to handling deadlocks:</p>
+        <ol>
+            <li><strong>Deadlock Prevention:</strong> Prevent at least one of the four necessary conditions from occurring.</li>
+            <li><strong>Deadlock Avoidance:</strong> Use additional information about future resource requirements and allocate resources only if the resulting state remains safe.</li>
+            <li><strong>Deadlock Detection and Recovery:</strong> Allow deadlocks to occur, detect them, and then recover.</li>
+            <li><strong>Do Nothing:</strong> If a system does not use prevention, avoidance, or detection/recovery, deadlocks may occur and remain.</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>17. Deadlock Prevention</h2>
+        <p>Deadlock prevention works by restricting how resources can be requested. The goal is to ensure that at least one necessary condition cannot hold.</p>
+
+        <h3>17.1 Prevent Mutual Exclusion</h3>
+        <ul>
+            <li>Cannot always be eliminated (non-sharable resources require mutual exclusion).</li>
+            <li>For sharable resources (e.g., read-only files), sharing is possible.</li>
+        </ul>
+
+        <h3>17.2 Prevent Hold and Wait</h3>
+        <ul>
+            <li>Require a process to request all required resources before execution begins, OR</li>
+            <li>Allow a process to request resources only when it currently holds no resources.</li>
+            <li><em>Disadvantages:</em> Low resource utilization, starvation may occur.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>18. Deadlock Prevention — No Preemption</h2>
+        <p>If a process holding some resources requests another resource that cannot be immediately allocated, then all resources currently held by that process may be released.</p>
+        <p class="flow">P0 (Holds R1+R2) &rarr; Requests R3 (Unavailable) &rarr; Release R1+R2 &rarr; Wait for R1+R2+R3 &rarr; Restart when all obtained</p>
+        
+        <ul>
+            <li>Currently held resources are released.</li>
+            <li>Preempted resources are added to the list of resources for which the process is waiting.</li>
+            <li>The process restarts only when it can regain its old resources and the newly requested resources.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>19. Deadlock Prevention — Circular Wait</h2>
+        <p>Circular wait can be prevented by imposing a total ordering on all resource types. Each resource type is assigned a number (e.g., Tape=1, Disk=5, Printer=12).</p>
+        
+        <p><strong>Rule:</strong> A process must request resources in increasing order. If it has requested <code>Ri</code>, it can request <code>Rj</code> only if <code>F(Rj) &gt; F(Ri)</code>.</p>
+        
+        <ul>
+            <li><strong>Valid:</strong> Tape drive (1) &rarr; Disk drive (5) &rarr; Printer (12)</li>
+            <li><strong>Invalid:</strong> Printer (12) &rarr; Disk drive (5) <em>(because 5 &lt; 12)</em></li>
+        </ul>
+
+        <div class="exam-point">
+            <strong>Exam One-Liner:</strong> Circular wait is prevented by imposing a total ordering on resource types and requiring every process to request resources in increasing order.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>20. Deadlock Avoidance</h2>
+        <p>Deadlock Avoidance requires additional information about the maximum resources each process may need. The OS dynamically checks every resource request.</p>
+<pre>
+Process Requests Resource
+           |
+           v
+ Check Resulting State
+           |
++-----------------+-----------------+
+|                                   |
+v                                   v
+Safe State                     Unsafe State
+(Allocate Resource)               (Wait)
+</pre>
+        <ul>
+            <li>Each process must declare its maximum resource requirement in advance.</li>
+            <li>The system decides whether granting a request keeps the system in a safe state.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>21. Resource-Allocation State & 22. Safe State & 23. Safe vs Unsafe</h2>
+        <p><strong>Resource-Allocation State:</strong> Defined by available resources, allocated resources, and maximum resource demands.</p>
+        
+        <h3>Safe State</h3>
+        <p>A system is in a safe state if there exists an ordering of all processes <code>&lt;P1, P2, ..., Pn&gt;</code> (a <strong>safe sequence</strong>) such that every process can obtain its remaining required resources, finish, and release its resources.</p>
+        
+        <p class="flow">Available Resources &rarr; Can P1 finish? (Yes) &rarr; P1 finishes &amp; releases &rarr; Can P2 finish?...</p>
+
+        <h3>Safe vs Unsafe State</h3>
+        <table>
+            <tr>
+                <th>State</th>
+                <th>Meaning</th>
+            </tr>
+            <tr>
+                <td><strong>Safe State</strong></td>
+                <td>System has at least one safe sequence (No deadlock)</td>
+            </tr>
+            <tr>
+                <td><strong>Unsafe State</strong></td>
+                <td>No guaranteed safe sequence (Deadlock is possible)</td>
+            </tr>
+            <tr>
+                <td><strong>Deadlock State</strong></td>
+                <td>Processes are actually permanently blocked</td>
+            </tr>
+        </table>
+        
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Safe &rarr; Deadlock guaranteed to be avoidable<br>
+            Unsafe &rarr; Deadlock may occur<br>
+            Deadlock &rarr; Deadlock has occurred
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>24. Banker's Algorithm & 25. System Model</h2>
+        <p><strong>Banker's Algorithm</strong> is a deadlock-avoidance algorithm.</p>
+        <ul>
+            <li>Used when multiple instances of each resource type exist.</li>
+            <li>Each process declares its maximum resource requirement.</li>
+            <li>A process may need to wait for resources, and must eventually return all allocated resources.</li>
+        </ul>
+        <p><strong>System Model:</strong> A process uses resources in this order: <span class="flow">Request &rarr; Use &rarr; Release</span></p>
+    </div>
+
+    <div class="card">
+        <h2>26. Banker's Algorithm Example & 27. Need Matrix</h2>
+        <p>5 processes (P0-P4), 3 resource types (A=10, B=5, C=7).</p>
+        
+        <p><strong>Snapshot at T0:</strong> <code>Available = (3, 3, 2)</code></p>
+        
+        <h3>Need Matrix</h3>
+        <p><code>Need = Max - Allocation</code></p>
+        
+        <table>
+            <tr>
+                <th>Process</th>
+                <th>Allocation (A B C)</th>
+                <th>Max (A B C)</th>
+                <th>Need (A B C)</th>
+            </tr>
+            <tr>
+                <td>P0</td>
+                <td>0 1 0</td>
+                <td>7 5 3</td>
+                <td><strong>7 4 3</strong></td>
+            </tr>
+            <tr>
+                <td>P1</td>
+                <td>2 0 0</td>
+                <td>3 2 2</td>
+                <td><strong>1 2 2</strong></td>
+            </tr>
+            <tr>
+                <td>P2</td>
+                <td>3 0 2</td>
+                <td>9 0 2</td>
+                <td><strong>6 0 0</strong></td>
+            </tr>
+            <tr>
+                <td>P3</td>
+                <td>2 1 1</td>
+                <td>2 2 2</td>
+                <td><strong>0 1 1</strong></td>
+            </tr>
+            <tr>
+                <td>P4</td>
+                <td>0 0 2</td>
+                <td>4 3 3</td>
+                <td><strong>4 3 1</strong></td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>28. Safe Sequence in Banker's Algorithm</h2>
+        <p>Initial: <code>Available = (3, 3, 2)</code></p>
+        <ol>
+            <li><strong>P1:</strong> Need (1,2,2) &le; Available (3,3,2) &rarr; Finishes. New Available = (3,3,2) + (2,0,0) = <strong>(5,3,2)</strong></li>
+            <li><strong>P3:</strong> Need (0,1,1) &le; Available (5,3,2) &rarr; Finishes. New Available = (5,3,2) + (2,1,1) = <strong>(7,4,3)</strong></li>
+            <li><strong>P4:</strong> Need (4,3,1) &le; Available (7,4,3) &rarr; Finishes. New Available = (7,4,3) + (0,0,2) = <strong>(7,4,5)</strong></li>
+            <li><strong>P2:</strong> Need (6,0,0) &le; Available (7,4,5) &rarr; Finishes. New Available = (7,4,5) + (3,0,2) = <strong>(10,4,7)</strong></li>
+            <li><strong>P0:</strong> Need (7,4,3) &le; Available (10,4,7) &rarr; Finishes.</li>
+        </ol>
+        
+        <div class="highlight">
+            Safe sequence: <strong>&lt;P1, P3, P4, P2, P0&gt;</strong><br>
+            Hence: <strong>System is in a SAFE STATE</strong>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>29. Banker's Algorithm — Fingertip Method</h2>
+        <ol>
+            <li>Calculate Need: <code>Need = Max - Allocation</code></li>
+            <li>Start with Available</li>
+            <li>Find a process where <code>Need &lt;= Available</code></li>
+            <li>Assume it finishes</li>
+            <li>Add its Allocation to Available</li>
+            <li>Repeat</li>
+        </ol>
+        <p>If ALL processes finish &rarr; <strong>SAFE STATE</strong>. If no process can finish &rarr; <strong>UNSAFE STATE</strong>.</p>
+    </div>
+
+    <div class="card">
+        <h2>30. Deadlock Prevention vs Avoidance</h2>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Prevention</th>
+                <th>Avoidance</th>
+            </tr>
+            <tr>
+                <td>Basic idea</td>
+                <td>Break at least one necessary condition</td>
+                <td>Avoid unsafe states</td>
+            </tr>
+            <tr>
+                <td>Information needed</td>
+                <td>Usually less</td>
+                <td>Maximum future resource needs</td>
+            </tr>
+            <tr>
+                <td>Approach</td>
+                <td>Restrict resource requests</td>
+                <td>Dynamically check requests</td>
+            </tr>
+            <tr>
+                <td>Goal</td>
+                <td>Make deadlock impossible</td>
+                <td>Ensure safe state</td>
+            </tr>
+            <tr>
+                <td>Example</td>
+                <td>Resource ordering</td>
+                <td>Banker's Algorithm</td>
+            </tr>
+        </table>
+        
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Prevention &rarr; Stop one deadlock condition from occurring<br>
+            Avoidance &rarr; Check whether allocation keeps system SAFE
+        </div>
+    </div>
+
+    <div class="card exam-point">
+        <h2>32. Most Important Exam Concepts</h2>
+        <ul>
+            <li><strong>Critical Section:</strong> Entry &rarr; Critical &rarr; Exit &rarr; Remainder</li>
+            <li><strong>Three CS Requirements:</strong> Mutual Exclusion, Progress, Bounded Waiting</li>
+            <li><strong>Peterson's Solution:</strong> Two processes, <code>flag[]</code>, <code>turn</code></li>
+            <li><strong>Mutex:</strong> <code>acquire()</code> &rarr; Critical Section &rarr; <code>release()</code></li>
+            <li><strong>Semaphore:</strong> <code>wait(S)</code>, <code>signal(S)</code></li>
+            <li><strong>Deadlock Conditions:</strong> Mutual Exclusion, Hold and Wait, No Preemption, Circular Wait</li>
+            <li><strong>Deadlock Prevention:</strong> Break at least ONE necessary condition</li>
+            <li><strong>Deadlock Avoidance:</strong> Never enter an unsafe state</li>
+            <li><strong>Banker's Algorithm:</strong> Need = Max - Allocation</li>
+            <li><strong>Safe State:</strong> At least one safe sequence exists</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>33. Exam One-Liners</h2>
+        <ul>
+            <li><strong>Race Condition:</strong> A situation where the final result depends on the order of concurrent execution of processes.</li>
+            <li><strong>Critical Section:</strong> The part of a process that accesses shared data/resources.</li>
+            <li><strong>Mutual Exclusion:</strong> Only one process can execute a critical section at a time.</li>
+            <li><strong>Progress:</strong> If the critical section is free, selection of the next process cannot be postponed indefinitely.</li>
+            <li><strong>Bounded Waiting:</strong> A process must have a finite bound on how many times others can enter before it gets its turn.</li>
+            <li><strong>Peterson's Solution:</strong> A software solution for the critical-section problem involving two processes using flag[] and turn.</li>
+            <li><strong>Mutex Lock:</strong> A synchronization mechanism that protects a critical section using acquire() and release().</li>
+            <li><strong>Spinlock:</strong> A lock where a process continuously waits by busy waiting.</li>
+            <li><strong>Semaphore:</strong> An integer synchronization variable accessed through atomic wait() and signal() operations.</li>
+            <li><strong>Deadlock:</strong> A state where processes wait indefinitely for resources/events held or controlled by other waiting processes.</li>
+            <li><strong>Starvation:</strong> Indefinite waiting of a process because it is repeatedly denied access to a resource.</li>
+            <li><strong>Deadlock Prevention:</strong> Preventing at least one of the four necessary deadlock conditions.</li>
+            <li><strong>Deadlock Avoidance:</strong> Dynamically allocating resources while ensuring the system remains in a safe state.</li>
+            <li><strong>Safe State:</strong> A state in which there exists a safe sequence allowing all processes to finish.</li>
+            <li><strong>Banker's Algorithm:</strong> A deadlock-avoidance algorithm that checks whether granting resources keeps the system safe.</li>
+            <li><strong>Need Matrix:</strong> Need = Max - Allocation.</li>
+            <li><strong>Circular Wait Prevention:</strong> Assign a numerical order to resource types and require processes to request resources in increasing order.</li>
+            <li><strong>No Preemption Prevention:</strong> If a requested resource cannot be immediately allocated, a process may be forced to release resources it currently holds.</li>
+        </ul>
+    </div>
+
+    <div class="card highlight">
+        <h2>34. 15-Second Revision Flow</h2>
+        <p class="flow">
+            CONCURRENCY<br>&darr;<br>
+            Shared resources create synchronization problems<br>&darr;<br>
+            Producer-Consumer &rarr; Race Condition &rarr; Critical Section<br>&darr;<br>
+            3 Requirements: Mutual Exclusion + Progress + Bounded Waiting<br>&darr;<br>
+            Solutions: Peterson's Solution | Mutex Locks | Semaphores<br>&darr;<br>
+            Synchronization Problems: Deadlock & Starvation<br>&darr;<br>
+            Deadlock requires 4 conditions: ME + Hold & Wait + No Preemption + Circular Wait<br>&darr;<br>
+            Handling Strategies: Prevention | Avoidance | Detection & Recovery<br>&darr;<br>
+            Avoidance via Banker's Algorithm (Need = Max - Allocation)<br>&darr;<br>
+            Safe Sequence = All processes can finish
+        </p>
+    </div>
+
+    <div class="card">
+        <h2>35. Ultimate Fingertip Memory Lines</h2>
+        <ul>
+            <li><strong>Producer-Consumer</strong> = Shared buffer synchronization problem</li>
+            <li><strong>Race Condition</strong> = Result depends on execution order</li>
+            <li><strong>Critical Section</strong> = Shared-resource access code</li>
+            <li><strong>Mutex</strong> = Lock before CS, unlock after CS</li>
+            <li><strong>Semaphore</strong> = <code>wait()</code> + <code>signal()</code></li>
+            <li><strong>Peterson</strong> = <code>flag[]</code> + <code>turn</code></li>
+            <li><strong>Deadlock</strong> = Processes permanently wait for each other</li>
+            <li><strong>Deadlock Conditions</strong> = Mutual Exclusion + Hold and Wait + No Preemption + Circular Wait</li>
+            <li><strong>Prevention</strong> = Break at least one condition</li>
+            <li><strong>No Preemption</strong> = Release held resources if new resource cannot be obtained</li>
+            <li><strong>Circular Wait Prevention</strong> = Request resources only in increasing order</li>
+            <li><strong>Avoidance</strong> = Never enter unsafe state</li>
+            <li><strong>Safe State</strong> = Safe sequence exists</li>
+            <li><strong>Banker's Algorithm</strong> = <code>Need = Max - Allocation</code></li>
+        </ul>
+    </div>
+
+</body>
+</html>
