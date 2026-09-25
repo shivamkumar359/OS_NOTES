@@ -1,1 +1,850 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operating Systems — Processes & Threads (Week 2)</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            text-align: center;
+        }
+        h2 {
+            color: #2980b9;
+            margin-top: 30px;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 5px;
+        }
+        h3 {
+            color: #34495e;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        th, td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+        }
+        .highlight, .exam-point {
+            background-color: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 10px 15px;
+            margin: 15px 0;
+            border-radius: 0 4px 4px 0;
+        }
+        .exam-point {
+            background-color: #fff3cd;
+            border-left-color: #ffc107;
+        }
+        .flow {
+            font-family: monospace;
+            background: #fff;
+            padding: 5px 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            display: inline-block;
+        }
+        .card {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            margin-bottom: 20px;
+        }
+        pre {
+            background: #f4f4f4;
+            padding: 15px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+            overflow-x: auto;
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        code {
+            font-family: Consolas, Monaco, 'Andale Mono', 'Ubuntu Mono', monospace;
+        }
+        ul, ol {
+            margin-bottom: 15px;
+        }
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Operating Systems — Processes & Threads (Week 2)</h1>
+
+    <div class="card">
+        <h2>1. Process Concept</h2>
+        
+        <h3>Process Definition</h3>
+        <ul>
+            <li><strong>Process</strong> = a program in execution.</li>
+            <li>A <strong>program</strong> is a passive file stored on disk.</li>
+            <li>A <strong>process</strong> is an active program executing in memory.</li>
+            <li>A program becomes a process when it is loaded into memory.</li>
+            <li>One program can create multiple processes when executed by different users.</li>
+        </ul>
+        
+        <h3>Process Components</h3>
+        <table>
+            <tr>
+                <th>Part</th>
+                <th>Purpose</th>
+            </tr>
+            <tr>
+                <td>Text/Code section</td>
+                <td>Program instructions</td>
+            </tr>
+            <tr>
+                <td>Program Counter + Registers</td>
+                <td>Current execution activity</td>
+            </tr>
+            <tr>
+                <td>Stack</td>
+                <td>Function parameters, return addresses, local variables</td>
+            </tr>
+            <tr>
+                <td>Data section</td>
+                <td>Global variables</td>
+            </tr>
+            <tr>
+                <td>Heap</td>
+                <td>Dynamically allocated memory</td>
+            </tr>
+        </table>
+        
+        <div class="exam-point">
+            <strong>Key Distinction:</strong> A program is passive (stored on disk), whereas a process is active (executing in memory).
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>2. Process States</h2>
+        <p>As a process executes, it moves through different states:</p>
+        <table>
+            <tr>
+                <th>State</th>
+                <th>Meaning</th>
+            </tr>
+            <tr>
+                <td>New</td>
+                <td>Process is being created</td>
+            </tr>
+            <tr>
+                <td>Running</td>
+                <td>Instructions are being executed</td>
+            </tr>
+            <tr>
+                <td>Waiting</td>
+                <td>Waiting for some event</td>
+            </tr>
+            <tr>
+                <td>Ready</td>
+                <td>Waiting for CPU assignment</td>
+            </tr>
+            <tr>
+                <td>Terminated</td>
+                <td>Execution is finished</td>
+            </tr>
+        </table>
+        
+        <div class="highlight">
+            <strong>State Transitions:</strong> <span class="flow">New &rarr; Ready &rarr; Running &rarr; Waiting &rarr; Ready &rarr; Terminated</span>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Process Control Block (PCB)</h2>
+        <h3>Definition</h3>
+        <p><strong>PCB</strong> = data structure containing information about a process. Also called Task Control Block (TCB).</p>
+        
+        <p>PCB contains:</p>
+        <ul>
+            <li><strong>Process State</strong> &rarr; running, waiting, etc.</li>
+            <li><strong>Program Counter</strong> &rarr; next instruction to execute</li>
+            <li><strong>CPU Registers</strong> &rarr; register contents</li>
+            <li><strong>CPU Scheduling Information</strong> &rarr; priority, queue pointers</li>
+            <li><strong>Memory Management Information</strong> &rarr; memory allocated</li>
+            <li><strong>Accounting Information</strong> &rarr; CPU time, elapsed time, limits</li>
+            <li><strong>I/O Status Information</strong> &rarr; allocated devices, open files</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Note:</strong> PCB stores all execution-related data required to manage a process.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>4. Context Switch</h2>
+        <h3>Definition</h3>
+        <p>When CPU changes from one process to another:</p>
+        <p class="flow">Save old process state &rarr; Load new process state</p>
+        <ul>
+            <li>Process context is stored in the PCB.</li>
+            <li>Context-switching consumes CPU time.</li>
+            <li>During switching, no useful process work is performed.</li>
+            <li>More complex OS/PCB &rarr; potentially longer switch time.</li>
+            <li>Time depends on hardware support.</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Summary:</strong> Context Switch = Save Old + Load New
+        </div>
+        <div class="exam-point">
+            <strong>Note:</strong> Context switching represents overhead because the CPU performs no productive work during the switch.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>5. Process Creation</h2>
+        <ul>
+            <li>A parent process can create child processes.</li>
+            <li>Children can create more processes &rarr; forms a process tree.</li>
+            <li>Every process is identified by a <strong>PID</strong> (Process ID).</li>
+        </ul>
+        
+        <h3>Resource Sharing</h3>
+        <p>Parent and child may:</p>
+        <ul>
+            <li>Share all resources</li>
+            <li>Share a subset</li>
+            <li>Share no resources</li>
+        </ul>
+        
+        <h3>Execution</h3>
+        <ul>
+            <li>Parent and child execute concurrently OR</li>
+            <li>Parent waits until child terminates.</li>
+        </ul>
+        
+        <h3>UNIX</h3>
+        <ul>
+            <li><code>fork()</code> &rarr; creates a new process</li>
+            <li><code>exec()</code> &rarr; replaces process memory with a new program</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Summary:</strong> <code>fork()</code> creates a new process; <code>exec()</code> replaces the process memory with a new program.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>6. Process Termination</h2>
+        <h3>Normal termination</h3>
+        <ul>
+            <li>Process finishes its last statement.</li>
+            <li>Calls <code>exit()</code>.</li>
+            <li>OS deallocates its resources.</li>
+            <li>Parent can obtain child status using <code>wait()</code>.</li>
+        </ul>
+        
+        <h3>Parent can terminate a child using <code>abort()</code> when:</h3>
+        <ul>
+            <li>Child exceeds allocated resources.</li>
+            <li>Child's task is no longer required.</li>
+            <li>Parent terminates and OS does not allow child to continue.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>7. Zombie and Orphan Processes</h2>
+        
+        <h3>Zombie Process</h3>
+        <ul>
+            <li>A terminated child whose parent has not yet called <code>wait()</code>.</li>
+            <li>Child's process-table entry remains.</li>
+            <li>Exit status has not yet been collected.</li>
+        </ul>
+        
+        <h3>Orphan Process</h3>
+        <ul>
+            <li>A child whose parent terminates without calling <code>wait()</code>.</li>
+            <li>OS assigns the <code>init</code> process as its parent.</li>
+            <li><code>init</code> periodically calls <code>wait()</code>.</li>
+        </ul>
+        
+        <h3>Zombie vs Orphan</h3>
+        <table>
+            <tr>
+                <th>Zombie</th>
+                <th>Orphan</th>
+            </tr>
+            <tr>
+                <td>Child already terminated</td>
+                <td>Child is still running</td>
+            </tr>
+            <tr>
+                <td>Parent has not collected status</td>
+                <td>Parent has terminated</td>
+            </tr>
+            <tr>
+                <td>Entry remains in process table</td>
+                <td>Adopted by init</td>
+            </tr>
+        </table>
+        
+        <div class="highlight">
+            <strong>Summary:</strong> A zombie is a terminated process whose exit status has not been collected by its parent. An orphan is an active process whose parent has terminated.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>8. Cascading Termination</h2>
+        <ul>
+            <li>Some OSs do not allow children to continue after the parent terminates.</li>
+        </ul>
+        <h3>Definition</h3>
+        <p>Termination of a parent causes termination of:</p>
+        <p class="flow">Child &rarr; Grandchild &rarr; Further descendants</p>
+        <p>The OS initiates this termination.</p>
+    </div>
+
+    <div class="card">
+        <h2>9. Interprocess Communication (IPC)</h2>
+        <h3>Definition</h3>
+        <p><strong>IPC</strong> = communication between processes.</p>
+        <p>Processes may be:</p>
+        <ul>
+            <li><strong>Independent</strong> &rarr; cannot affect each other.</li>
+            <li><strong>Cooperating</strong> &rarr; can affect/be affected by other processes.</li>
+        </ul>
+        
+        <h3>Why processes cooperate?</h3>
+        <ul>
+            <li>Information sharing</li>
+            <li>Computation speed-up</li>
+            <li>Modularity</li>
+            <li>Convenience</li>
+        </ul>
+        
+        <h3>Two main IPC models</h3>
+        <ol>
+            <li>Shared Memory</li>
+            <li>Message Passing</li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>10. Shared Memory</h2>
+        <ul>
+            <li>A memory area is shared by multiple processes.</li>
+            <li>Processes communicate through shared memory.</li>
+            <li>Communication is mainly controlled by user processes, not the OS.</li>
+            <li>Processes must synchronize access to shared data.</li>
+        </ul>
+        
+        <div class="exam-point">
+            <strong>Key Consideration:</strong> Explicit synchronization is required when multiple processes write to shared memory.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>11. Message Passing</h2>
+        <ul>
+            <li>Processes communicate without shared variables.</li>
+        </ul>
+        
+        <h3>Basic operations</h3>
+        <ul>
+            <li><code>send(message)</code></li>
+            <li><code>receive(message)</code></li>
+        </ul>
+        <p>Used for communication and synchronization. Message size can be fixed or variable.</p>
+        
+        <div class="highlight">
+            <strong>Summary:</strong><br>
+            <strong>Shared Memory:</strong> Direct access to shared data structures.<br>
+            <strong>Message Passing:</strong> Communication via explicit send and receive operations.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>12. Remote Procedure Call (RPC)</h2>
+        <ul>
+            <li><strong>RPC</strong> = mechanism that makes procedure calls between processes on networked systems appear simpler.</li>
+            <li>Uses ports for service differentiation.</li>
+            <li><strong>Client stub</strong> acts as a proxy. Locates server and marshals parameters.</li>
+            <li><strong>Server stub</strong> receives, unpacks parameters, and performs the procedure.</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Client Stub:</strong> Locates server and marshals parameters.<br>
+            <strong>Server Stub:</strong> Unpacks parameters and invokes the execution.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>13. Pipes</h2>
+        <p><strong>Definition:</strong> A pipe is a communication channel between processes.</p>
+        <p>Important questions:</p>
+        <ul>
+            <li>Unidirectional or bidirectional?</li>
+            <li>Half-duplex or full-duplex?</li>
+            <li>Parent-child relationship required?</li>
+            <li>Can it work over a network?</li>
+        </ul>
+        
+        <h3>13.1 Ordinary Pipes</h3>
+        <ul>
+            <li>Usually used between parent and child.</li>
+            <li>Unidirectional.</li>
+            <li>Producer writes &rarr; Consumer reads.</li>
+            <li>Producer = write end; Consumer = read end.</li>
+            <li>In Windows, called anonymous pipes.</li>
+        </ul>
+        <div class="exam-point">
+            <strong>Note:</strong> Unused pipe ends must be closed to prevent processes from blocking indefinitely.
+        </div>
+        
+        <h3>13.2 Named Pipes</h3>
+        <ul>
+            <li>Bidirectional</li>
+            <li>No parent-child relationship required</li>
+            <li>Multiple processes can use them</li>
+            <li>Available in UNIX and Windows</li>
+        </ul>
+        
+        <h3>Ordinary vs Named Pipe</h3>
+        <table>
+            <tr>
+                <th>Ordinary Pipe</th>
+                <th>Named Pipe</th>
+            </tr>
+            <tr>
+                <td>Usually parent-child</td>
+                <td>No parent-child requirement</td>
+            </tr>
+            <tr>
+                <td>Unidirectional</td>
+                <td>Bidirectional</td>
+            </tr>
+            <tr>
+                <td>Less powerful</td>
+                <td>More powerful</td>
+            </tr>
+            <tr>
+                <td>Anonymous</td>
+                <td>Has a name</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>14. Threads</h2>
+        <p><strong>Definition:</strong> A thread is a unit of execution within a process.</p>
+        <p>Modern applications are generally multithreaded.</p>
+        <p>Example: Thread 1 &rarr; UI | Thread 2 &rarr; Network requests | Thread 3 &rarr; JavaScript | Thread 4 &rarr; File download</p>
+        
+        <h3>Process vs Thread</h3>
+        <ul>
+            <li><strong>Processes:</strong> Heavyweight units with distinct memory spaces.</li>
+            <li><strong>Threads:</strong> Lightweight execution units sharing process memory space.</li>
+        </ul>
+        <p>Threads can simplify programs and improve efficiency.</p>
+    </div>
+
+    <div class="card">
+        <h2>15. Benefits of Multithreading</h2>
+        <ol>
+            <li><strong>Responsiveness:</strong> One blocked part does not necessarily stop the whole application.</li>
+            <li><strong>Resource Sharing:</strong> Threads of the same process naturally share process resources.</li>
+            <li><strong>Economy:</strong> Thread creation and switching cost less than process creation and context switching.</li>
+            <li><strong>Scalability:</strong> Threads can use multiprocessor/multicore systems.</li>
+        </ol>
+        
+        <div class="highlight">
+            <strong>Key Benefits:</strong> Responsiveness, Resource Sharing, Economy, and Scalability.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>16. Concurrency vs Parallelism</h2>
+        
+        <h3>Concurrency</h3>
+        <ul>
+            <li>Multiple tasks make progress during overlapping periods.</li>
+            <li>Possible even on a single-core CPU through scheduling.</li>
+        </ul>
+        
+        <h3>Parallelism</h3>
+        <ul>
+            <li>Multiple tasks are executed simultaneously.</li>
+            <li>Requires multiple cores/processors for true simultaneous execution.</li>
+        </ul>
+        
+        <table>
+            <tr>
+                <th>Concurrency</th>
+                <th>Parallelism</th>
+            </tr>
+            <tr>
+                <td>Tasks make progress</td>
+                <td>Tasks execute simultaneously</td>
+            </tr>
+            <tr>
+                <td>Possible on single core</td>
+                <td>Uses multiple cores</td>
+            </tr>
+            <tr>
+                <td>Scheduler can switch tasks</td>
+                <td>Tasks can run at same time</td>
+            </tr>
+        </table>
+        
+        <div class="exam-point">
+            <strong>Key Distinction:</strong> Concurrency allows multiple tasks to make progress over overlapping time frames; parallelism executes multiple tasks simultaneously.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>17. Types of Parallelism</h2>
+        
+        <h3>Data Parallelism</h3>
+        <ul>
+            <li>Same operation on different data chunks using multiple cores/threads.</li>
+            <li><em>Example:</em> Split an array into parts and process all parts simultaneously.</li>
+        </ul>
+        
+        <h3>Task Parallelism</h3>
+        <ul>
+            <li>Different threads perform different operations.</li>
+            <li><em>Example:</em> One thread downloads data while another processes it.</li>
+        </ul>
+        
+        <div class="highlight">
+            <strong>Summary:</strong><br>
+            <strong>Data Parallelism:</strong> Same operation applied across different data chunks.<br>
+            <strong>Task Parallelism:</strong> Different operations executed concurrently on separate threads.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>18. Multicore Programming Challenges</h2>
+        <p>Main challenges:</p>
+        <ul>
+            <li>Dividing activities</li>
+            <li>Load balancing</li>
+            <li>Data splitting</li>
+            <li>Data dependency</li>
+            <li>Testing and debugging</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>19. User Threads vs Kernel Threads</h2>
+        
+        <h3>User Threads</h3>
+        <ul>
+            <li>Managed by a user-level thread library.</li>
+            <li>Examples of thread libraries: POSIX Pthreads, Windows threads, Java threads</li>
+        </ul>
+        
+        <h3>Kernel Threads</h3>
+        <ul>
+            <li>Supported and managed by the OS kernel.</li>
+            <li>Examples: Windows, Linux, Solaris, Mac OS X, Tru64 UNIX</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>20. Blocking: User vs Kernel Threads</h2>
+        
+        <h3>User Thread</h3>
+        <p>If one user thread makes a blocking system call:</p>
+        <p class="flow">One thread blocks &rarr; Entire process may block &rarr; All user threads stop</p>
+        
+        <h3>Kernel Thread</h3>
+        <p>If one kernel thread blocks:</p>
+        <p class="flow">Only that thread blocks &rarr; Other threads can continue</p>
+        
+        <div class="exam-point">
+            <strong>Key Distinction:</strong> A blocking system call in a user thread blocks the entire process, whereas in a kernel thread, only that thread is blocked.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>21. Multithreading Models</h2>
+        <p>Three main models: Many-to-One, One-to-One, Many-to-Many</p>
+        
+        <h3>21.1 Many-to-One Model</h3>
+        <p class="flow">Many user threads &rarr; One kernel thread</p>
+        <ul>
+            <li>One blocking thread can block all.</li>
+            <li>No true parallelism on multicore systems.</li>
+            <li>Rarely used today.</li>
+            <li>Examples: Solaris Green Threads, GNU Portable Threads</li>
+        </ul>
+        <div class="highlight">
+            <strong>Summary:</strong> Multiple user threads mapped to a single kernel thread can cause potential bottlenecks during blocking operations.
+        </div>
+        
+        <h3>21.2 One-to-One Model</h3>
+        <p class="flow">One user thread &rarr; One kernel thread</p>
+        <ul>
+            <li>More concurrency than many-to-one.</li>
+            <li>Creating a user thread also creates a kernel thread.</li>
+            <li>Number of threads may be restricted because of overhead.</li>
+            <li>Examples: Windows, Linux, Solaris 9+</li>
+        </ul>
+        <div class="highlight">
+            <strong>Summary:</strong> Each user thread maps to a distinct kernel thread, maximizing concurrency but incurring kernel overhead.
+        </div>
+        
+        <h3>21.3 Many-to-Many Model</h3>
+        <p class="flow">Many user threads &rarr; Many kernel threads</p>
+        <ul>
+            <li>OS creates an appropriate number of kernel threads.</li>
+            <li>Provides greater flexibility.</li>
+            <li>Examples: Solaris versions before 9, Windows with ThreadFiber package</li>
+        </ul>
+        <div class="highlight">
+            <strong>Summary:</strong> Maps many user threads to an equal or lesser number of kernel threads, balancing concurrency and resource usage.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>22. Multithreading in Python</h2>
+        <h3>Basic Thread</h3>
+<pre><code>import threading
+
+def task():
+    print("Hello from thread")
+
+t = threading.Thread(target=task)
+t.start()
+t.join()
+
+print("Main thread finished")</code></pre>
+        
+        <p><strong>Important methods:</strong></p>
+        <ul>
+            <li><code>Thread(...)</code> &rarr; creates thread</li>
+            <li><code>start()</code> &rarr; starts execution</li>
+            <li><code>join()</code> &rarr; waits for thread completion</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>23. Creating Multiple Threads</h2>
+<pre><code>import threading
+
+def worker(n):
+    print(f"Thread {n} is running")
+
+threads = []
+
+for i in range(5):
+    t = threading.Thread(target=worker, args=(i,))
+    threads.append(t)
+    t.start()
+
+for t in threads:
+    t.join()
+
+print("All threads completed")</code></pre>
+        <p><strong>Execution Flow:</strong> <span class="flow">Create &rarr; Start &rarr; Join</span></p>
+    </div>
+
+    <div class="card">
+        <h2>24. Shared Data and Race Conditions</h2>
+        <p>When multiple threads access the same variable, incorrect results may occur due to unsynchronized access.</p>
+        <p>Example shared variable:</p>
+<pre><code>counter = 0</code></pre>
+        <p>Two threads may simultaneously execute:</p>
+<pre><code>counter += 1</code></pre>
+        <p>This can create a race condition.</p>
+        
+        <div class="exam-point">
+            <strong>Race Condition:</strong> When the final result depends on the timing/order of thread execution.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>25. Synchronizing Shared Data with Locks</h2>
+<pre><code>import threading
+
+counter = 0
+lock = threading.Lock()
+
+def increment():
+    global counter
+    for _ in range(100000):
+        with lock:
+            counter += 1</code></pre>
+            
+        <h3>Lock Mechanism</h3>
+        <ul>
+            <li>Allows controlled access to shared data so that critical operations are protected.</li>
+            <li><strong>Without Lock</strong> &rarr; possible race condition</li>
+            <li><strong>With Lock</strong> &rarr; synchronized access</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>Key Concepts Comparison</h2>
+        
+        <h3>Program vs Process</h3>
+        <table>
+            <tr>
+                <th>Program</th>
+                <th>Process</th>
+            </tr>
+            <tr>
+                <td>Passive</td>
+                <td>Active</td>
+            </tr>
+            <tr>
+                <td>Stored on disk</td>
+                <td>Executing in memory</td>
+            </tr>
+            <tr>
+                <td>No execution state</td>
+                <td>Has execution state</td>
+            </tr>
+        </table>
+        
+        <h3>Process vs Thread</h3>
+        <table>
+            <tr>
+                <th>Process</th>
+                <th>Thread</th>
+            </tr>
+            <tr>
+                <td>Heavyweight</td>
+                <td>Lightweight</td>
+            </tr>
+            <tr>
+                <td>Separate process context</td>
+                <td>Runs within process</td>
+            </tr>
+            <tr>
+                <td>More expensive creation</td>
+                <td>Cheaper creation</td>
+            </tr>
+            <tr>
+                <td>Context switching has more overhead</td>
+                <td>Thread switching generally has lower overhead</td>
+            </tr>
+            <tr>
+                <td>IPC needed for process communication</td>
+                <td>Threads share process resources</td>
+            </tr>
+        </table>
+        
+        <h3>Shared Memory vs Message Passing</h3>
+        <table>
+            <tr>
+                <th>Shared Memory</th>
+                <th>Message Passing</th>
+            </tr>
+            <tr>
+                <td>Common memory area</td>
+                <td>Messages exchanged</td>
+            </tr>
+            <tr>
+                <td>Shared data/variables</td>
+                <td>send() / receive()</td>
+            </tr>
+            <tr>
+                <td>Synchronization is important</td>
+                <td>Communication through messages</td>
+            </tr>
+        </table>
+
+        <h3>Many-to-One vs One-to-One vs Many-to-Many</h3>
+        <table>
+            <tr>
+                <th>Model</th>
+                <th>Mapping</th>
+            </tr>
+            <tr>
+                <td>Many-to-One</td>
+                <td>Many User &rarr; 1 Kernel</td>
+            </tr>
+            <tr>
+                <td>One-to-One</td>
+                <td>1 User &rarr; 1 Kernel</td>
+            </tr>
+            <tr>
+                <td>Many-to-Many</td>
+                <td>Many User &harr; Many Kernel</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card exam-point">
+        <h2>Key Takeaways</h2>
+        <ul>
+            <li>A process is a program in execution.</li>
+            <li>PCB contains the state and execution information of a process.</li>
+            <li>Context switching is an overhead because CPU performs no useful process work during the switch.</li>
+            <li><code>fork()</code> creates a new process in UNIX.</li>
+            <li><code>exec()</code> loads a new program into a process.</li>
+            <li>A zombie process has terminated but its parent has not collected its exit status.</li>
+            <li>An orphan process has a terminated parent.</li>
+            <li>IPC models are shared memory and message passing.</li>
+            <li>Ordinary pipes are generally unidirectional.</li>
+            <li>Named pipes do not require a parent-child relationship.</li>
+            <li>Threads are lighter than processes.</li>
+            <li>Concurrency can exist on a single-core system.</li>
+            <li>Parallelism requires simultaneous execution, typically using multiple cores.</li>
+            <li>Data parallelism uses the same operation on different data.</li>
+            <li>Task parallelism distributes different operations among threads.</li>
+            <li>Kernel threads allow other threads to continue when one thread blocks.</li>
+            <li>Many-to-one maps many user threads to one kernel thread.</li>
+            <li>One-to-one maps each user thread to a kernel thread.</li>
+            <li>A race condition occurs when unsynchronized shared access causes results to depend on execution timing.</li>
+            <li>A lock protects critical sections involving shared data.</li>
+        </ul>
+    </div>
+
+    <div class="card highlight">
+        <h2>Summary Overview</h2>
+        <ul>
+            <li><strong>Process</strong> &rarr; Program in execution</li>
+            <li><strong>States</strong> &rarr; New, Ready, Running, Waiting, Terminated</li>
+            <li><strong>PCB</strong> &rarr; Process information</li>
+            <li><strong>Context Switch</strong> &rarr; Save old + load new</li>
+            <li><strong>Creation</strong> &rarr; Parent &rarr; Child &rarr; PID</li>
+            <li><strong>UNIX</strong> &rarr; <code>fork()</code> + <code>exec()</code></li>
+            <li><strong>Termination</strong> &rarr; <code>exit()</code> + <code>wait()</code></li>
+            <li><strong>Zombie</strong> &rarr; Dead child, status not collected</li>
+            <li><strong>Orphan</strong> &rarr; Parent gone, child remains</li>
+            <li><strong>IPC</strong> &rarr; Shared Memory + Message Passing</li>
+            <li><strong>Pipes</strong> &rarr; Ordinary / Named</li>
+            <li><strong>Thread</strong> &rarr; Lightweight execution unit</li>
+            <li><strong>Benefits</strong> &rarr; Responsiveness + Sharing + Economy + Scalability</li>
+            <li><strong>Concurrency</strong> &rarr; Tasks progress together</li>
+            <li><strong>Parallelism</strong> &rarr; Tasks execute simultaneously</li>
+            <li><strong>Parallelism types</strong> &rarr; Data + Task</li>
+            <li><strong>Threads</strong> &rarr; User + Kernel</li>
+            <li><strong>Models</strong> &rarr; Many-to-One, One-to-One, Many-to-Many</li>
+            <li><strong>Shared data problem</strong> &rarr; Race Condition</li>
+            <li><strong>Solution</strong> &rarr; Lock</li>
+        </ul>
+    </div>
+
+</body>
+</html>
