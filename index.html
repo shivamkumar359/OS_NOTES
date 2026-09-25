@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Operating Systems — Fingertip Concise Notes</title>
+  <title>Operating Systems — Complete Fingertip Notes (Week 1 & 2)</title>
   <style>
     :root {
       --bg: #f8fafc;
@@ -12,11 +12,13 @@
       --text-muted: #64748b;
       --primary: #2563eb;
       --primary-light: #eff6ff;
-      --accent: #0ea5e9;
+      --accent: #0284c7;
       --border: #e2e8f0;
       --badge-bg: #fef3c7;
       --badge-text: #92400e;
       --code-bg: #f1f5f9;
+      --tag-green: #dcfce7;
+      --tag-green-text: #166534;
     }
 
     * {
@@ -34,13 +36,13 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 960px;
       margin: 0 auto;
     }
 
     header {
       text-align: center;
-      margin-bottom: 2.5rem;
+      margin-bottom: 2rem;
       padding-bottom: 1.5rem;
       border-bottom: 2px solid var(--border);
     }
@@ -53,7 +55,48 @@
 
     header p {
       color: var(--text-muted);
-      font-size: 1.1rem;
+      font-size: 1.05rem;
+    }
+
+    .nav-bar {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .nav-link {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      text-decoration: none;
+      color: var(--primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .nav-link:hover {
+      background: var(--primary-light);
+      border-color: var(--primary);
+    }
+
+    .week-header {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: #ffffff;
+      padding: 1rem 1.5rem;
+      border-radius: 8px;
+      margin: 2.5rem 0 1.5rem 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .week-header h2 {
+      color: #ffffff;
+      font-size: 1.5rem;
+      margin: 0;
     }
 
     .section-card {
@@ -62,20 +105,20 @@
       border-radius: 8px;
       padding: 1.5rem;
       margin-bottom: 1.5rem;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04);
     }
 
-    h2 {
-      font-size: 1.35rem;
+    h3 {
+      font-size: 1.25rem;
       color: var(--primary);
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.65rem;
       display: flex;
       align-items: center;
       gap: 0.5rem;
     }
 
-    h3 {
-      font-size: 1.1rem;
+    h4 {
+      font-size: 1.05rem;
       margin: 1rem 0 0.5rem 0;
       color: #334155;
     }
@@ -113,7 +156,7 @@
       font-weight: 600;
     }
 
-    /* Highlight boxes */
+    /* Highlight badges & callouts */
     .fingertip-pill {
       display: inline-block;
       background: var(--primary-light);
@@ -123,19 +166,7 @@
       margin: 0.5rem 0;
       font-weight: 600;
       border-radius: 0 4px 4px 0;
-      font-size: 0.95rem;
-    }
-
-    .exam-tag {
-      display: inline-block;
-      background: var(--badge-bg);
-      color: var(--badge-text);
-      font-size: 0.8rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      padding: 0.2rem 0.5rem;
-      border-radius: 4px;
-      margin-right: 0.4rem;
+      font-size: 0.9rem;
     }
 
     .exam-note {
@@ -147,38 +178,58 @@
       font-size: 0.95rem;
     }
 
+    .exam-tag {
+      display: inline-block;
+      background: var(--badge-bg);
+      color: var(--badge-text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.2rem 0.45rem;
+      border-radius: 4px;
+      margin-right: 0.4rem;
+    }
+
+    .star-tag {
+      color: #eab308;
+      font-size: 0.9rem;
+      margin-left: auto;
+    }
+
     .flow {
       font-family: monospace;
       background: var(--code-bg);
-      padding: 0.4rem 0.75rem;
+      padding: 0.45rem 0.75rem;
       border-radius: 4px;
       display: inline-block;
       margin: 0.4rem 0;
       font-size: 0.9rem;
+      color: #0f172a;
     }
 
     .revision-box {
-      background: linear-gradient(135deg, #1e293b, #0f172a);
+      background: linear-gradient(135deg, #0f172a, #1e293b);
       color: #f8fafc;
       border-radius: 8px;
       padding: 1.75rem;
       margin-top: 2rem;
     }
 
-    .revision-box h2 {
+    .revision-box h3 {
       color: #38bdf8;
     }
 
     .revision-box p {
       color: #cbd5e1;
-      font-size: 1.05rem;
+      font-size: 1rem;
       line-height: 1.8;
       margin-bottom: 0;
     }
 
-    @media (max-width: 600px) {
+    @media (max-width: 640px) {
       body { padding: 1rem 0.5rem; }
       .section-card { padding: 1rem; }
+      .week-header { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
     }
   </style>
 </head>
@@ -187,15 +238,27 @@
 <div class="container">
 
   <header>
-    <h1>Operating Systems</h1>
-    <p>Fingertip Concise Exam Notes</p>
+    <h1>Operating Systems — Fingertip Notes</h1>
+    <p>Comprehensive revision guide covering Core Architecture, Processes, Threads, &amp; IPC</p>
   </header>
+
+  <div class="nav-bar">
+    <a href="#week1" class="nav-link">&darr; Week 1: Architecture &amp; Foundations</a>
+    <a href="#week2" class="nav-link">&darr; Week 2: Processes, Threads &amp; IPC</a>
+  </div>
+
+  <!-- ========================================================================= -->
+  <!-- WEEK 1 -->
+  <!-- ========================================================================= -->
+  <div id="week1" class="week-header">
+    <h2>Week 1: OS Concepts &amp; Architecture</h2>
+    <span>Topics 1 – 26</span>
+  </div>
 
   <!-- 1. What is an OS -->
   <section class="section-card">
-    <h2>1. What is an Operating System?</h2>
+    <h3>1. What is an Operating System?</h3>
     <p><strong>Operating System (OS):</strong> Software that acts as an intermediary between the user and computer hardware.</p>
-    
     <table>
       <thead>
         <tr><th>View</th><th>Meaning</th></tr>
@@ -205,7 +268,6 @@
         <tr><td><strong>System-centric</strong></td><td>Allocates resources and controls system operations</td></tr>
       </tbody>
     </table>
-
     <div class="exam-note">
       <span class="exam-tag">Exam Point</span> <strong>OS = Resource Allocator + Control Program + Interface</strong>
     </div>
@@ -213,7 +275,7 @@
 
   <!-- 2. Computer System Structure -->
   <section class="section-card">
-    <h2>2. Computer System Structure</h2>
+    <h3>2. Computer System Structure</h3>
     <p>A computer system has 4 main components:</p>
     <ul>
       <li><strong>Hardware:</strong> CPU, memory, I/O devices</li>
@@ -226,219 +288,298 @@
 
   <!-- 3. What Does an OS Do? -->
   <section class="section-card">
-    <h2>3. What Does an OS Do?</h2>
-    <p>Depends on the system type:</p>
+    <h3>3. What Does an OS Do?</h3>
     <ul>
       <li>Provides convenience &amp; improves performance</li>
-      <li>Manages system resources &amp; supports multiple users/programs</li>
+      <li>Manages system resources &amp; supports multi-user operations</li>
       <li>Optimizes battery life in handheld systems</li>
-      <li>Embedded systems may have little or no user interface</li>
+      <li>Embedded systems may operate with minimal or no user interface</li>
     </ul>
   </section>
 
-  <!-- 4. Computer Startup -->
+  <!-- 4. Startup & Operations -->
   <section class="section-card">
-    <h2>4. Computer Startup</h2>
-    <div class="flow">Bootstrap Program &rarr; Initializes System &rarr; Loads OS Kernel &rarr; Starts Execution</div>
-    <h3>Bootstrap Program</h3>
-    <ul>
-      <li>Stored in <strong>ROM/EPROM</strong> (firmware)</li>
-      <li>Loads the OS kernel into memory</li>
-    </ul>
-    <div class="exam-note">
-      <span class="exam-tag">Exam</span> Bootstrap program is the first program executed during startup.
-    </div>
-  </section>
-
-  <!-- 5. Computer-System Operation -->
-  <section class="section-card">
-    <h2>5. Computer-System Operation</h2>
+    <h3>4 &amp; 5. Startup &amp; Computer-System Operation</h3>
+    <div class="flow">Bootstrap Program &rarr; Initializes System &rarr; Loads Kernel &rarr; Starts Execution</div>
+    <p style="margin-top: 0.5rem;"><strong>Bootstrap Program:</strong> Stored in ROM/EPROM (firmware); executed first upon boot/restart.</p>
+    <h4>I/O Operation</h4>
     <ul>
       <li>CPU and I/O devices work concurrently.</li>
-      <li>Each device has a <strong>device controller</strong> with a <strong>local buffer</strong>.</li>
-      <li>Data moves between <em>main memory &harr; local buffer</em>.</li>
-      <li>Controller triggers an <strong>interrupt</strong> to CPU upon completing an operation.</li>
+      <li>Device controllers maintain a <strong>local buffer</strong>; transfers occur between <em>main memory &harr; local buffer</em>.</li>
+      <li>Controller raises an <strong>interrupt</strong> to notify CPU when work completes.</li>
     </ul>
     <div class="fingertip-pill">Device &rarr; Controller &rarr; Buffer &rarr; Memory &rarr; Interrupt</div>
   </section>
 
-  <!-- 6. Storage Hierarchy -->
+  <!-- 6 - 8. Storage, Cache & Drivers -->
   <section class="section-card">
-    <h2>6. Storage Hierarchy</h2>
-    <p>Organized as a hierarchy based on three primary vectors:</p>
+    <h3>6 – 8. Storage Hierarchy, Caching &amp; Drivers</h3>
     <ul>
-      <li><strong>Speed</strong></li>
-      <li><strong>Cost</strong></li>
-      <li><strong>Volatility</strong></li>
+      <li><strong>Storage Hierarchy:</strong> Ranked by <em>Speed</em>, <em>Cost</em>, and <em>Volatility</em> (faster storage = smaller &amp; more expensive).</li>
+      <li><strong>Caching:</strong> Temporary storage in faster media. Steps: Check cache &rarr; Hit (use directly) &rarr; Miss (fetch from slow storage to cache). Key trade-offs: Cache size, replacement policy, management.</li>
+      <li><strong>Device Driver:</strong> Translation software that provides a uniform OS interface to device controllers.</li>
     </ul>
-    <p><em>Rule of Thumb:</em> Faster storage is generally more expensive, volatile, and smaller in capacity.</p>
-  </section>
-
-  <!-- 7. Caching -->
-  <section class="section-card">
-    <h2>7. Caching</h2>
-    <p><strong>Definition:</strong> Copying information from slower storage to faster storage temporarily.</p>
-    <ol>
-      <li>Check faster storage (cache).</li>
-      <li>If data present &rarr; use it directly (Hit).</li>
-      <li>If absent &rarr; copy data from slower storage to cache (Miss).</li>
-      <li>Use cached copy.</li>
-    </ol>
-    <p><strong>Key Issues:</strong> Cache size, replacement policy, and cache management.</p>
     <div class="fingertip-pill">Cache = Small + Fast + Temporary copy</div>
-  </section>
-
-  <!-- 8. Device Driver -->
-  <section class="section-card">
-    <h2>8. Device Driver</h2>
-    <p><strong>Definition:</strong> Software that manages a particular device controller.</p>
-    <ul>
-      <li>Directly controls and manages specific I/O devices.</li>
-      <li>Provides a uniform interface between device controllers and the OS kernel.</li>
-    </ul>
   </section>
 
   <!-- 9 & 10. Multiprogramming vs Timesharing -->
   <section class="section-card">
-    <h2>9 &amp; 10. Multiprogramming vs. Timesharing</h2>
+    <h3>9 &amp; 10. Multiprogramming vs. Timesharing</h3>
     <table>
       <thead>
         <tr><th>Feature</th><th>Multiprogramming</th><th>Timesharing (Multitasking)</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Primary Focus</strong></td><td>CPU utilization &amp; efficiency</td><td>Interactive user response (< 1s)</td></tr>
-        <tr><td><strong>Switch Trigger</strong></td><td>Switches when a job waits for I/O</td><td>Switches frequently via timer/time-slice</td></tr>
-        <tr><td><strong>Goal</strong></td><td>Keep CPU always busy</td><td>Allow multi-user interactive execution</td></tr>
+        <tr><td><strong>Primary Focus</strong></td><td>CPU utilization &amp; efficiency</td><td>Interactive response (&lt; 1s)</td></tr>
+        <tr><td><strong>Switch Trigger</strong></td><td>When current job waits for I/O</td><td>Frequent switching via timer intervals</td></tr>
+        <tr><td><strong>Goal</strong></td><td>Keep CPU constantly busy</td><td>Concurrent multi-user execution</td></tr>
       </tbody>
     </table>
   </section>
 
-  <!-- 11 & 12. Interrupts & Dual-Mode -->
+  <!-- 11 & 12. Dual Mode -->
   <section class="section-card">
-    <h2>11 &amp; 12. Operations &amp; Dual-Mode Protection</h2>
-    <p>OS operation is <strong>interrupt-driven</strong>:</p>
-    <ul>
-      <li><strong>Hardware Interrupt:</strong> Generated by hardware devices via system bus.</li>
-      <li><strong>Software Interrupt (Trap/Exception):</strong> Generated by software errors (e.g., division by zero) or requests for OS services.</li>
-    </ul>
-    <hr style="margin: 1rem 0; border: 0; border-top: 1px solid var(--border);">
-    <h3>Dual-Mode Operation</h3>
-    <p>Protected by hardware <strong>Mode Bit</strong> (User Mode vs. Kernel Mode).</p>
-    <div class="flow">User Program &rarr; System Call &rarr; Switch to Kernel Mode &rarr; Service &rarr; Return to User Mode</div>
+    <h3>11 &amp; 12. Interrupts &amp; Dual-Mode Protection</h3>
+    <p>OS is interrupt-driven: <strong>Hardware Interrupts</strong> (bus signals) vs. <strong>Software Interrupts/Traps</strong> (exceptions, system calls).</p>
+    <h4>Dual-Mode Protection</h4>
+    <p>Differentiated via a hardware <strong>Mode Bit</strong> (User Mode = 1, Kernel Mode = 0).</p>
+    <div class="flow">User Program &rarr; System Call (Trap) &rarr; Switch to Kernel Mode &rarr; Execute &rarr; Return to User Mode</div>
     <div class="exam-note">
-      <span class="exam-tag">Exam</span> Privileged instructions cannot be executed directly in user mode.
+      <span class="exam-tag">Exam</span> Privileged instructions can only execute in Kernel Mode.
     </div>
   </section>
 
-  <!-- 13 & 14. Process Management -->
+  <!-- 13 - 17. OS Subsystems -->
   <section class="section-card">
-    <h2>13 &amp; 14. Process Management</h2>
-    <p><strong>Process:</strong> A program in execution.</p>
-    <table>
-      <thead>
-        <tr><th>Program</th><th>Process</th></tr>
-      </thead>
-      <tbody>
-        <tr><td>Passive entity (stored binary/code)</td><td>Active entity (executing in memory)</td></tr>
-        <tr><td>No dynamic execution state</td><td>Maintains registers, PC, heap, and stack</td></tr>
-      </tbody>
-    </table>
-    <p><strong>OS Process Activities:</strong> Creation, deletion, suspension, resumption, synchronization, communication, and deadlock handling.</p>
-  </section>
-
-  <!-- 15, 16, 17. Memory, Storage & I/O -->
-  <section class="section-card">
-    <h2>15, 16 &amp; 17. Memory, Storage &amp; I/O Subsystems</h2>
+    <h3>13 – 17. Core OS Subsystems</h3>
     <ul>
-      <li><strong>Memory Management:</strong> Tracks free/used memory; allocates and deallocates dynamic space for instructions/data.</li>
-      <li><strong>File-System:</strong> Maps logical file views to physical storage; organizes directories and manages access control.</li>
-      <li><strong>I/O Subsystem:</strong> Hides device complexities using:
+      <li><strong>Memory Management:</strong> Tracks free/used memory; dynamic allocation/deallocation.</li>
+      <li><strong>Storage &amp; File Systems:</strong> Logical abstraction of raw storage; manages directories, mapping, and ACLs.</li>
+      <li><strong>I/O Subsystems:</strong>
         <ul>
-          <li><strong>Buffering:</strong> Temporary storage holding data during transfers.</li>
-          <li><strong>Caching:</strong> Storing active data in faster memory for immediate performance.</li>
-          <li><strong>Spooling:</strong> Overlapping output of one job with input of another (e.g., print spooling).</li>
+          <li><strong>Buffering:</strong> Temporary storage during transfers.</li>
+          <li><strong>Caching:</strong> Storing active data in faster memory.</li>
+          <li><strong>Spooling:</strong> Overlapping output of one job with input of another (e.g., printers).</li>
         </ul>
       </li>
     </ul>
     <div class="fingertip-pill">Buffer = Temp Transfer | Cache = Faster Copy | Spool = Overlap I/O</div>
   </section>
 
-  <!-- 18. Protection & Security -->
+  <!-- 18 - 22. Protection, Interfaces & System Calls -->
   <section class="section-card">
-    <h2>18. Protection &amp; Security</h2>
+    <h3>18 – 22. Protection, Interfaces &amp; System Calls</h3>
+    <p><strong>Protection vs Security:</strong> Protection controls internal access (User ID / Group ID). Security protects against external attacks (malware, DoS).</p>
+    <table>
+      <thead>
+        <tr><th>System Call Type</th><th>Operations / Examples</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Process Control</strong></td><td><code>fork()</code>, <code>exec()</code>, exit, wait, memory allocation</td></tr>
+        <tr><td><strong>File Management</strong></td><td>open, close, read, write, reposition, delete</td></tr>
+        <tr><td><strong>Device Management</strong></td><td>request, release, read, write device attributes</td></tr>
+        <tr><td><strong>Information</strong></td><td>get/set time, system info, process attributes</td></tr>
+        <tr><td><strong>Communication</strong></td><td>Message passing (pipes/sockets) vs Shared Memory</td></tr>
+        <tr><td><strong>Protection</strong></td><td>chmod, access permission control</td></tr>
+      </tbody>
+    </table>
+    <div class="fingertip-pill">App &rarr; API &rarr; System Call &rarr; OS Kernel</div>
+  </section>
+
+  <!-- 23 - 26. OS Impact on AI & Data Science -->
+  <section class="section-card">
+    <h3>23 – 26. Modern OS in AI, Data Science &amp; MLOps</h3>
     <ul>
-      <li><strong>Protection:</strong> Internal mechanism controlling processes/users access to system resources.</li>
-      <li><strong>Security:</strong> External defense against threats (viruses, worms, DoS, identity theft).</li>
-      <li><strong>Access Control:</strong> Enforced via User IDs and Group IDs associated with running processes.</li>
+      <li><strong>Scheduler:</strong> Impacts CPU-GPU overlap, training latency, and batch scheduling.</li>
+      <li><strong>Memory Management:</strong> Limits swapping and memory fragmentation. Employs <code>mmap()</code> for large-file virtual memory mapping and batch prefetching.</li>
+      <li><strong>Accelerators:</strong> Manages GPU kernel drivers, DMA transfers, and NUMA-aware topologies.</li>
+      <li><strong>Distributed Networking:</strong> RDMA / RoCE bypasses kernel TCP stacks for low-latency All-Reduce parameter synchronization.</li>
+      <li><strong>Containers (Docker/K8s):</strong> Leverages Linux <strong>Namespaces</strong> (isolation) and <strong>cgroups</strong> (enforcing CPU, memory, and GPU limits).</li>
     </ul>
+  </section>
+
+  <!-- ========================================================================= -->
+  <!-- WEEK 2 -->
+  <!-- ========================================================================= -->
+  <div id="week2" class="week-header">
+    <h2>Week 2: Processes, Threads &amp; IPC</h2>
+    <span>Topics 1 – 13</span>
+  </div>
+
+  <!-- 1. Process Concept -->
+  <section class="section-card">
+    <h3>1. Process Concept <span class="star-tag">&#9733;</span></h3>
+    <p><strong>Process:</strong> A program in execution. Loaded into memory from disk.</p>
+    <table>
+      <thead>
+        <tr><th>Component</th><th>Purpose</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Text / Code</strong></td><td>Executable machine instructions</td></tr>
+        <tr><td><strong>Program Counter + Registers</strong></td><td>Current execution state and activity</td></tr>
+        <tr><td><strong>Stack</strong></td><td>Function parameters, return addresses, local variables (grows downward)</td></tr>
+        <tr><td><strong>Heap</strong></td><td>Dynamically allocated memory via <code>malloc()</code> / <code>new</code> (grows upward)</td></tr>
+        <tr><td><strong>Data Section</strong></td><td>Global and static variables</td></tr>
+      </tbody>
+    </table>
     <div class="exam-note">
-      <span class="exam-tag">Exam</span> Protection = Access Control &bull; Security = Defense against attacks
+      <span class="exam-tag">Exam</span> Program = Passive entity on disk; Process = Active entity executing in memory.
     </div>
   </section>
 
-  <!-- 19, 20 & 21. User Interfaces & System Calls -->
+  <!-- 2. Process States -->
   <section class="section-card">
-    <h2>19, 20 &amp; 21. Interfaces &amp; System Calls</h2>
-    <p><strong>User Interfaces:</strong> CLI (command shells), GUI (visual windows/icons), Touchscreen interfaces.</p>
-    <p><strong>System Call:</strong> Programming interface used to request services from the OS kernel (invoked via standard APIs like POSIX, Windows API, Java API).</p>
-    <div class="fingertip-pill">App &rarr; API &rarr; System Call &rarr; Kernel</div>
-    
+    <h3>2. Process States <span class="star-tag">&#9733;</span></h3>
     <table>
       <thead>
-        <tr><th>Type</th><th>Key Functions / Responsibilities</th></tr>
+        <tr><th>State</th><th>Meaning</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>Process Control</strong></td><td><code>fork()</code>, <code>exec()</code>, terminate, wait, allocate memory</td></tr>
-        <tr><td><strong>File Management</strong></td><td>Create, delete, open, close, read, write, reposition</td></tr>
-        <tr><td><strong>Device Management</strong></td><td>Request/release device, read/write attributes</td></tr>
-        <tr><td><strong>Information</strong></td><td>Get/set system time, process data, file attributes</td></tr>
-        <tr><td><strong>Communication</strong></td><td>Message passing (network/pipes) vs Shared memory</td></tr>
-        <tr><td><strong>Protection</strong></td><td>Set file permissions, change access control lists</td></tr>
+        <tr><td><strong>New</strong></td><td>Process is currently being created</td></tr>
+        <tr><td><strong>Running</strong></td><td>Instructions are actively being executed on the CPU</td></tr>
+        <tr><td><strong>Waiting (Blocked)</strong></td><td>Waiting for an event or I/O completion</td></tr>
+        <tr><td><strong>Ready</strong></td><td>Loaded and waiting to be assigned to a CPU core</td></tr>
+        <tr><td><strong>Terminated</strong></td><td>Process has finished execution</td></tr>
       </tbody>
     </table>
+    <div class="flow">New &rarr; Ready &harr; Running &rarr; Waiting &rarr; Ready &rarr; Terminated</div>
   </section>
 
-  <!-- 23-26. OS Impact on AI & Systems -->
+  <!-- 3. PCB -->
   <section class="section-card">
-    <h2>23–26. Modern OS in AI, Data Science &amp; MLOps</h2>
+    <h3>3. Process Control Block (PCB) <span class="star-tag">&#9733;&#9733;&#9733;</span></h3>
+    <p>Also known as a <strong>Task Control Block (TCB)</strong>. Serves as the repository for any information that varies from process to process:</p>
     <ul>
-      <li><strong>Process &amp; Thread Schedulers:</strong> Dictate CPU-GPU overlap, training latency, and batch scheduling.</li>
-      <li><strong>Memory Subsystems:</strong> Prevent swapping and fragmentation on huge models; leverage <code>mmap()</code> for huge datasets and batch prefetching.</li>
-      <li><strong>Accelerators:</strong> Manages GPU kernel drivers, DMA transfers, and NUMA-aware memory topologies.</li>
-      <li><strong>Distributed Networking:</strong> OS handles low-latency RDMA, RoCE, and kernel-bypass for distributed <em>All-Reduce</em> gradients.</li>
-      <li><strong>Containers:</strong> Utilizes Linux <strong>Namespaces</strong> (isolation) and <strong>cgroups</strong> (CPU/memory/GPU resource limits).</li>
+      <li><strong>Process State:</strong> Ready, running, waiting, etc.</li>
+      <li><strong>Program Counter:</strong> Address of the next instruction to execute.</li>
+      <li><strong>CPU Registers:</strong> Accumulators, index registers, stack pointers.</li>
+      <li><strong>CPU Scheduling Info:</strong> Process priority, scheduling queue pointers.</li>
+      <li><strong>Memory-Management Info:</strong> Page tables, segment tables, base/limit registers.</li>
+      <li><strong>Accounting Info:</strong> CPU time used, time limits, account numbers.</li>
+      <li><strong>I/O Status Info:</strong> List of allocated I/O devices and open files.</li>
     </ul>
+    <div class="exam-note">
+      <span class="exam-tag">Exam One-Liner</span> PCB stores the complete execution context and metadata of a process.
+    </div>
   </section>
 
-  <!-- Exam One-Liners -->
+  <!-- 4. Context Switch -->
   <section class="section-card">
-    <h2>Exam One-Liners &amp; Quick Facts</h2>
-    <ol>
-      <li><strong>OS:</strong> Software acting as an interface between user and hardware.</li>
-      <li><strong>Resource Allocator:</strong> Allocates CPU, memory, and devices efficiently.</li>
-      <li><strong>Control Program:</strong> Prevents errors and improper computer usage.</li>
-      <li><strong>Process:</strong> A program in active execution with associated resources.</li>
-      <li><strong>Multiprogramming:</strong> Keeps multiple jobs in memory to prevent CPU idling.</li>
-      <li><strong>Timesharing:</strong> Rapid CPU switching to create interactive multi-user sessions.</li>
-      <li><strong>Interrupt:</strong> Asynchronous signal notifying the CPU of an event.</li>
-      <li><strong>Kernel Mode:</strong> Mode bit 0; allows privileged instructions to execute.</li>
-      <li><strong>User Mode:</strong> Mode bit 1; restricted sandbox for safe user program execution.</li>
-      <li><strong>System Call:</strong> Software request bridge for kernel routines.</li>
-      <li><strong>Device Driver:</strong> Translation layer between device controller and OS.</li>
-      <li><strong>Caching:</strong> Storing slow-storage data in smaller, faster memory blocks.</li>
-      <li><strong>Protection vs Security:</strong> Protection controls internal access; Security defends against external/internal attacks.</li>
-    </ol>
+    <h3>4. Context Switch <span class="star-tag">&#9733;&#9733;&#9733;</span></h3>
+    <p>Switching the CPU core to another process requires <strong>saving the state of the old process</strong> into its PCB and <strong>loading the saved state</strong> of the new process from its PCB.</p>
+    <div class="flow">Save State to PCB_old &rarr; Load State from PCB_new</div>
+    <ul>
+      <li>Context-switch time is pure <strong>overhead</strong> (system does no useful work during the switch).</li>
+      <li>Speed is heavily bounded by memory speeds, number of registers, and hardware support.</li>
+    </ul>
+    <div class="fingertip-pill">Context Switch = Pure Overhead (Save Old PCB + Load New PCB)</div>
   </section>
 
-  <!-- 15-Second Revision -->
+  <!-- 5 & 6. Process Creation & Termination -->
+  <section class="section-card">
+    <h3>5 &amp; 6. Process Creation &amp; Termination <span class="star-tag">&#9733;&#9733;</span></h3>
+    <p>Processes form a tree structure identified by a unique <strong>PID (Process Identifier)</strong>.</p>
+    <h4>UNIX System Calls</h4>
+    <ul>
+      <li><code>fork()</code>: Creates a new child process by duplicating the address space of the parent.</li>
+      <li><code>exec()</code>: Replaces the process's memory space with a new program.</li>
+      <li><code>wait()</code>: Blocks parent until child process finishes and collects its exit code.</li>
+      <li><code>exit()</code>: Terminates the process and returns status to OS.</li>
+      <li><code>abort()</code>: Allows parent to forcefully terminate a child (e.g., resource limit exceeded).</li>
+    </ul>
+    <div class="fingertip-pill">fork() = Create Duplicate | exec() = Replace Program Space</div>
+  </section>
+
+  <!-- 7 & 8. Zombie, Orphan & Cascading -->
+  <section class="section-card">
+    <h3>7 &amp; 8. Zombie, Orphan &amp; Cascading Termination <span class="star-tag">&#9733;&#9733;&#9733;</span></h3>
+    <table>
+      <thead>
+        <tr><th>Concept</th><th>Definition</th><th>Key Characteristic</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Zombie Process</strong></td>
+          <td>Child has terminated, but parent has not yet called <code>wait()</code>.</td>
+          <td>Process is dead; exit status and entry remain in process table.</td>
+        </tr>
+        <tr>
+          <td><strong>Orphan Process</strong></td>
+          <td>Parent has terminated without calling <code>wait()</code>.</td>
+          <td>Child is alive; adopted by root/init process (PID 1), which calls <code>wait()</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Cascading Termination</strong></td>
+          <td>OS policy where parent termination automatically terminates all child descendants.</td>
+          <td>Initiated by OS kernel.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="exam-note">
+      <span class="exam-tag">Exam Tip</span> Zombie = Dead child waiting for parent &bull; Orphan = Alive child whose parent died.
+    </div>
+  </section>
+
+  <!-- 9, 10 & 11. IPC, Shared Memory, Message Passing -->
+  <section class="section-card">
+    <h3>9 – 11. Interprocess Communication (IPC) <span class="star-tag">&#9733;&#9733;&#9733;</span></h3>
+    <p>Processes can be <em>Independent</em> or <em>Cooperating</em> (cooperation enables speedup, modularity, and resource sharing).</p>
+    <table>
+      <thead>
+        <tr><th>IPC Model</th><th>Mechanism</th><th>Characteristics &amp; Trade-offs</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Shared Memory</strong></td>
+          <td>Processes establish a shared region of address space.</td>
+          <td>Very fast; user processes must handle data <strong>synchronization</strong> explicitly.</td>
+        </tr>
+        <tr>
+          <td><strong>Message Passing</strong></td>
+          <td>Messages exchanged via <code>send()</code> and <code>receive()</code> primitives.</td>
+          <td>Useful for distributed systems; kernel-mediated; no shared variables required.</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="fingertip-pill">Shared Memory &rarr; Fast / Needs Sync | Message Passing &rarr; Send / Receive</div>
+  </section>
+
+  <!-- 12. RPC -->
+  <section class="section-card">
+    <h3>12. Remote Procedure Call (RPC)</h3>
+    <p>Abstracts procedural calls between networked processes using structured network stubs:</p>
+    <ul>
+      <li><strong>Client Stub:</strong> Acts as a local proxy; marshals (packs) parameters and targets remote server port.</li>
+      <li><strong>Server Stub:</strong> Receives packet, unmarshals (unpacks) parameters, executes routine, returns results.</li>
+    </ul>
+    <div class="fingertip-pill">Client Stub &rarr; Marshal | Server Stub &rarr; Unpack &amp; Execute</div>
+  </section>
+
+  <!-- 13. Pipes -->
+  <section class="section-card">
+    <h3>13. Pipes <span class="star-tag">&#9733;&#9733;</span></h3>
+    <p>A communication conduit connecting standard input/output streams between processes.</p>
+    <table>
+      <thead>
+        <tr><th>Feature</th><th>Ordinary Pipes (Anonymous)</th><th>Named Pipes (FIFOs)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Directionality</strong></td><td>Unidirectional (one-way)</td><td>Bidirectional (half-duplex or full-duplex)</td></tr>
+        <tr><td><strong>Relationship</strong></td><td>Requires parent-child relationship</td><td>No parent-child relationship required</td></tr>
+        <tr><td><strong>Lifetime</strong></td><td>Exists only while processes are running</td><td>Persists in file system until deleted</td></tr>
+        <tr><td><strong>Access</strong></td><td>Used by two related processes</td><td>Multiple processes can read and write</td></tr>
+      </tbody>
+    </table>
+    <div class="exam-note">
+      <span class="exam-tag">Warning</span> In ordinary pipes, if unused write/read ends are not explicitly closed, the reader process may block forever waiting for EOF.
+    </div>
+  </section>
+
+  <!-- Quick Revision Footer -->
   <div class="revision-box">
-    <h2>⚡ 15-Second Summary</h2>
+    <h3>⚡ Complete Summary</h3>
     <p>
-      An OS provides an interface between users and hardware while managing core system resources. 
-      Responsibilities span processes, memory, storage, I/O, protection, and security. 
-      Multiprogramming maximizes CPU utilization; timesharing enables interactive computing. 
-      Interrupts drive asynchronous processing, and dual-mode operation safeguards hardware. 
-      Modern workloads (AI/ML) rely heavily on kernel scheduling, batch prefetching, low-latency RDMA, and container control groups (cgroups).
+      An OS provides an interface between users and hardware while managing core system resources (processes, memory, storage, I/O, protection). Multiprogramming keeps CPU busy; timesharing guarantees interactive response. Processes are active programs executing in memory, represented by a PCB. Transitions between processes incur context switch overhead. IPC is established via Shared Memory (fast, requires user sync) or Message Passing (kernel-mediated). Dead children uncollected by parents are Zombies; children with terminated parents are Orphans adopted by init.
     </p>
   </div>
 
