@@ -14,20 +14,19 @@
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
             background-color: #f9f9f9;
         }
         h1 {
             color: #2c3e50;
             border-bottom: 2px solid #3498db;
-            padding-bottom: 10px;
+            padding-bottom: 8px;
             text-align: center;
         }
         h2 {
             color: #2980b9;
-            margin-top: 30px;
+            margin-top: 18px;
             border-bottom: 1px solid #ccc;
             padding-bottom: 5px;
         }
@@ -71,10 +70,11 @@
         }
         .card {
             background: #fff;
-            padding: 20px;
+            padding: 14px 16px;
             border-radius: 8px;
             box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-            margin-bottom: 20px;
+            margin-bottom: 0;
+            break-inside: avoid;
         }
         pre {
             background: #f4f4f4;
@@ -133,6 +133,34 @@
 
         .topic-section.active {
             display: block;
+            width: 100%;
+            box-sizing: border-box;
+            padding: 20px clamp(18px, 4vw, 56px) 32px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px clamp(20px, 3vw, 44px);
+            align-items: start;
+        }
+
+        .topic-section.active > h1 {
+            grid-column: 1 / -1;
+            margin: 0;
+        }
+
+        .topic-section.active > .card {
+            min-width: 0;
+        }
+
+        .topic-section.active table {
+            table-layout: fixed;
+            overflow-wrap: anywhere;
+        }
+
+        .topic-section.active p,
+        .topic-section.active ul,
+        .topic-section.active ol {
+            margin-top: 8px;
+            margin-bottom: 8px;
         }
 
         @media (max-width: 600px) {
@@ -146,6 +174,20 @@
             .nav-bar button {
                 font-size: 0.75rem;
             }
+
+            .topic-section.active {
+                grid-template-columns: 1fr;
+                padding: 16px 12px 24px;
+                gap: 12px;
+            }
+
+            .topic-section.active > h1 {
+                font-size: 1.6rem;
+            }
+
+            .card {
+                padding: 12px;
+            }
         }
     </style>
 </head>
@@ -155,6 +197,7 @@
         <button type="button" onclick="showTopic('t2', this)">Week 2</button>
         <button type="button" onclick="showTopic('t3', this)">Week 3</button>
         <button type="button" onclick="showTopic('t4', this)">Week 4</button>
+        <button type="button" onclick="showTopic('t5', this)">Week 5</button>
     </nav>
     <main>
         <section id="t1" class="source-document topic-section active">
@@ -3033,6 +3076,502 @@
             </div>
         
         </section>
+        <section id="t5" class="source-document topic-section">
+<h1>Operating Systems — Memory Management</h1>
+
+    <div class="card">
+        <h2>1. Introduction to Memory Management</h2>
+        
+        <h3>What is Memory Management?</h3>
+        <p>Memory management is the operating system function responsible for managing main memory (RAM) and deciding:</p>
+        <ul>
+            <li>Which processes should be kept in memory.</li>
+            <li>Where processes should be placed.</li>
+            <li>How memory addresses are translated.</li>
+            <li>How memory is protected.</li>
+            <li>How processes can use more memory than the available physical RAM.</li>
+        </ul>
+
+        <h3>Why do we need it?</h3>
+        <p>CPU scheduling requires multiple processes to be kept in memory at the same time. Therefore, after learning CPU Scheduling, we study ways to efficiently manage memory.</p>
+        
+        <p>Memory-management techniques range from:</p>
+        <p class="flow">Primitive / Bare Machine &rarr; Simple allocation &rarr; Partitioning &rarr; Segmentation &rarr; Paging &rarr; Virtual Memory</p>
+        
+        <div class="exam-point">
+            <strong>Key Point:</strong> The choice of a memory-management method depends on several factors, especially the hardware architecture/design.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>2. Background</h2>
+        <h3>How does the CPU use memory?</h3>
+        <p>The CPU executes instructions using the <strong>Program Counter (PC)</strong>. The basic sequence is:</p>
+        <p class="flow">Program Counter &rarr; Fetch instruction &rarr; Decode instruction &rarr; Fetch operands (if required) &rarr; Execute instruction &rarr; Store result (if required)</p>
+
+        <h3>Example</h3>
+        <p>Suppose an instruction says: <code>ADD A, B</code></p>
+        <p>The CPU may need to:</p>
+        <ol>
+            <li>Fetch the instruction.</li>
+            <li>Fetch the values of A and B.</li>
+            <li>Perform the addition.</li>
+            <li>Store the result.</li>
+        </ol>
+        <p>Therefore, a running program generates a sequence of memory addresses.</p>
+
+        <div class="exam-point">
+            <strong>Exam Point:</strong> The OS is mainly concerned with the sequence of memory addresses generated by a running program because memory management must correctly map and protect those accesses.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>3. Basic Hardware</h2>
+        <h3>Main Memory and Registers</h3>
+        <p>A program must first be brought from disk/storage into main memory before it can execute. The CPU can directly access:</p>
+        <p class="flow">CPU Registers &rarr; Cache &rarr; Main Memory (RAM) &rarr; Disk / Storage</p>
+
+        <h3>Important Points</h3>
+        <ul>
+            <li>Registers are directly accessible by the CPU.</li>
+            <li>Main memory is also directly accessible by the CPU.</li>
+            <li>Memory receives: an address + read request, or an address + data + write request.</li>
+            <li>Register access usually takes one CPU clock cycle or less.</li>
+            <li>Main-memory access can take many CPU cycles. Slow memory access can cause the CPU to stall.</li>
+            <li>Cache is placed between the CPU and main memory to reduce access time.</li>
+            <li>Memory protection is necessary so that one process cannot improperly access another process's memory.</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Registers &rarr; Fastest<br>
+            Cache &rarr; Fast<br>
+            RAM &rarr; Slower<br>
+            Disk &rarr; Slowest
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>4. Logical Address vs Physical Address</h2>
+        <p>This is one of the most important concepts in memory management.</p>
+
+        <h3>Logical Address</h3>
+        <p>A logical address is the address generated by the CPU. It is also called a <strong>Virtual Address</strong>.</p>
+
+        <h3>Physical Address</h3>
+        <p>A physical address is the actual address seen by the memory hardware.</p>
+
+        <p class="flow">CPU generates &rarr; Logical / Virtual Address &rarr; Address Translation &rarr; Physical Address &rarr; Main Memory</p>
+
+        <h3>Address Space</h3>
+        <ul>
+            <li><strong>Logical Address Space:</strong> The set of all logical addresses generated by a program.</li>
+            <li><strong>Physical Address Space:</strong> The set of physical memory addresses corresponding to the program's memory references.</li>
+        </ul>
+
+        <h3>Address Binding</h3>
+        <p>Address binding determines when logical addresses are converted/bound to physical addresses.</p>
+        <ol>
+            <li><strong>Compile-Time Binding:</strong> If the physical memory location is known at compile time. <em>(Logical Address = Physical Address)</em></li>
+            <li><strong>Load-Time Binding:</strong> Address binding takes place when the program is loaded into memory. <em>(Logical address = Physical address in the sense that the program's generated address is directly tied to its physical location after binding)</em></li>
+            <li><strong>Execution-Time Binding:</strong> Binding takes place while the program is executing. <em>(Logical / Virtual Address &ne; Physical Address)</em></li>
+        </ol>
+
+        <div class="exam-point">
+            <strong>Exam Point:</strong> Execution-time binding requires hardware support for address translation.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>5. Base and Limit Registers</h2>
+        <p>A pair of registers can be used to protect a process's memory.</p>
+        <ul>
+            <li><strong>Base Register:</strong> Stores the starting physical address of the process.</li>
+            <li><strong>Limit Register:</strong> Stores the size/range of the valid address space.</li>
+        </ul>
+
+<pre>
+Physical Memory
+Base &rarr;  +-------------------------+
+         |     Process Memory      |
+Limit &rarr;  +-------------------------+
+</pre>
+
+        <p>For every memory access generated in user mode, the CPU checks whether the address is within the permitted range:</p>
+        <ul>
+            <li>If address is within allowed range &rarr; <strong>ACCESS</strong></li>
+            <li>If address is outside allowed range &rarr; <strong>PROTECTION ERROR</strong></li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Purpose:</strong> Base and limit registers provide memory protection.<br>
+            <strong>Fingertip:</strong><br>
+            Base = Where process starts<br>
+            Limit = How far process is allowed to go
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>6. Memory-Management Unit (MMU)</h2>
+        <h3>Definition</h3>
+        <p>The <strong>Memory-Management Unit (MMU)</strong> is a hardware component that performs address translation at run time.</p>
+        <p class="flow">Virtual / Logical Address &rarr; MMU &rarr; Physical Address &rarr; Main Memory</p>
+
+        <h3>Relocation Register</h3>
+        <p>In a simple execution-time address translation scheme, the value in the relocation register is added to every address generated by the user process. The base register is also called the relocation register in this context.</p>
+
+        <p><strong>Example:</strong><br>
+        Logical Address = 250<br>
+        Relocation Register = 1000<br>
+        Physical Address = 1000 + 250 = <strong>1250</strong></p>
+
+        <h3>Important Points</h3>
+        <ul>
+            <li>The user program works only with logical addresses.</li>
+            <li>The user program does not see actual physical addresses.</li>
+            <li>Address binding occurs when a memory reference is made. This is execution-time binding.</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong> Physical Address = Relocation/Base Register + Logical Address
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>7. Segmentation & 8. User's View of a Program</h2>
+        <h3>Definition</h3>
+        <p><strong>Segmentation</strong> is a memory-management scheme that supports the programmer's/user's logical view of a program. A program is viewed as a collection of logical units called segments.</p>
+
+        <h3>Examples of Segments / User's View</h3>
+        <p>Instead of seeing the program as one continuous block, the user sees it as several logical components:</p>
+        <ul>
+            <li>Main program</li>
+            <li>Procedures / Functions / Methods</li>
+            <li>Global variables / Local variables</li>
+            <li>Stack / Arrays / Objects / Symbol table</li>
+        </ul>
+        <p>This matches the natural logical structure of a program.</p>
+    </div>
+
+    <div class="card">
+        <h2>9. Logical View of Segmentation & 10. Architecture</h2>
+        <p>Segments do not necessarily have to be stored contiguously in physical memory.</p>
+
+<pre>
+Logical Program        Physical Memory
++---------+            +------------------+
+| Segment1|            | Segment 1        |
++---------+            +------------------+
+| Segment2|            | Other Process    |
++---------+            +------------------+
+| Segment3|            | Segment 3        |
++---------+            +------------------+
+| Segment4|            | Free Space       |
++---------+            +------------------+
+                       | Segment 4        |
+                       +------------------+
+                       | Segment 2        |
+                       +------------------+
+</pre>
+
+        <h3>Segmentation Architecture</h3>
+        <p>A logical address in segmentation can be represented as:</p>
+        <p class="flow">| Segment Number | Offset |</p>
+        <ul>
+            <li>The <strong>segment number</strong> identifies the segment.</li>
+            <li>The <strong>offset</strong> identifies the location inside that segment.</li>
+            <li>The segment table contains information about each segment, including its physical location and size.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>11. Segmentation Protection & 12. Important Problem</h2>
+        <h3>Segmentation Protection</h3>
+        <p>Each segment-table entry can contain a:</p>
+        <ul>
+            <li><strong>Validation Bit:</strong> validation bit = 0 &rarr; Illegal segment.</li>
+            <li><strong>Protection Privileges:</strong> R = Read, W = Write, X = Execute.<br>
+            <em>Example:</em> Code Segment &rarr; Read + Execute | Data Segment &rarr; Read + Write</li>
+        </ul>
+        <p><strong>Sharing:</strong> Protection and sharing can be applied at the segment level (e.g., code sharing).</p>
+
+        <h3>Important Problem with Segmentation</h3>
+        <p>Segments are variable-sized. Therefore, memory allocation becomes a <strong>Dynamic Storage-Allocation Problem</strong>. Finding suitable free areas can become difficult.</p>
+
+        <div class="highlight">
+            <strong>Fingertip: Segmentation</strong><br>
+            = Variable-sized logical units<br>
+            = Matches user's program view<br>
+            = Dynamic allocation required
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>13. Paging & 14. Frames and Pages</h2>
+        <h3>Definition</h3>
+        <p><strong>Paging</strong> is a memory-management technique in which physical memory is divided into fixed-size blocks and logical memory is divided into equally sized blocks. The important advantage is that a process does not need to occupy contiguous physical memory.</p>
+
+        <h3>Frames and Pages</h3>
+        <ul>
+            <li><strong>Physical Memory</strong> is divided into fixed-sized blocks called <strong>Frames</strong>.</li>
+            <li><strong>Logical Memory</strong> is divided into blocks of the same size called <strong>Pages</strong>.</li>
+        </ul>
+        
+        <div class="exam-point">
+            <strong>Important Rule:</strong> Page size = Frame size
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>15. Properties of Paging & 16. Page Table</h2>
+        <h3>Page/Frame Size</h3>
+        <p>The size is a power of 2 (ranges from 512 bytes to 16 Mbytes).</p>
+        
+        <h3>Allocation</h3>
+        <p>To run a program containing N pages, you need N free frames. The frames do not have to be physically adjacent. The process is still valid even though the pages are scattered.</p>
+
+        <h3>Page Table</h3>
+        <p>A page table maps logical pages to physical frames.</p>
+        <p class="flow">Page 0 &rarr; Frame 5 | Page 1 &rarr; Frame 2 | Page 2 &rarr; Frame 9 | Page 3 &rarr; Frame 1</p>
+        <p>The page table is therefore used for: <strong>Logical-to-Physical Address Translation</strong>.</p>
+    </div>
+
+    <div class="card">
+        <h2>17. Why Paging is Useful</h2>
+        <h3>Advantages</h3>
+        <ul>
+            <li>A process can occupy non-contiguous physical memory.</li>
+            <li>It avoids external fragmentation.</li>
+            <li>It avoids the problem of allocating variable-sized physical chunks.</li>
+        </ul>
+
+        <h3>Disadvantage</h3>
+        <p>Paging still causes <strong>Internal Fragmentation</strong> because the final page may not be completely filled.</p>
+
+        <h3>Comparison</h3>
+        <table>
+            <tr>
+                <th>Feature</th>
+                <th>Segmentation</th>
+                <th>Paging</th>
+            </tr>
+            <tr>
+                <td>Unit</td>
+                <td>Segment</td>
+                <td>Page</td>
+            </tr>
+            <tr>
+                <td>Size</td>
+                <td>Variable</td>
+                <td>Fixed</td>
+            </tr>
+            <tr>
+                <td>Matches logical program structure</td>
+                <td>Yes</td>
+                <td>No</td>
+            </tr>
+            <tr>
+                <td>Physical allocation</td>
+                <td>Variable-size</td>
+                <td>Fixed-size frames</td>
+            </tr>
+            <tr>
+                <td>External fragmentation</td>
+                <td>Possible</td>
+                <td>Avoided</td>
+            </tr>
+            <tr>
+                <td>Internal fragmentation</td>
+                <td>Usually not the main issue</td>
+                <td>Possible</td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="card">
+        <h2>18. Address Translation in Paging & 19. Address Space</h2>
+        <p>A CPU-generated logical address is divided into:</p>
+        <p class="flow">| Page Number (p) | Page Offset (d) |</p>
+        <ul>
+            <li><strong>Page Number (p):</strong> Used as an index into the page table to get the physical frame/base address.</li>
+            <li><strong>Page Offset (d):</strong> Gives the exact location inside the page/frame.</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Important Point:</strong> The offset does not change during translation. Only the page number is translated into a frame number.
+        </div>
+
+        <h3>Address Space and Page Size</h3>
+        <p>For a logical address space of <code>2^m</code> and a page size of <code>2^n</code>:</p>
+        <ul>
+            <li>Number of pages = <code>2^(m-n)</code></li>
+            <li>Number of offset bits = <code>n</code></li>
+        </ul>
+
+        <div class="exam-point">
+            <strong>Exam Formula:</strong><br>
+            Offset bits = log2(Page Size)<br>
+            Page number bits = Logical Address bits - Offset bits
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>20. Paging Example & 21. Free Frames</h2>
+        <h3>Paging Example</h3>
+        <p>Given logical address space <code>m = 4</code> (16 bytes total) and Page size = 4 bytes (<code>n = 2</code>).</p>
+        <ul>
+            <li>Since Page size = 4 = <code>2^2</code>, offset requires 2 bits.</li>
+            <li>Logical address has 4 bits total.</li>
+            <li>Page number bits = 4 - 2 = 2.</li>
+        </ul>
+        <p class="flow">| Page Number (2 bits) | Offset (2 bits) |</p>
+        <p>The address translation mechanism uses the page number to locate the corresponding frame and combines that frame with the offset.</p>
+
+        <h3>Free Frames</h3>
+        <p>The OS keeps track of all currently available frames. The exact mapping depends on which free frames were selected from the free-frame list upon allocation.</p>
+    </div>
+
+    <div class="card">
+        <h2>22. Paging Hardware with TLB</h2>
+        <p>A page-table lookup can itself require a memory access. To make address translation faster, systems use a <strong>TLB — Translation Lookaside Buffer</strong>.</p>
+        <p>The TLB is a fast associative memory containing recently used page-table entries.</p>
+
+<pre>
+CPU &rarr; Logical Address
+         |
+         v
+       [ TLB ] &mdash;&mdash;&mdash; (TLB miss) &rarr; Page Table &rarr; Frame Number
+         | (TLB hit)
+         v
+    Frame Number
+         |
+         v
+  Physical Address &rarr; Main Memory
+</pre>
+
+        <ul>
+            <li><strong>TLB Hit:</strong> Page number is in the TLB. Translation is faster.</li>
+            <li><strong>TLB Miss:</strong> Page number is not found. A memory access to the Page Table is required, and the TLB is updated for future accesses.</li>
+        </ul>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong> TLB = Fast cache for page-table entries
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>23. Virtual Memory (Background) & 24. Definition</h2>
+        <h3>Background</h3>
+        <p>A program does not necessarily use every part of its code or data at the same time (e.g., error-handling code, unusual routines). Loading the entire program into memory is often unnecessary. This leads to the idea of Virtual Memory.</p>
+
+        <h3>Definition of Virtual Memory</h3>
+        <p>Virtual memory separates the user's logical memory from the actual physical memory. Only the required portion of a program needs to be in physical memory at a particular time. Therefore:</p>
+        
+        <p class="flow">Logical Address Space &gt; Physical Address Space</p>
+        
+        <p>A process may have a logical address space much larger than the available physical RAM.</p>
+    </div>
+
+    <div class="card">
+        <h2>25. Advantages of Virtual Memory</h2>
+        <ol>
+            <li><strong>Larger programs can run:</strong> The entire program does not need to be in physical memory.</li>
+            <li><strong>More processes can run concurrently:</strong> Each process requires less physical memory at a time.</li>
+            <li><strong>Better CPU utilization:</strong> More processes can remain available for execution.</li>
+            <li><strong>Better throughput:</strong> More work can be completed over time.</li>
+            <li><strong>Less unnecessary I/O:</strong> Only required portions of a program need to be loaded.</li>
+            <li><strong>Efficient process creation.</strong></li>
+            <li><strong>Memory sharing:</strong> Virtual address spaces can support sharing between processes.</li>
+            <li><strong>Program size is no longer strictly limited by physical RAM.</strong></li>
+        </ol>
+
+        <div class="exam-point">
+            <strong>Important Note:</strong> Virtual memory can increase CPU utilization and throughput without an increase in response time or turnaround time, assuming suitable system conditions.
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>26. Virtual Address Space & 28. Larger Than Physical Memory</h2>
+        <p>The virtual address space represents the logical view of how a process is stored. It is normally viewed as a contiguous sequence of logical addresses (Page 0, Page 1, Page 2...).</p>
+        <p>Meanwhile, physical memory is divided into page frames (Frame 0, Frame 1...). The MMU maps the virtual pages to physical frames.</p>
+
+        <h3>Virtual Memory Larger Than Physical Memory</h3>
+        <p>This is possible because only the currently required portions (pages) need to be resident in RAM.</p>
+<pre>
+Virtual Memory (Large Address Space)
+         |
+         | (Only required parts)
+         v
+Physical Memory (Required pages)
+</pre>
+    </div>
+
+    <div class="card">
+        <h2>27. Virtual Memory Implementation & 29. Demand Paging</h2>
+        <p>Virtual memory can be implemented using:</p>
+        <ul>
+            <li><strong>Demand Paging</strong></li>
+            <li><strong>Demand Segmentation</strong></li>
+        </ul>
+
+        <h3>Definition of Demand Paging</h3>
+        <p>In demand paging, a page is loaded into physical memory <strong>only when it is needed</strong>.</p>
+        <ul>
+            <li><strong>Traditional loading:</strong> Load entire process into memory.</li>
+            <li><strong>Demand paging:</strong> Load only required pages initially &rarr; Load additional pages when needed.</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>30. Advantages of Demand Paging & 31. Lazy Swapper</h2>
+        <h3>Advantages of Demand Paging</h3>
+        <p>Less I/O, Less memory usage, Faster initial response, More users/processes can be supported, No need to load unnecessary pages.</p>
+        <p><em>Example:</em> A program contains 100 pages but initially uses only 10. Demand paging loads only those 10.</p>
+
+        <h3>Lazy Swapper / Pager</h3>
+        <p>A lazy swapper never brings a page into memory unless that page is actually needed. A swapper that deals specifically with pages is called a <strong>Pager</strong>.</p>
+
+        <div class="highlight">
+            <strong>Fingertip:</strong><br>
+            Lazy = Do not load until needed<br>
+            Pager = Swapper that works with pages
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>32. What Happens When a Page is Needed? & 33. Valid-Invalid Bit</h2>
+        <h3>When the CPU references a page:</h3>
+        <p class="flow">Page Reference &rarr; Is page valid? &rarr; No (Not in memory) &rarr; <strong>Page Fault</strong> &rarr; Load page</p>
+        <p>If the reference is completely invalid (out of bounds), it results in an abort.</p>
+
+        <h3>Valid-Invalid Bit</h3>
+        <p>Each page-table entry contains a valid-invalid bit.</p>
+        <ul>
+            <li><strong>Valid (v):</strong> page is in memory</li>
+            <li><strong>Invalid (i):</strong> page is not in memory</li>
+        </ul>
+        <p>Initially, all page-table entries are set to <code>i</code> because pages have not yet been loaded.</p>
+    </div>
+
+    <div class="card">
+        <h2>34. Page Table When Some Pages Are Not in Main Memory</h2>
+        <p>Example of a Page Table with missing pages:</p>
+
+<pre>
+Page Table
++------+-------+---------------+
+| Page | Bit   | Frame Number  |
++------+-------+---------------+
+|  0   |   v   |       5       |
+|  1   |   i   |      --       |
+|  2   |   v   |       2       |
+|  3   |   i   |      --       |
+|  4   |  ...  |      ...      |
++------+-------+---------------+
+</pre>
+        <p>If the CPU requests Page 1 or Page 3, a <strong>Page Fault</strong> will occur, triggering the OS to load the missing page into a free frame and update the table.</p>
+    </div>
+        </section>
     </main>
     <script>
         function showTopic(id, btn) {
@@ -3047,6 +3586,8 @@
             const selectedSection = document.getElementById(id);
             selectedSection.classList.add('active');
             btn.classList.add('active');
+
+            window.scrollTo({ top: 0, behavior: 'auto' });
 
             const targetTop = selectedSection.getBoundingClientRect().top + window.scrollY - 100;
             window.scrollTo({ top: targetTop, behavior: 'smooth' });
